@@ -1,0 +1,581 @@
+metadata:
+  Microsoft.DSC:
+    version: 3.1.0
+    operation: get
+    executionType: actual
+    startDatetime: 2025-07-18T11:48:46.626470900+02:00
+    endDatetime: 2025-07-18T11:54:21.345282100+02:00
+    duration: PT334.7188112S
+    securityContext: elevated
+results:
+- metadata:
+    Microsoft.DSC:
+      duration: PT0.1345325S
+  name: ShowFileExtensions
+  type: Microsoft.Windows/Registry
+  result:
+    actualState:
+      keyPath: HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced
+      valueName: HideFileExt
+      valueData:
+        DWord: 0
+- metadata:
+    Microsoft.DSC:
+      duration: PT0.0446008S
+  name: DisableLoopbackCheck
+  type: Microsoft.Windows/Registry
+  result:
+    actualState:
+      keyPath: HKLM\SYSTEM\CurrentControlSet\Control\Lsa
+      valueName: DisableLoopbackCheck
+      valueData:
+        DWord: 1
+- metadata:
+    Microsoft.DSC:
+      duration: PT4.8087144S
+  name: InstallScoop
+  type: MyScoop/MyScoop
+  result:
+    actualState:
+      Ensure: Present
+      MyScoopKey: MyScoopKey
+- metadata:
+    Microsoft.DSC:
+      duration: PT10.3744292S
+  name: InstallDotnetSdk
+  type: MyScoopPackage/MyScoopPackage
+  result:
+    actualState:
+      State: Current
+      PackageName: dotnet-sdk
+      Version: 9.0.303
+      LatestVersion: 9.0.303
+      Ensure: Present
+- metadata:
+    Microsoft.DSC:
+      duration: PT9.0374646S
+  name: InstallGh
+  type: MyScoopPackage/MyScoopPackage
+  result:
+    actualState:
+      Version: 2.76.0
+      PackageName: gh
+      State: Current
+      LatestVersion: 2.76.0
+      Ensure: Present
+- metadata:
+    Microsoft.DSC:
+      duration: PT8.8727375S
+  name: InstallOhMyPosh
+  type: MyScoopPackage/MyScoopPackage
+  result:
+    actualState:
+      State: Current
+      LatestVersion: 26.17.0
+      Ensure: Present
+      Version: 26.17.0
+      PackageName: oh-my-posh
+- metadata:
+    Microsoft.DSC:
+      duration: PT11.1348306S
+  name: InstallGit
+  type: MyScoopPackage/MyScoopPackage
+  result:
+    actualState:
+      LatestVersion: 2.50.1
+      Ensure: Present
+      State: Current
+      Version: 2.50.1
+      PackageName: git
+- metadata:
+    Microsoft.DSC:
+      duration: PT12.0004911S
+  name: InstallNvm
+  type: MyScoopPackage/MyScoopPackage
+  result:
+    actualState:
+      State: Current
+      LatestVersion: 1.1.11
+      Version: 1.1.11
+      PackageName: nvm
+      Ensure: Present
+- metadata:
+    Microsoft.DSC:
+      duration: PT14.5510322S
+  name: InstallTerraform
+  type: MyScoopPackage/MyScoopPackage
+  result:
+    actualState:
+      State: Current
+      Ensure: Present
+      PackageName: terraform
+      Version: 1.12.2
+      LatestVersion: 1.12.2
+- metadata:
+    Microsoft.DSC:
+      duration: PT13.4561614S
+  name: InstallDotnet3Sdk
+  type: MyScoopPackage/MyScoopPackage
+  result:
+    actualState:
+      Ensure: Present
+      State: Current
+      LatestVersion: 3.1.426
+      Version: 3.1.426
+      PackageName: dotnet3-sdk
+- metadata:
+    Microsoft.DSC:
+      duration: PT13.7086815S
+  name: InstallDotnet5Sdk
+  type: MyScoopPackage/MyScoopPackage
+  result:
+    actualState:
+      State: Current
+      Ensure: Present
+      Version: 5.0.408
+      LatestVersion: 5.0.408
+      PackageName: dotnet5-sdk
+- metadata:
+    Microsoft.DSC:
+      duration: PT14.1162114S
+  name: InstallDotnet6Sdk
+  type: MyScoopPackage/MyScoopPackage
+  result:
+    actualState:
+      State: Current
+      Version: 6.0.428
+      Ensure: Present
+      PackageName: dotnet6-sdk
+      LatestVersion: 6.0.428
+- metadata:
+    Microsoft.DSC:
+      duration: PT8.8196328S
+  name: InstallBareTail
+  type: MyScoopPackage/MyScoopPackage
+  result:
+    actualState:
+      PackageName: baretail
+      Ensure: Absent
+      Version: ''
+      State: NotInstalled
+      LatestVersion: ''
+- metadata:
+    Microsoft.DSC:
+      duration: PT14.7201569S
+  name: InstallMockoon
+  type: MyScoopPackage/MyScoopPackage
+  result:
+    actualState:
+      LatestVersion: 9.3.0
+      PackageName: mockoon
+      State: Current
+      Ensure: Present
+      Version: 9.3.0
+- metadata:
+    Microsoft.DSC:
+      duration: PT14.2282858S
+  name: InstallNugetPackageExplorer
+  type: MyScoopPackage/MyScoopPackage
+  result:
+    actualState:
+      LatestVersion: 6.2.19
+      Ensure: Present
+      State: Current
+      PackageName: nuget-package-explorer
+      Version: 6.2.19
+- metadata:
+    Microsoft.DSC:
+      duration: PT13.6775795S
+  name: InstallPaintNet
+  type: MyScoopPackage/MyScoopPackage
+  result:
+    actualState:
+      LatestVersion: 5.1.8
+      State: Current
+      Version: 5.1.8
+      Ensure: Present
+      PackageName: paint.net
+- metadata:
+    Microsoft.DSC:
+      duration: PT13.5063381S
+  name: InstallPostman
+  type: MyScoopPackage/MyScoopPackage
+  result:
+    actualState:
+      PackageName: postman
+      Ensure: Present
+      LatestVersion: 11.54.0
+      Version: 11.54.0
+      State: Current
+- metadata:
+    Microsoft.DSC:
+      duration: PT14.1036086S
+  name: InstallVlc
+  type: MyScoopPackage/MyScoopPackage
+  result:
+    actualState:
+      LatestVersion: 3.0.21
+      Ensure: Present
+      PackageName: vlc
+      State: Current
+      Version: 3.0.21
+- metadata:
+    Microsoft.DSC:
+      duration: PT14.9990521S
+  name: InstallWiztree
+  type: MyScoopPackage/MyScoopPackage
+  result:
+    actualState:
+      LatestVersion: '4.26'
+      State: Current
+      Version: '4.26'
+      Ensure: Present
+      PackageName: wiztree
+- metadata:
+    Microsoft.DSC:
+      duration: PT8.264949S
+  name: InstallCascadiaCodeNFMono
+  type: MyScoopPackage/MyScoopPackage
+  result:
+    actualState:
+      LatestVersion: ''
+      State: NotInstalled
+      Version: ''
+      Ensure: Absent
+      PackageName: CascadiaCode-NF-Mono
+- metadata:
+    Microsoft.DSC:
+      duration: PT13.9897226S
+  name: InstallFiraCodeNF
+  type: MyScoopPackage/MyScoopPackage
+  result:
+    actualState:
+      LatestVersion: 3.4.0
+      PackageName: FiraCode-NF
+      Ensure: Present
+      Version: 3.4.0
+      State: Current
+- metadata:
+    Microsoft.DSC:
+      duration: PT12.6492679S
+  name: InstallTemurinLtsJdk
+  type: MyScoopPackage/MyScoopPackage
+  result:
+    actualState:
+      Version: 21.0.7-6.0.LTS
+      State: Current
+      Ensure: Present
+      PackageName: temurin-lts-jdk
+      LatestVersion: 21.0.7-6.0.LTS
+- metadata:
+    Microsoft.DSC:
+      duration: PT10.4423573S
+  name: ChocolateyAndPackages
+  type: Microsoft.DSC/PowerShell
+  result:
+    actualState:
+      result:
+      - name: InstallChocolatey
+        type: MyChocolatey/MyChocolatey
+        properties:
+          MyChocolateyKey: MyChocolateyKey
+          Ensure: Present
+      - name: Install7Zip
+        type: MyChocolateyPackage/MyChocolateyPackage
+        properties:
+          State: Current
+          LatestVersion: 25.0.0
+          PackageName: 7zip
+          Ensure: Present
+          Version: 25.0.0
+      - name: InstallAdobeReader
+        type: MyChocolateyPackage/MyChocolateyPackage
+        properties:
+          State: Current
+          LatestVersion: 2025.1.20531
+          PackageName: adobereader
+          Ensure: Present
+          Version: 2025.1.20531
+      - name: InstallBulkRenameUtility
+        type: MyChocolateyPackage/MyChocolateyPackage
+        properties:
+          State: Current
+          LatestVersion: 4.0.0.8
+          PackageName: bulkrenameutility
+          Ensure: Present
+          Version: 4.0.0.8
+      - name: InstallNotepadPlusPlus
+        type: MyChocolateyPackage/MyChocolateyPackage
+        properties:
+          State: Current
+          LatestVersion: 8.8.3
+          PackageName: notepadplusplus
+          Ensure: Present
+          Version: 8.8.3
+      - name: InstallUrlRewrite
+        type: MyChocolateyPackage/MyChocolateyPackage
+        properties:
+          State: Current
+          LatestVersion: 2.1.20190828
+          PackageName: urlrewrite
+          Ensure: Present
+          Version: 2.1.20190828
+      - name: InstallWebDeploy
+        type: MyChocolateyPackage/MyChocolateyPackage
+        properties:
+          State: Current
+          LatestVersion: 3.6.20210729
+          PackageName: webdeploy
+          Ensure: Present
+          Version: 3.6.20210729
+      - name: InstallWinMerge
+        type: MyChocolateyPackage/MyChocolateyPackage
+        properties:
+          State: Current
+          LatestVersion: 2.16.48.2
+          PackageName: winmerge
+          Ensure: Present
+          Version: 2.16.48.2
+- metadata:
+    Microsoft.DSC:
+      duration: PT2.2697689S
+  name: InstallFork
+  type: Microsoft.WinGet/Package
+  result:
+    actualState:
+      _exist: true
+      id: Fork.Fork
+      useLatest: true
+      version: 2.10.3
+- metadata:
+    Microsoft.DSC:
+      duration: PT2.5839719S
+  name: InstallPowerShell
+  type: Microsoft.WinGet/Package
+  result:
+    actualState:
+      _exist: true
+      id: Microsoft.PowerShell
+      useLatest: true
+      version: 7.5.2.0
+- metadata:
+    Microsoft.DSC:
+      duration: PT2.188647S
+  name: InstallPowerToys
+  type: Microsoft.WinGet/Package
+  result:
+    actualState:
+      _exist: true
+      id: Microsoft.PowerToys
+      useLatest: true
+      version: 0.92.1
+- metadata:
+    Microsoft.DSC:
+      duration: PT1.8309458S
+  name: InstallPowerAutomateDesktop
+  type: Microsoft.WinGet/Package
+  result:
+    actualState:
+      _exist: true
+      id: Microsoft.PowerAutomateDesktop
+      useLatest: true
+      version: 2.58.163.25188
+- metadata:
+    Microsoft.DSC:
+      duration: PT1.7641563S
+  name: InstallPowerBI
+  type: Microsoft.WinGet/Package
+  result:
+    actualState:
+      _exist: true
+      id: Microsoft.PowerBI
+      useLatest: true
+      version: 2.145.1105.0
+- metadata:
+    Microsoft.DSC:
+      duration: PT2.4796458S
+  name: InstallVSCode
+  type: Microsoft.WinGet/Package
+  result:
+    actualState:
+      _exist: true
+      id: Microsoft.VisualStudioCode
+      useLatest: true
+      version: 1.102.1
+- metadata:
+    Microsoft.DSC:
+      duration: PT2.0048143S
+  name: InstallChrome
+  type: Microsoft.WinGet/Package
+  result:
+    actualState:
+      _exist: true
+      id: Google.Chrome
+      useLatest: true
+      version: 138.0.7204.158
+- metadata:
+    Microsoft.DSC:
+      duration: PT8.5078191S
+  name: VSComponents
+  type: Microsoft.VisualStudio.DSC/VSComponents
+  result:
+    actualState:
+      installedComponents:
+      - Component.Microsoft.ML.ModelBuilder
+      - Component.Microsoft.VisualStudio.Tools.Applications.amd64
+      - Component.c38f38c8-d545-467c-b30f-2a021690d56b
+      - Component.193F609A-0084-45AA-AA5D-33BCBFAFC11E
+      - Microsoft.Net.Component.4.7.TargetingPack
+      - Microsoft.NetCore.Component.Runtime.3.1
+      - Microsoft.VisualStudio.Workload.Data
+      - Microsoft.VisualStudio.Workload.ManagedDesktop
+      - Microsoft.ComponentGroup.Blend
+      - Microsoft.VisualStudio.Component.DotNetModelBuilder
+      - Microsoft.VisualStudio.Component.ManagedDesktop.Prerequisites
+      - Microsoft.Component.Azure.DataLake.Tools
+      - Microsoft.VisualStudio.Workload.NetWeb
+      - Microsoft.VisualStudio.ComponentGroup.IISDevelopment
+      - Microsoft.VisualStudio.Component.Wcf.Tooling
+      - Microsoft.VisualStudio.Component.WslDebugging
+      - Component.Microsoft.VisualStudio.LiveShare.2022
+      - Microsoft.VisualStudio.Component.Debugger.JustInTime
+      - Microsoft.VisualStudio.Component.EntityFramework
+      - Microsoft.VisualStudio.Component.DiagnosticTools
+      - Microsoft.NetCore.Component.SDK
+      - Microsoft.NetCore.Component.Runtime.8.0
+      - Microsoft.VisualStudio.ComponentGroup.Web.CloudTools
+      - Microsoft.VisualStudio.ComponentGroup.AzureFunctions
+      - Component.Microsoft.VisualStudio.Web.AzureFunctions
+      - Microsoft.VisualStudio.Component.AspNet
+      - Microsoft.VisualStudio.Component.AspNet45
+      - Microsoft.Net.ComponentGroup.4.8.DeveloperTools
+      - Microsoft.Net.Component.4.8.TargetingPack
+      - Microsoft.VisualStudio.Component.Web
+      - Microsoft.VisualStudio.Component.AppInsights.Tools
+      - Microsoft.VisualStudio.Component.WebDeploy
+      - Microsoft.NetCore.Component.Web
+      - Microsoft.VisualStudio.Component.DockerTools
+      - Microsoft.VisualStudio.Component.FSharp.WebTemplates
+      - Microsoft.NetCore.Component.DevelopmentTools
+      - Microsoft.ComponentGroup.ClickOnce.Publish
+      - Microsoft.VisualStudio.Component.FSharp
+      - Microsoft.NetCore.Component.Runtime.9.0
+      - Component.VisualStudio.GitHub.Copilot
+      - Microsoft.VisualStudio.Component.IntelliCode
+      - Microsoft.VisualStudio.ComponentGroup.Web
+      - Component.Microsoft.WebTools.BrowserLink.WebLivePreview
+      - Component.Microsoft.Web.LibraryManager
+      - Microsoft.VisualStudio.Component.SQL.DataSources
+      - Microsoft.VisualStudio.Component.SQL.SSDT
+      - Microsoft.VisualStudio.Component.ManagedDesktop.Core
+      - Microsoft.Component.ClickOnce
+      - Microsoft.VisualStudio.Component.MSSQL.CMDLnUtils
+      - Microsoft.VisualStudio.Component.SQL.CLR
+      - Microsoft.VisualStudio.Component.Common.Azure.Tools
+      - Microsoft.VisualStudio.Component.SQL.LocalDB.Runtime
+      - Microsoft.VisualStudio.Component.MSODBC.SQL
+      - Microsoft.VisualStudio.Component.NuGet
+      - Microsoft.VisualStudio.Component.IISExpress
+      - Component.Microsoft.VisualStudio.RazorExtension
+      - Microsoft.VisualStudio.Component.TextTemplating
+      - Microsoft.VisualStudio.Component.Roslyn.LanguageServices
+      - Microsoft.Component.MSBuild
+      - Microsoft.VisualStudio.Component.Roslyn.Compiler
+      - Microsoft.VisualStudio.Component.JavaScript.Diagnostics
+      - Microsoft.VisualStudio.Component.JavaScript.TypeScript
+      - Microsoft.VisualStudio.ComponentGroup.WebToolsExtensions
+      - Microsoft.VisualStudio.Component.TypeScript.TSServer
+      - Microsoft.Net.ComponentGroup.DevelopmentPrerequisites
+      - Microsoft.Net.Component.4.7.2.TargetingPack
+      - Microsoft.Net.Component.4.8.SDK
+      - Microsoft.VisualStudio.Workload.CoreEditor
+      - Microsoft.VisualStudio.Component.CoreEditor
+      includeRecommended: false
+      productId: Microsoft.VisualStudio.Product.Professional
+      vsConfigFile: C:\Users\mchampion\source\repos\KoaDev\WaC\DSCv3\resources\visual-studio\professional.vsconfig
+      allowUnsignedExtensions: false
+      includeOptional: false
+      components: null
+      channelId: VisualStudio.17.Release
+- metadata:
+    Microsoft.DSC:
+      duration: PT6.5250858S
+  name: InstallCrtPaca
+  type: MyCertificate/MyCertificate
+  result:
+    actualState:
+      Location: LocalMachine
+      Thumbprint: 3D30B009E3FA41AEBF125824E58B1C8692E94E0B
+      Path: C:\Users\mchampion\source\repos\KoaDev\WaC\resources\certificates\_.cr-paca.fr.crt
+      StoreName: Root
+      Ensure: Present
+- metadata:
+    Microsoft.DSC:
+      duration: PT7.8245397S
+  name: InstallCACert
+  type: MyCertificate/MyCertificate
+  result:
+    actualState:
+      Path: C:\Users\mchampion\source\repos\KoaDev\WaC\resources\certificates\Autorite de Certification Region SUD Provence-Alpes-Cote d'Azur.crt
+      Thumbprint: 65D65B74DAF4FF1C8649E18366123A23AF560260
+      Location: LocalMachine
+      Ensure: Present
+      StoreName: Root
+- metadata:
+    Microsoft.DSC:
+      duration: PT8.9580444S
+  name: ExcludeProjectsFolder
+  type: MyWindowsDefenderExclusion/MyWindowsDefenderExclusion
+  result:
+    actualState:
+      Name: WindowsDefenderPreference
+      Type: Path
+      Ensure: Present
+      Value: C:\Projets
+- metadata:
+    Microsoft.DSC:
+      duration: PT10.8797131S
+  name: ExcludeDotnetToolsFolder
+  type: MyWindowsDefenderExclusion/MyWindowsDefenderExclusion
+  result:
+    actualState:
+      Ensure: Present
+      Name: WindowsDefenderPreference
+      Value: C:\Users\%user%\.dotnet\tools
+      Type: Path
+- metadata:
+    Microsoft.DSC:
+      duration: PT6.7430156S
+  name: UseLTSNodeVersion
+  type: MyNodeVersion/MyNodeVersion
+  result:
+    actualState:
+      LatestVersion: '22'
+      Ensure: Present
+      State: Stale
+      Version: lts
+      CurrentVersion: 22.17.1
+- metadata:
+    Microsoft.DSC:
+      duration: PT7.4466589S
+  name: InstallNodeVersion18
+  type: MyNodeVersion/MyNodeVersion
+  result:
+    actualState:
+      Ensure: Present
+      LatestVersion: '18'
+      State: Stale
+      CurrentVersion: 18.20.8
+      Version: '18'
+- metadata:
+    Microsoft.DSC:
+      duration: PT5.4406872S
+  name: RegionSUD
+  type: MyHosts/MyHosts
+  result:
+    actualState:
+      Path: C:\Users\mchampion\source\repos\KoaDev\WaC\DSCv3\resources\hosts
+      Ensure: Absent
+      Name: RegionSUD
+messages: []
+hadErrors: false

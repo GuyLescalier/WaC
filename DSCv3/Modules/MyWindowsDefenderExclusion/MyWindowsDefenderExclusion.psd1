@@ -1,9 +1,7 @@
-# Inspired by https://github.com/chocolatey/cChoco
-
 @{
-    RootModule           = 'MyChocolatey.psm1'
+    RootModule           = 'MyWindowsDefenderExclusion.psm1'
     ModuleVersion        = '0.0.1'
-    GUID                 = '0fcc04b9-b393-444d-b796-04dc402f8b67'
+    GUID                 = '048d11c0-87cf-4a36-9031-f00e2fada918'
     Author               = 'Guy Lescalier'
     CompanyName          = 'SopraSteria'
     Copyright            = '(c) Guy Lescalier. All rights reserved.'
@@ -11,5 +9,5 @@
     CmdletsToExport      = '*'
     VariablesToExport    = @()
     AliasesToExport      = @()
-    DscResourcesToExport = 'MyChocolatey'
+    DscResourcesToExport = 'MyWindowsDefenderExclusion'
 }

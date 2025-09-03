@@ -11,5 +11,5 @@
     CmdletsToExport      = '*'
     VariablesToExport    = @()
     AliasesToExport      = @()
-    DscResourcesToExport = 'MyChocolatey'
+    DscResourcesToExport = @('MyChocolatey') 
 }

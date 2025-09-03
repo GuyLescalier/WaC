@@ -1,0 +1,315 @@
+<UserSettings>
+	<ToolsOptions>
+		<ToolsOptionsCategory name="Environment" RegisteredName="Environment">
+			<ToolsOptionsSubCategory name="FindAndReplace" RegisteredName="FindAndReplace" PackageName="Visual Studio Environment Package">
+				<PropertyValue name="ShowMessageBoxes">false</PropertyValue>
+			</ToolsOptionsSubCategory>
+			<ToolsOptionsSubCategory name="ProjectsAndSolution" RegisteredName="ProjectsAndSolution" PackageName="Visual Studio Environment Package">
+				<PropertyValue name="PromptForRenameSymbol">false</PropertyValue>
+				<PropertyValue name="ConcurrentBuilds">8</PropertyValue>
+			</ToolsOptionsSubCategory>
+			<ToolsOptionsSubCategory name="RoamingSettings" RegisteredName="RoamingSettings" PackageName="Roaming Manager Package">
+				<PropertyValue name="GitHubEnterpriseEnabled">true</PropertyValue>
+				<PropertyValue name="SelectedFlowType">3</PropertyValue>
+			</ToolsOptionsSubCategory>
+			<ToolsOptionsSubCategory name="WebBrowser" RegisteredName="WebBrowser" PackageName="Visual Studio Web Browser Package">
+				<PropertyValue name="HomePage">https://go.microsoft.com/fwlink/?linkid=32722</PropertyValue>
+				<PropertyValue name="ViewSourceExternalProgram">C:\WINDOWS\system32\notepad.exe</PropertyValue>
+				<PropertyValue name="SearchPage">https://www.bing.com</PropertyValue>
+			</ToolsOptionsSubCategory>
+		</ToolsOptionsCategory>
+		<ToolsOptionsCategory name="Projects" RegisteredName="Projects">
+		</ToolsOptionsCategory>
+		<ToolsOptionsCategory name="TextEditor" RegisteredName="TextEditor">
+			<ToolsOptionsSubCategory name="C/C++ Specific" RegisteredName="C/C++ Specific" PackageName="Visual C++ Language Manager Package">
+				<PropertyValue name="AssingInsteadOfEqualityErrorTagType">2</PropertyValue>
+				<PropertyValue name="ComparisonBitwiseMismatchErrorTagType">2</PropertyValue>
+			</ToolsOptionsSubCategory>
+			<ToolsOptionsSubCategory name="CSharp-Specific" RegisteredName="CSharp-Specific" PackageName="CSharpPackage">
+				<PropertyValue name="Style_RemoveUnnecessarySuppressionExclusions" />
+				<PropertyValue name="Style_PreferPatternMatching">&lt;CodeStyleOption SerializationVersion="1" Type="Boolean" Value="true" DiagnosticSeverity="Hidden" /&gt;</PropertyValue>
+				<PropertyValue name="NavigateToSourceLinkAndEmbeddedSources">1</PropertyValue>
+				<PropertyValue name="CollapseSourceLinkEmbeddedDecompiledFilesWhenFirstOpened">0</PropertyValue>
+				<PropertyValue name="Style_UseVarWhenDeclaringLocals">0</PropertyValue>
+				<PropertyValue name="Space_AroundBinaryOperator">0</PropertyValue>
+				<PropertyValue name="Style_AllowMultipleBlankLines">&lt;CodeStyleOption SerializationVersion="1" Type="Boolean" Value="true" DiagnosticSeverity="Hidden" /&gt;</PropertyValue>
+				<PropertyValue name="SkipAnalyzersForImplicitlyTriggeredBuilds">1</PropertyValue>
+				<PropertyValue name="OfferRemoveUnusedReferences">1</PropertyValue>
+				<PropertyValue name="CollapseMetadataSignatureFilesWhenFirstOpened">1</PropertyValue>
+				<PropertyValue name="Fading_FadeOutUnusedImports">1</PropertyValue>
+				<PropertyValue name="ExtractMethod_DoNotPutOutOrRefOnStruct">1</PropertyValue>
+				<PropertyValue name="ShowItemsFromUnimportedNamespaces">1</PropertyValue>
+				<PropertyValue name="Style_PreferCompoundAssignment">&lt;CodeStyleOption SerializationVersion="1" Type="Boolean" Value="true" DiagnosticSeverity="Info" /&gt;</PropertyValue>
+				<PropertyValue name="Style_PreferredModifierOrder">&lt;CodeStyleOption SerializationVersion="1" Type="String" Value="public,private,protected,internal,file,static,extern,new,virtual,abstract,sealed,override,readonly,unsafe,required,volatile,async" DiagnosticSeverity="Hidden" /&gt;</PropertyValue>
+				<PropertyValue name="Style_RequireAccessibilityModifiers">&lt;CodeStyleOption SerializationVersion="1" Type="Int32" Value="2" DiagnosticSeverity="Hidden" /&gt;</PropertyValue>
+				<PropertyValue name="EnableHighlightRelatedKeywords">1</PropertyValue>
+				<PropertyValue name="ExtractMethod_AllowBestEffort">1</PropertyValue>
+				<PropertyValue name="Style_UnusedValueAssignment">&lt;CodeStyleOption SerializationVersion="1" Type="Int32" Value="2" DiagnosticSeverity="Info" /&gt;</PropertyValue>
+				<PropertyValue name="Style_PreferReadOnlyStruct">&lt;CodeStyleOption SerializationVersion="1" Type="Boolean" Value="true" DiagnosticSeverity="Info" /&gt;</PropertyValue>
+				<PropertyValue name="NavigateToDecompiledSources">1</PropertyValue>
+				<PropertyValue name="Fading_FadeOutUnreachableCode">1</PropertyValue>
+				<PropertyValue name="Style_PreferConditionalExpressionOverReturn">&lt;CodeStyleOption SerializationVersion="1" Type="Boolean" Value="true" DiagnosticSeverity="Hidden" /&gt;</PropertyValue>
+				<PropertyValue name="AutomaticallyCompleteStatementOnSemicolon">1</PropertyValue>
+				<PropertyValue name="AddImportsOnPaste">1</PropertyValue>
+				<PropertyValue name="CollapseRegionsWhenFirstOpened">1</PropertyValue>
+				<PropertyValue name="DisplayLineSeparators">0</PropertyValue>
+				<PropertyValue name="Style_PreferTopLevelStatements">&lt;CodeStyleOption SerializationVersion="1" Type="Boolean" Value="true" DiagnosticSeverity="Hidden" /&gt;</PropertyValue>
+				<PropertyValue name="Style_PreferIndexOperator">&lt;CodeStyleOption SerializationVersion="1" Type="Boolean" Value="true" DiagnosticSeverity="Info" /&gt;</PropertyValue>
+				<PropertyValue name="Style_PreferDeconstructedVariableDeclaration">&lt;CodeStyleOption SerializationVersion="1" Type="Boolean" Value="true" DiagnosticSeverity="Info" /&gt;</PropertyValue>
+				<PropertyValue name="WarnOnBuildErrors">0</PropertyValue>
+				<PropertyValue name="SortUsings_PlaceSystemFirst">1</PropertyValue>
+				<PropertyValue name="Style_ImplicitObjectCreationWhenTypeIsApparent">&lt;CodeStyleOption SerializationVersion="1" Type="Boolean" Value="true" DiagnosticSeverity="Info" /&gt;</PropertyValue>
+				<PropertyValue name="Style_PreferLocalOverAnonymousFunction">&lt;CodeStyleOption SerializationVersion="1" Type="Boolean" Value="true" DiagnosticSeverity="Info" /&gt;</PropertyValue>
+				<PropertyValue name="Style_PreferNamespaceAndFolderMatchStructure">&lt;CodeStyleOption SerializationVersion="1" Type="Boolean" Value="true" DiagnosticSeverity="Info" /&gt;</PropertyValue>
+				<PropertyValue name="Style_PreferSimplifiedInterpolation">&lt;CodeStyleOption SerializationVersion="1" Type="Boolean" Value="true" DiagnosticSeverity="Info" /&gt;</PropertyValue>
+				<PropertyValue name="AutomaticallyFixStringContentsOnPaste">1</PropertyValue>
+				<PropertyValue name="ShowSnippets">0</PropertyValue>
+				<PropertyValue name="ShowKeywords">0</PropertyValue>
+				<PropertyValue name="SortUsings_SeparateImportDirectiveGroups">0</PropertyValue>
+				<PropertyValue name="Style_NamespaceDeclarations">&lt;CodeStyleOption SerializationVersion="1" Type="Boolean" Value="false" DiagnosticSeverity="Hidden" /&gt;</PropertyValue>
+				<PropertyValue name="Style_PreferredUsingDirectivePlacement">&lt;CodeStyleOption SerializationVersion="1" Type="Boolean" Value="true" DiagnosticSeverity="Hidden" /&gt;</PropertyValue>
+				<PropertyValue name="Style_PreferNotPattern">&lt;CodeStyleOption SerializationVersion="1" Type="Boolean" Value="true" DiagnosticSeverity="Info" /&gt;</PropertyValue>
+				<PropertyValue name="Style_PreferConditionalExpressionOverAssignment">&lt;CodeStyleOption SerializationVersion="1" Type="Boolean" Value="true" DiagnosticSeverity="Hidden" /&gt;</PropertyValue>
+				<PropertyValue name="Style_PreferExpressionBodiedLambdas">&lt;CodeStyleOption SerializationVersion="1" Type="Boolean" Value="true" DiagnosticSeverity="Hidden" /&gt;</PropertyValue>
+				<PropertyValue name="CSharpClosedFileDiagnostics">0</PropertyValue>
+				<PropertyValue name="ClosedFileDiagnostics">0</PropertyValue>
+				<PropertyValue name="AutoFormattingOnTyping">1</PropertyValue>
+				<PropertyValue name="Style_AllowBlankLineAfterColonInConstructorInitializer">&lt;CodeStyleOption SerializationVersion="1" Type="Boolean" Value="true" DiagnosticSeverity="Hidden" /&gt;</PropertyValue>
+				<PropertyValue name="Style_UnusedValueExpressionStatement">&lt;CodeStyleOption SerializationVersion="1" Type="Int32" Value="2" DiagnosticSeverity="Hidden" /&gt;</PropertyValue>
+				<PropertyValue name="Style_AllowStatementImmediatelyAfterBlock">&lt;CodeStyleOption SerializationVersion="1" Type="Boolean" Value="true" DiagnosticSeverity="Hidden" /&gt;</PropertyValue>
+				<PropertyValue name="Style_PreferAutoProperties">&lt;CodeStyleOption SerializationVersion="1" Type="Boolean" Value="true" DiagnosticSeverity="Hidden" /&gt;</PropertyValue>
+				<PropertyValue name="Style_PreferExpressionBodiedLocalFunctions">&lt;CodeStyleOption SerializationVersion="1" Type="Boolean" Value="false" DiagnosticSeverity="Hidden" /&gt;</PropertyValue>
+				<PropertyValue name="Style_AllowBlankLineAfterTokenInConditionalExpression">&lt;CodeStyleOption SerializationVersion="1" Type="Boolean" Value="true" DiagnosticSeverity="Hidden" /&gt;</PropertyValue>
+				<PropertyValue name="Style_AllowBlankLinesBetweenConsecutiveBraces">&lt;CodeStyleOption SerializationVersion="1" Type="Boolean" Value="true" DiagnosticSeverity="Hidden" /&gt;</PropertyValue>
+				<PropertyValue name="Style_AllowEmbeddedStatementsOnSameLine">&lt;CodeStyleOption SerializationVersion="1" Type="Boolean" Value="true" DiagnosticSeverity="Hidden" /&gt;</PropertyValue>
+				<PropertyValue name="Style_PreferSimpleUsingStatement">&lt;CodeStyleOption SerializationVersion="1" Type="Boolean" Value="true" DiagnosticSeverity="Info" /&gt;</PropertyValue>
+				<PropertyValue name="Style_PreferSimpleDefaultExpression">&lt;CodeStyleOption SerializationVersion="1" Type="Boolean" Value="true" DiagnosticSeverity="Info" /&gt;</PropertyValue>
+				<PropertyValue name="Style_PreferSystemHashCode">&lt;CodeStyleOption SerializationVersion="1" Type="Boolean" Value="true" DiagnosticSeverity="Info" /&gt;</PropertyValue>
+				<PropertyValue name="Style_PreferIsNullCheckOverReferenceEqualityMethod">&lt;CodeStyleOption SerializationVersion="1" Type="Boolean" Value="true" DiagnosticSeverity="Info" /&gt;</PropertyValue>
+				<PropertyValue name="AlwaysUseDefaultSymbolServers">1</PropertyValue>
+				<PropertyValue name="EnableArgumentCompletionSnippets">-1</PropertyValue>
+				<PropertyValue name="Style_AllowBlankLineAfterTokenInArrowExpressionClause">&lt;CodeStyleOption SerializationVersion="1" Type="Boolean" Value="true" DiagnosticSeverity="Hidden" /&gt;</PropertyValue>
+				<PropertyValue name="Style_PreferSimplifiedBooleanExpressions">&lt;CodeStyleOption SerializationVersion="1" Type="Boolean" Value="true" DiagnosticSeverity="Info" /&gt;</PropertyValue>
+				<PropertyValue name="TriggerInArgumentLists">1</PropertyValue>
+				<PropertyValue name="NavigateAsynchronously">1</PropertyValue>
+				<PropertyValue name="Style_PreferTupleSwap">&lt;CodeStyleOption SerializationVersion="1" Type="Boolean" Value="true" DiagnosticSeverity="Info" /&gt;</PropertyValue>
+				<PropertyValue name="Style_PreferStaticLocalFunction">&lt;CodeStyleOption SerializationVersion="1" Type="Boolean" Value="true" DiagnosticSeverity="Info" /&gt;</PropertyValue>
+				<PropertyValue name="Style_PreferRangeOperator">&lt;CodeStyleOption SerializationVersion="1" Type="Boolean" Value="true" DiagnosticSeverity="Info" /&gt;</PropertyValue>
+				<PropertyValue name="Style_PreferNullCheckOverTypeCheck">&lt;CodeStyleOption SerializationVersion="1" Type="Boolean" Value="true" DiagnosticSeverity="Info" /&gt;</PropertyValue>
+				<PropertyValue name="Style_PreferMethodGroupConversion">&lt;CodeStyleOption SerializationVersion="1" Type="Boolean" Value="true" DiagnosticSeverity="Hidden" /&gt;</PropertyValue>
+				<PropertyValue name="Indent_FlushLabelsLeft">1</PropertyValue>
+				<PropertyValue name="CollapseImportsWhenFirstOpened">0</PropertyValue>
+			</ToolsOptionsSubCategory>
+			<ToolsOptionsSubCategory name="FSharp" RegisteredName="FSharp" PackageName="Text Management Package">
+				<PropertyValue name="EnableLeftClickForURLs">false</PropertyValue>
+			</ToolsOptionsSubCategory>
+			<ToolsOptionsSubCategory name="JSON" RegisteredName="JSON" PackageName="Text Management Package">
+				<PropertyValue name="TabSize">2</PropertyValue>
+				<PropertyValue name="IndentSize">2</PropertyValue>
+			</ToolsOptionsSubCategory>
+			<ToolsOptionsSubCategory name="TypeScript Specific" RegisteredName="TypeScript Specific" PackageName="Microsoft.VisualStudio.LanguageServices.TypeScript.TypeScriptPackage, Microsoft.VisualStudio.LanguageServices.TypeScript, Version=17.0.0.0, Culture=neutral">
+				<PropertyValue name="InsertSpaceAfterConstructor">false</PropertyValue>
+				<PropertyValue name="CollapseRegionsToDefinition">true</PropertyValue>
+				<PropertyValue name="IncludePackageJsonAutoImportsAuto">true</PropertyValue>
+				<PropertyValue name="InsertSpaceAfterOpeningAndBeforeClosingTemplateStringBraces">false</PropertyValue>
+				<PropertyValue name="InsertSpaceAfterOpeningAndBeforeClosingNonemptyBraces">true</PropertyValue>
+				<PropertyValue name="IncludePackageJsonAutoImportsOff">false</PropertyValue>
+				<PropertyValue name="InsertSpaceAfterTypeAssertion">false</PropertyValue>
+				<PropertyValue name="InsertSpaceAfterOpeningAndBeforeClosingEmptyBraces">true</PropertyValue>
+				<PropertyValue name="IncludePackageJsonAutoImports">0</PropertyValue>
+				<PropertyValue name="InsertSpaceBeforeTypeAnnotation">false</PropertyValue>
+				<PropertyValue name="InsertSpaceBeforeFunctionParenthesis">false</PropertyValue>
+				<PropertyValue name="ImportModuleSpecifierPreferenceProjectRelative">false</PropertyValue>
+				<PropertyValue name="IncludePackageJsonAutoImportsOn">false</PropertyValue>
+				<PropertyValue name="DisableFilenameBasedTypeAcquisition">false</PropertyValue>
+				<PropertyValue name="TypeAcquisitionEnable">true</PropertyValue>
+				<PropertyValue name="InsertSpaceAfterOpeningAndBeforeClosingJsxExpressionBraces">false</PropertyValue>
+				<PropertyValue name="InsertSpaceAfterOpeningAndBeforeClosingNonemptyBrackets">false</PropertyValue>
+				<PropertyValue name="ImportModuleSpecifierPreferenceShortest">false</PropertyValue>
+			</ToolsOptionsSubCategory>
+			<ToolsOptionsSubCategory name="WebForms Specific" RegisteredName="WebForms Specific" PackageName="Visual Studio HTM Editor Package">
+				<PropertyValue name="HtmlMargin">999</PropertyValue>
+				<PropertyValue name="HtmlBreakInTags">0</PropertyValue>
+				<PropertyValue name="ShowErrors">-1</PropertyValue>
+			</ToolsOptionsSubCategory>
+			<ToolsOptionsSubCategory name="XAML" RegisteredName="XAML" PackageName="Text Management Package">
+				<PropertyValue name="EnableLeftClickForURLs">false</PropertyValue>
+			</ToolsOptionsSubCategory>
+			<ToolsOptionsSubCategory name="XML" RegisteredName="XML" PackageName="Text Management Package">
+				<PropertyValue name="TabSize">2</PropertyValue>
+				<PropertyValue name="IndentSize">2</PropertyValue>
+			</ToolsOptionsSubCategory>
+			<ToolsOptionsSubCategory name="Rest" RegisteredName="Rest" PackageName="Text Management Package">
+				<PropertyValue name="EnableLeftClickForURLs">false</PropertyValue>
+				<PropertyValue name="ShowLineNumbers">false</PropertyValue>
+			</ToolsOptionsSubCategory>
+		</ToolsOptionsCategory>
+		<ToolsOptionsCategory name="XAML Designer" RegisteredName="XAML Designer">
+		</ToolsOptionsCategory>
+	</ToolsOptions>
+	<Category name="CSS_Advanced" Category="{978df9f7-5f7c-46c1-afe6-3e4335e93514}" Package="{5330c67f-305c-4b17-a3dc-fbb7aee69c09}" RegisteredName="CSS_Advanced" PackageName="CssPackage">
+		<PropertyValue name="AutoFormat">On</PropertyValue>
+		<PropertyValue name="BracePositionStyle">Semi-expanded</PropertyValue>
+		<PropertyValue name="ColorPickerFormat">#000000</PropertyValue>
+		<PropertyValue name="DetectInvalidValues">True</PropertyValue>
+		<PropertyValue name="DetectInvalidVendorSpecificItems">True</PropertyValue>
+		<PropertyValue name="DetectUnknownProperties">True</PropertyValue>
+		<PropertyValue name="EnableValidation">True</PropertyValue>
+		<PropertyValue name="ErrorsAsWarnings">True</PropertyValue>
+		<PropertyValue name="FormatOnPaste">On</PropertyValue>
+		<PropertyValue name="HierarchicalIndent">On</PropertyValue>
+	</Category>
+	<Category name="CodeLens" Category="{04DA95C1-B198-491D-BB93-DAD8610F3019}" Package="{E269B994-EF71-4CE0-8BCD-581C217372E8}" RegisteredName="CodeLens" PackageName="Microsoft.VisualStudio.Editor.Implementation.EditorPackage">
+	</Category>
+	<Category name="Debugger" Category="{EEDBF29A-5C8B-4E01-827C-263382C18CFE}" Package="{C9DD4A57-47FB-11D2-83E7-00C04F9902C1}" RegisteredName="Debugger" PackageName="Visual Studio Debugger">
+		<PropertyValue name="EnableJavaScriptMultitargetDebugging">1</PropertyValue>
+		<PropertyValue name="EnableJavaScriptMultitargetNodeDebug">1</PropertyValue>
+		<PropertyValue name="UseVSDebugConsole">1</PropertyValue>
+		<PropertyValue name="HotReloadVerbosityLevel">0</PropertyValue>
+		<PropertyValue name="StringVisualizerWordWrap">1</PropertyValue>
+		<PropertyValue name="FrameworkSourceServerName" />
+	</Category>
+	<Category name="Environment_Group" RegisteredName="Environment_Group">
+		<Category name="Environment_Aliases" Category="{AD334E74-368A-4c46-9AF8-F53ABF0775F2}" Package="{DA9FB551-C724-11d0-AE1F-00A0C90FFFC3}" RegisteredName="Environment_Aliases" PackageName="Visual Studio Environment Package">
+			<Aliases Version="1.0">
+			</Aliases>
+		</Category>
+		<Category name="Environment_CommandBars" Category="{B9D9C123-B500-4202-B887-57C829CBD08F}" Package="{DA9FB551-C724-11d0-AE1F-00A0C90FFFC3}" RegisteredName="Environment_CommandBars" PackageName="Visual Studio Environment Package">
+			<CommandBars Version="05072811">
+				<DefaultCustomizations>
+					<add Cmd="{5EFC7975-14BC-11CF-9B2B-00AA00573819}:00000462" CmdPri="00100001" Group="{D309F791-903F-11D0-9EFC-00A0C911004F}:0000019f" GroupPri="01000000" Menu="{D309F791-903F-11D0-9EFC-00A0C911004F}:00000300" />
+					<remove Cmd="{6E87CFAD-6C05-4ADF-9CD7-3B7943875B7C}:00000010" CmdPri="06500000" Group="{D309F791-903F-11D0-9EFC-00A0C911004F}:00000174" GroupPri="09000000" Menu="{D309F791-903F-11D0-9EFC-00A0C911004F}:00000001" IsPartialRemoval="true" />
+					<remove Cmd="{5EFC7975-14BC-11CF-9B2B-00AA00573819}:00000105" CmdPri="03000000" Group="{D309F791-903F-11D0-9EFC-00A0C911004F}:00000133" GroupPri="01000000" Menu="{D309F791-903F-11D0-9EFC-00A0C911004F}:00000082" IsPartialRemoval="false" />
+					<remove Cmd="{5EFC7975-14BC-11CF-9B2B-00AA00573819}:000000c7" CmdPri="04000000" Group="{D309F791-903F-11D0-9EFC-00A0C911004F}:00000133" GroupPri="01000000" Menu="{D309F791-903F-11D0-9EFC-00A0C911004F}:00000082" IsPartialRemoval="false" />
+					<remove Cmd="{5EFC7975-14BC-11CF-9B2B-00AA00573819}:00000462" CmdPri="00500000" Group="{D309F791-903F-11D0-9EFC-00A0C911004F}:00000722" GroupPri="08000000" Menu="{D309F791-903F-11D0-9EFC-00A0C911004F}:00000082" IsPartialRemoval="false" />
+					<remove Cmd="{D309F791-903F-11D0-9EFC-00A0C911004F}:00000359" CmdPri="01000000" Group="{D309F791-903F-11D0-9EFC-00A0C911004F}:0000035a" GroupPri="03500000" Menu="{D309F791-903F-11D0-9EFC-00A0C911004F}:00000300" IsPartialRemoval="false" />
+					<remove Cmd="{E8B06F44-6D01-11D2-AA7D-00C04F990343}:00001387" CmdPri="00100000" Group="{E8B06F42-6D01-11D2-AA7D-00C04F990343}:0000006a" GroupPri="00200000" Menu="{E8B06F42-6D01-11D2-AA7D-00C04F990343}:00000004" IsPartialRemoval="false" />
+				</DefaultCustomizations>
+				<UserCustomizations>
+					<add Cmd="{5D4C0442-C0A2-4BE8-9B4D-AB1C28450942}:00000102" CmdPri="01028001" Group="{5D4C0442-C0A2-4BE8-9B4D-AB1C28450942}:00002000" GroupPri="02000000" Menu="{5D4C0442-C0A2-4BE8-9B4D-AB1C28450942}:00001000" />
+					<remove Cmd="{5D4C0442-C0A2-4BE8-9B4D-AB1C28450942}:00000102" CmdPri="01100000" Group="{5D4C0442-C0A2-4BE8-9B4D-AB1C28450942}:00002000" GroupPri="02000000" Menu="{5D4C0442-C0A2-4BE8-9B4D-AB1C28450942}:00001000" IsPartialRemoval="false" />
+				</UserCustomizations>
+			</CommandBars>
+			<PropertyValue name="ShowLargeButtons">false</PropertyValue>
+			<PropertyValue name="ShowScreenTips">true</PropertyValue>
+			<PropertyValue name="ShowScreenTipShortcutKeys">false</PropertyValue>
+		</Category>
+		<Category name="Environment_Expansions" Category="{0B9A10B2-C0D0-4a6a-8353-115E9CACF34A}" Package="{F5E7E720-1401-11d1-883B-0000F87579D2}" RegisteredName="Environment_Expansions" PackageName="Text Management Package">
+		</Category>
+		<Category name="Environment_ExtensionManager" Category="{539391d7-9414-4715-b033-8669db0abee1}" Package="{e7576c05-1874-450c-9e98-cf3a0897a069}" RegisteredName="Environment_ExtensionManager" PackageName="ExtensionManagerPackage">
+			<PropertyValue name="CustomRepositories">&lt;ExtensionRepositoryConfigList Capacity="0" xmlns="clr-namespace:Microsoft.VisualStudio.ExtensionManager;assembly=Microsoft.VisualStudio.ExtensionEngine" /&gt;</PropertyValue>
+		</Category>
+		<Category name="Environment_ExternalTools" Category="{E8FAE9E8-FBA2-4474-B134-AB0FFCFB291D}" Package="{DA9FB551-C724-11d0-AE1F-00A0C90FFFC3}" RegisteredName="Environment_ExternalTools" PackageName="Visual Studio Environment Package">
+			<ExternalTools>
+			</ExternalTools>
+		</Category>
+		<Category name="Environment_FontsAndColors" Category="{1EDA5DD4-927A-43a7-810E-7FD247D0DA1D}" Package="{DA9FB551-C724-11d0-AE1F-00A0C90FFFC3}" RegisteredName="Environment_FontsAndColors" PackageName="Visual Studio Environment Package">
+			<PropertyValue name="Version">2</PropertyValue>
+			<FontsAndColors Version="2.0">
+				<Categories>
+					<Category GUID="{75A05685-00A8-4DED-BAE5-E7A50BFA929A}" FontIsDefault="Yes">
+						<Items>
+						</Items>
+					</Category>
+				</Categories>
+			</FontsAndColors>
+		</Category>
+		<Category name="Environment_KeyBindings" Category="{F09035F1-80D2-4312-8EC4-4D354A4BCB4C}" Package="{DA9FB551-C724-11d0-AE1F-00A0C90FFFC3}" RegisteredName="Environment_KeyBindings" PackageName="Visual Studio Environment Package">
+			<Version>17.0.0.0</Version>
+			<KeyboardShortcuts>
+				<ScopeDefinitions>
+					<Scope Name="Find All References Tool Window" ID="{1FA1FD06-3592-4D1D-AC75-0B953320140C}" />
+					<Scope Name="Test Explorer Playlist Tab" ID="{D2F6510A-150A-4F3F-9D7C-8E38622D26F7}" />
+					<Scope Name="XAML Live Preview" ID="{A0CA7712-7BB0-4324-9AF0-70E70D5ECC2D}" />
+					<Scope Name="Live Property Explorer" ID="{31FC2115-5126-4A87-B2F7-77EAAB65048B}" />
+					<Scope Name="XML (Text) Editor" ID="{FA3CD31E-987B-443A-9B81-186104E8DAC1}" />
+					<Scope Name="Microsoft SQL Server Data Tools, T-SQL PDW Editor" ID="{C9626B29-6A42-411C-BD76-DAD855C86913}" />
+					<Scope Name="Work Item Results View" ID="{7026002D-01F6-44E7-95CF-A896C00DA3F8}" />
+					<Scope Name="Solution Explorer" ID="{3AE79031-E1BC-11D0-8F78-00A0C9110057}" />
+					<Scope Name="C# Editor with Encoding" ID="{08467B34-B90F-4D91-BDCA-EB8C8CF3033A}" />
+					<Scope Name="Watch Windows" ID="{90243340-BD7A-11D0-93EF-00A0C90F2734}" />
+					<Scope Name="CSS Editor" ID="{A5401142-F49D-43DB-90B1-F57BA349E55C}" />
+					<Scope Name="Breakpoints Window" ID="{BE4D7042-BA3F-11D2-840E-00C04F9902C1}" />
+					<Scope Name="XAML Designer" ID="{E9B8485C-1217-4277-9ED6-C825A5AC1968}" />
+					<Scope Name="Graph Document Editor" ID="{295A0962-5A59-4F4F-9E12-6BC670C15C3B}" />
+					<Scope Name="XAML Editor" ID="{A4F9FF65-A78C-4650-866D-5069CC4127CF}" />
+					<Scope Name="Microsoft SQL Server Data Tools, Table Designer" ID="{2366CF66-2394-4701-AFCA-37ED7FD41648}" />
+					<Scope Name="HTML Editor" ID="{40D31677-CBC0-4297-A9EF-89D907823A98}" />
+					<Scope Name="Autos Window" ID="{F2E84780-2AF1-11D1-A7FA-00A0C9110051}" />
+					<Scope Name="Live Visual Tree" ID="{A2EAF38F-A0AD-4503-91F8-5F004A69A040}" />
+					<Scope Name="Work Item Query View" ID="{B6303490-B828-410C-9216-AE727D0E282D}" />
+					<Scope Name="DOM Explorer" ID="{01E50993-E6A4-491E-AB3F-3A9939DE3524}" />
+					<Scope Name="Team Foundation Build Detail Editor" ID="{86306A97-84F2-4F5A-889B-1318501AEB5F}" />
+					<Scope Name="Database Designer" ID="{CFF78A9B-78A3-45A3-9142-0267AFC261FA}" />
+					<Scope Name="Work Item Editor" ID="{40A91D9D-8076-4D28-87C5-5AF9F0ACFE0F}" />
+					<Scope Name="Live Unit Testing Tab" ID="{AA9A73A5-B2BF-400B-B57C-58F166FF1C56}" />
+					<Scope Name="JSON Editor" ID="{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}" />
+					<Scope Name="C# Editor" ID="{A6C744A8-0E4A-4FC6-886A-064283054674}" />
+					<Scope Name="Interactive Window" ID="{2D0A56AA-9527-4B78-B6E6-EBE6E05DA749}" />
+					<Scope Name="Merge Editor Window" ID="{9A9A8AAA-ACD2-4DB6-BD81-8D64176C52B6}" />
+					<Scope Name="Visual Basic Editor with Encoding" ID="{6C33E1AA-1401-4536-AB67-0E21E6E569DA}" />
+					<Scope Name="Settings Designer" ID="{515231AD-C9DC-4AA3-808F-E1B65E72081C}" />
+					<Scope Name="Modules Window" ID="{37ABA9BE-445A-11D3-9949-00C04F68FD0A}" />
+					<Scope Name="Parallel Stacks Window" ID="{B9A151CE-EF7C-4FE1-A6AA-4777E6E518F3}" />
+					<Scope Name="Locals Window" ID="{4A18F9D0-B838-11D0-93EB-00A0C90F2734}" />
+					<Scope Name="Web Live Preview Designer" ID="{530B96D7-B823-4F3F-8178-2645B480838B}" />
+					<Scope Name="JavaScript Console" ID="{074F1AD9-308B-488C-861E-CF88182E2788}" />
+					<Scope Name="Difference Viewer" ID="{79D52DDF-52BC-43F1-9663-B3E85CDCA912}" />
+					<Scope Name="Microsoft SQL Server Data Tools, Schema Compare" ID="{00E9D2E3-9044-47D1-978C-BE2825249219}" />
+					<Scope Name="Table Designer" ID="{4194FEE5-6777-419F-A5FC-47A536DF1BDB}" />
+					<Scope Name="Dependency Validation Diagram" ID="{305563E9-FDF9-485B-B73E-D9FEDCC36F2E}" />
+					<Scope Name="Microsoft SQL Server Data Tools, T-SQL Editor" ID="{CC5D8DF0-88F4-4BB2-9DBB-B48CEE65C30A}" />
+					<Scope Name="Query Results" ID="{0058A1F7-65F3-4DB9-B3D0-CA7E64DD73CD}" />
+					<Scope Name="Test Explorer" ID="{E1B7D1F8-9B3C-49B1-8F4F-BFC63A88835D}" />
+					<Scope Name="XML Schema Designer" ID="{DEE6CEF9-3BCA-449A-82A6-FC757D6956FB}" />
+				</ScopeDefinitions>
+				<ShortcutsScheme>Visual C# 2005</ShortcutsScheme>
+			</KeyboardShortcuts>
+		</Category>
+		<Category name="Environment_SimplifiedToolsOptions" Category="{13BEDEE6-9051-4809-B9E3-2EEC749EB15A}" Package="{DA9FB551-C724-11d0-AE1F-00A0C90FFFC3}" RegisteredName="Environment_SimplifiedToolsOptions" PackageName="Visual Studio Environment Package">
+			<PropertyValue name="ShowingAllPages">true</PropertyValue>
+		</Category>
+	</Category>
+	<Category name="HTML_Advanced" Category="{3d9c2439-5c0a-4592-b9e8-42e26dfe636b}" Package="{cf49ec7d-92b1-4bbd-9254-9cc13978e82e}" RegisteredName="HTML_Advanced" PackageName="HtmlPackage">
+		<PropertyValue name="EnableTagHelperTooltips">True</PropertyValue>
+		<PropertyValue name="EnableTooltips">True</PropertyValue>
+		<PropertyValue name="EnableValidation">True</PropertyValue>
+		<PropertyValue name="ErrorsAsWarnings">True</PropertyValue>
+		<PropertyValue name="FormatOnPaste">True</PropertyValue>
+		<PropertyValue name="InsertAttributeValueQuotes">True</PropertyValue>
+		<PropertyValue name="InsertClosingTag">True</PropertyValue>
+		<PropertyValue name="UseLegacyASPNETCoreRazorEditor">False</PropertyValue>
+		<PropertyValue name="XHtmlCodingStyle">True</PropertyValue>
+	</Category>
+	<Category name="Projects_Web Package Management_External Web Tools" Category="{b521100c-f698-4018-b1cf-6421fc59fa9b}" Package="{cb03d63d-47be-437d-b26b-1ad8aa7ff394}" RegisteredName="Projects_Web Package Management_External Web Tools" PackageName="PackageManagementPackage">
+		<PropertyValue name="ToolPaths">.\node_modules\.bin;$(PATH);$(VSInstalledExternalTools);C:\Program Files\Git\bin</PropertyValue>
+	</Category>
+	<Category name="Projects_Web Package Management_Package Restore" Category="{03D27F49-12E4-4282-94F3-03A8AEF90B8F}" Package="{cb03d63d-47be-437d-b26b-1ad8aa7ff394}" RegisteredName="Projects_Web Package Management_Package Restore" PackageName="PackageManagementPackage">
+		<PropertyValue name="NpmRestoreOnPackageJsonSave">False</PropertyValue>
+		<PropertyValue name="NpmRestoreOnProjectOpen">False</PropertyValue>
+	</Category>
+	<Category name="SCSS_Advanced" Category="{cea4fb93-f562-4d14-980f-8d9cab6e0a71}" Package="{60116bb0-6f13-49e2-a1ce-a185c783b68b}" RegisteredName="SCSS_Advanced" PackageName="ScssPackage">
+		<PropertyValue name="AutoFormat">Off</PropertyValue>
+		<PropertyValue name="BracePositionStyle">Semi-expanded</PropertyValue>
+		<PropertyValue name="ColorPickerFormat">#000000</PropertyValue>
+		<PropertyValue name="EnableValidation">True</PropertyValue>
+		<PropertyValue name="ErrorsAsWarnings">True</PropertyValue>
+		<PropertyValue name="FormatOnPaste">On</PropertyValue>
+		<PropertyValue name="HierarchicalIndent">Off</PropertyValue>
+	</Category>
+	<Category name="SQL Server Tools" RegisteredName="SQL Server Tools">
+	</Category>
+	<Category name="Text Editor_Advanced" Category="{efd55f3d-23c1-4a1d-a58b-77295611c7d4}" Package="{e269b994-ef71-4ce0-8bcd-581c217372e8}" RegisteredName="Text Editor_Advanced" PackageName="Microsoft.VisualStudio.Editor.Implementation.EditorPackage">
+		<PropertyValue name="WordBasedSuggestions">true</PropertyValue>
+		<PropertyValue name="DefaultCompletionMode">0</PropertyValue>
+		<PropertyValue name="DisplaceCaretLineOption">true</PropertyValue>
+		<PropertyValue name="UseBoxSelectionOption">false</PropertyValue>
+	</Category>
+	<Category name="WebProjects" Category="{C78AFEEB-A722-4cf3-AD3F-8694126C2145}" Package="{39c9c826-8ef8-4079-8c95-428f5b1c323f}" RegisteredName="WebProjects" PackageName="Visual Web Developer Project System Package">
+		<PropertyValue name="Use64BitIISExpress">true</PropertyValue>
+	</Category>
+	<Category name="Yaml_General" Category="{83c839a2-64b3-44bc-bb7a-4ced7f9fcb55}" Package="{9b434dbd-8747-408e-aae0-6efc1f43c75d}" RegisteredName="Yaml_General" PackageName="YAML Package">
+		<PropertyValue name="FileNamesAndPatternsToSuppressValidation">azure-pipelines.y?(a)ml,deployment.y?(a)ml,ingress.y?(a)ml,secrets.y?(a)ml</PropertyValue>
+		<PropertyValue name="ValidationEnabled">True</PropertyValue>
+	</Category>
+</UserSettings>

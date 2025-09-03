@@ -1,0 +1,90 @@
+- name: Registry
+  resourceType: Microsoft.Windows/Registry
+  property:
+  - keyPath: HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced
+    valueName: HideFileExt
+    valueData:
+      DWord: 0
+  - keyPath: HKLM\SYSTEM\CurrentControlSet\Control\Lsa
+    valueName: DisableLoopbackCheck
+    valueData:
+      DWord: 1
+- name: MyScoop
+  resourceType: MyScoop/MyScoop
+  property:
+  - {}
+- name: MyScoopPackage
+  resourceType: MyScoopPackage/MyScoopPackage
+  property:
+  - PackageName: dotnet-sdk
+  - PackageName: gh
+  - PackageName: oh-my-posh
+  - PackageName: git
+  - PackageName: nvm
+  - PackageName: terraform
+  - PackageName: dotnet3-sdk
+  - PackageName: dotnet5-sdk
+  - PackageName: dotnet6-sdk
+  - PackageName: baretail
+  - PackageName: mockoon
+  - PackageName: nuget-package-explorer
+  - PackageName: paint.net
+  - PackageName: postman
+  - PackageName: vlc
+  - PackageName: wiztree
+  - PackageName: CascadiaCode-NF-Mono
+  - PackageName: FiraCode-NF
+  - PackageName: temurin-lts-jdk
+- name: MyChocolatey
+  resourceType: MyChocolatey/MyChocolatey
+  property:
+  - MyChocolateyKey: https://chocolatey.org/install.ps1
+- name: MyChocolateyPackage
+  resourceType: MyChocolateyPackage/MyChocolateyPackage
+  property:
+  - PackageName: 7zip
+  - PackageName: adobereader
+  - PackageName: bulkrenameutility
+  - PackageName: notepadplusplus
+  - PackageName: urlrewrite
+  - PackageName: webdeploy
+  - PackageName: winmerge
+- name: Package
+  resourceType: Microsoft.WinGet/Package
+  property:
+  - id: Fork.Fork
+  - id: Microsoft.PowerShell
+  - id: Microsoft.PowerToys
+  - id: Microsoft.PowerAutomateDesktop
+  - id: Microsoft.PowerBI
+  - id: Microsoft.VisualStudioCode
+  - id: Google.Chrome
+- name: VSComponents
+  resourceType: Microsoft.VisualStudio.DSC/VSComponents
+  property:
+  - ProductId: Microsoft.VisualStudio.Product.Professional
+    ChannelId: VisualStudio.17.Release
+    VSConfigFile: C:\Users\mchampion\source\repos\KoaDev\WaC\DSCv3\resources\visual-studio\professional.vsconfig
+- name: MyCertificate
+  resourceType: MyCertificate/MyCertificate
+  property:
+  - Path: C:\Users\mchampion\source\repos\KoaDev\WaC\resources\certificates\_.cr-paca.fr.crt
+  - Path: C:\Users\mchampion\source\repos\KoaDev\WaC\resources\certificates\Autorite de Certification Region SUD Provence-Alpes-Cote d'Azur.crt
+- name: MyWindowsDefenderExclusion
+  resourceType: MyWindowsDefenderExclusion/MyWindowsDefenderExclusion
+  property:
+  - Type: Path
+    Value: C:\Projets
+  - Type: Path
+    Value: C:\Users\%user%\.dotnet\tools
+- name: MyNodeVersion
+  resourceType: MyNodeVersion/MyNodeVersion
+  property:
+  - Version: lts
+    Ensure: Used
+  - Version: 18
+- name: MyHosts
+  resourceType: MyHosts/MyHosts
+  property:
+  - Name: RegionSUD
+    Path: C:\Users\mchampion\source\repos\KoaDev\WaC\DSCv3\resources\hosts

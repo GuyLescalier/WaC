@@ -1,0 +1,688 @@
+metadata:
+  Microsoft.DSC:
+    version: 3.1.0
+    operation: test
+    executionType: actual
+    startDatetime: 2025-07-18T12:05:23.851958800+02:00
+    endDatetime: 2025-07-18T12:09:33.890674100+02:00
+    duration: PT250.0387153S
+    securityContext: elevated
+results:
+- metadata:
+    Microsoft.DSC:
+      duration: PT0.1244268S
+  name: ShowFileExtensions
+  type: Microsoft.Windows/Registry
+  result:
+    desiredState:
+      keyPath: HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced
+      valueName: HideFileExt
+      valueData:
+        DWord: 0
+    actualState:
+      keyPath: HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced
+      valueName: HideFileExt
+      valueData:
+        DWord: 0
+    inDesiredState: true
+    differingProperties: []
+- metadata:
+    Microsoft.DSC:
+      duration: PT0.0461674S
+  name: DisableLoopbackCheck
+  type: Microsoft.Windows/Registry
+  result:
+    desiredState:
+      keyPath: HKLM\SYSTEM\CurrentControlSet\Control\Lsa
+      valueName: DisableLoopbackCheck
+      valueData:
+        DWord: 1
+    actualState:
+      keyPath: HKLM\SYSTEM\CurrentControlSet\Control\Lsa
+      valueName: DisableLoopbackCheck
+      valueData:
+        DWord: 1
+    inDesiredState: true
+    differingProperties: []
+- metadata:
+    Microsoft.DSC:
+      duration: PT4.2001738S
+  name: InstallScoop
+  type: MyScoop/MyScoop
+  result:
+    desiredState:
+      Ensure: Present
+    actualState:
+      InDesiredState: true
+    inDesiredState: true
+    differingProperties:
+    - Ensure
+- metadata:
+    Microsoft.DSC:
+      duration: PT8.9325103S
+  name: InstallDotnetSdk
+  type: MyScoopPackage/MyScoopPackage
+  result:
+    desiredState:
+      PackageName: dotnet-sdk
+      Ensure: Present
+    actualState:
+      InDesiredState: true
+    inDesiredState: true
+    differingProperties:
+    - PackageName
+    - Ensure
+- metadata:
+    Microsoft.DSC:
+      duration: PT8.9257274S
+  name: InstallGh
+  type: MyScoopPackage/MyScoopPackage
+  result:
+    desiredState:
+      PackageName: gh
+      Ensure: Present
+    actualState:
+      InDesiredState: true
+    inDesiredState: true
+    differingProperties:
+    - PackageName
+    - Ensure
+- metadata:
+    Microsoft.DSC:
+      duration: PT8.928498S
+  name: InstallOhMyPosh
+  type: MyScoopPackage/MyScoopPackage
+  result:
+    desiredState:
+      PackageName: oh-my-posh
+      Ensure: Present
+    actualState:
+      InDesiredState: true
+    inDesiredState: true
+    differingProperties:
+    - PackageName
+    - Ensure
+- metadata:
+    Microsoft.DSC:
+      duration: PT9.3408654S
+  name: InstallGit
+  type: MyScoopPackage/MyScoopPackage
+  result:
+    desiredState:
+      PackageName: git
+      Ensure: Present
+    actualState:
+      InDesiredState: true
+    inDesiredState: true
+    differingProperties:
+    - PackageName
+    - Ensure
+- metadata:
+    Microsoft.DSC:
+      duration: PT9.6504996S
+  name: InstallNvm
+  type: MyScoopPackage/MyScoopPackage
+  result:
+    desiredState:
+      PackageName: nvm
+      Ensure: Present
+    actualState:
+      InDesiredState: true
+    inDesiredState: true
+    differingProperties:
+    - PackageName
+    - Ensure
+- metadata:
+    Microsoft.DSC:
+      duration: PT10.2547924S
+  name: InstallTerraform
+  type: MyScoopPackage/MyScoopPackage
+  result:
+    desiredState:
+      PackageName: terraform
+      Ensure: Present
+    actualState:
+      InDesiredState: true
+    inDesiredState: true
+    differingProperties:
+    - PackageName
+    - Ensure
+- metadata:
+    Microsoft.DSC:
+      duration: PT9.6694465S
+  name: InstallDotnet3Sdk
+  type: MyScoopPackage/MyScoopPackage
+  result:
+    desiredState:
+      PackageName: dotnet3-sdk
+      Ensure: Present
+    actualState:
+      InDesiredState: true
+    inDesiredState: true
+    differingProperties:
+    - PackageName
+    - Ensure
+- metadata:
+    Microsoft.DSC:
+      duration: PT9.3786223S
+  name: InstallDotnet5Sdk
+  type: MyScoopPackage/MyScoopPackage
+  result:
+    desiredState:
+      PackageName: dotnet5-sdk
+      Ensure: Present
+    actualState:
+      InDesiredState: true
+    inDesiredState: true
+    differingProperties:
+    - PackageName
+    - Ensure
+- metadata:
+    Microsoft.DSC:
+      duration: PT9.8634733S
+  name: InstallDotnet6Sdk
+  type: MyScoopPackage/MyScoopPackage
+  result:
+    desiredState:
+      PackageName: dotnet6-sdk
+      Ensure: Present
+    actualState:
+      InDesiredState: true
+    inDesiredState: true
+    differingProperties:
+    - PackageName
+    - Ensure
+- metadata:
+    Microsoft.DSC:
+      duration: PT6.7476712S
+  name: InstallBareTail
+  type: MyScoopPackage/MyScoopPackage
+  result:
+    desiredState:
+      PackageName: baretail
+      Ensure: Present
+    actualState:
+      InDesiredState: false
+    inDesiredState: false
+    differingProperties:
+    - PackageName
+    - Ensure
+- metadata:
+    Microsoft.DSC:
+      duration: PT9.8207817S
+  name: InstallMockoon
+  type: MyScoopPackage/MyScoopPackage
+  result:
+    desiredState:
+      PackageName: mockoon
+      Ensure: Present
+    actualState:
+      InDesiredState: true
+    inDesiredState: true
+    differingProperties:
+    - PackageName
+    - Ensure
+- metadata:
+    Microsoft.DSC:
+      duration: PT9.6204527S
+  name: InstallNugetPackageExplorer
+  type: MyScoopPackage/MyScoopPackage
+  result:
+    desiredState:
+      PackageName: nuget-package-explorer
+      Ensure: Present
+    actualState:
+      InDesiredState: true
+    inDesiredState: true
+    differingProperties:
+    - PackageName
+    - Ensure
+- metadata:
+    Microsoft.DSC:
+      duration: PT9.6119696S
+  name: InstallPaintNet
+  type: MyScoopPackage/MyScoopPackage
+  result:
+    desiredState:
+      PackageName: paint.net
+      Ensure: Present
+    actualState:
+      InDesiredState: true
+    inDesiredState: true
+    differingProperties:
+    - PackageName
+    - Ensure
+- metadata:
+    Microsoft.DSC:
+      duration: PT9.6740419S
+  name: InstallPostman
+  type: MyScoopPackage/MyScoopPackage
+  result:
+    desiredState:
+      PackageName: postman
+      Ensure: Present
+    actualState:
+      InDesiredState: true
+    inDesiredState: true
+    differingProperties:
+    - PackageName
+    - Ensure
+- metadata:
+    Microsoft.DSC:
+      duration: PT9.5267655S
+  name: InstallVlc
+  type: MyScoopPackage/MyScoopPackage
+  result:
+    desiredState:
+      PackageName: vlc
+      Ensure: Present
+    actualState:
+      InDesiredState: true
+    inDesiredState: true
+    differingProperties:
+    - PackageName
+    - Ensure
+- metadata:
+    Microsoft.DSC:
+      duration: PT9.346916S
+  name: InstallWiztree
+  type: MyScoopPackage/MyScoopPackage
+  result:
+    desiredState:
+      PackageName: wiztree
+      Ensure: Present
+    actualState:
+      InDesiredState: true
+    inDesiredState: true
+    differingProperties:
+    - PackageName
+    - Ensure
+- metadata:
+    Microsoft.DSC:
+      duration: PT4.6457737S
+  name: InstallCascadiaCodeNFMono
+  type: MyScoopPackage/MyScoopPackage
+  result:
+    desiredState:
+      PackageName: CascadiaCode-NF-Mono
+      Ensure: Present
+    actualState:
+      InDesiredState: false
+    inDesiredState: false
+    differingProperties:
+    - PackageName
+    - Ensure
+- metadata:
+    Microsoft.DSC:
+      duration: PT9.3008508S
+  name: InstallFiraCodeNF
+  type: MyScoopPackage/MyScoopPackage
+  result:
+    desiredState:
+      PackageName: FiraCode-NF
+      Ensure: Present
+    actualState:
+      InDesiredState: true
+    inDesiredState: true
+    differingProperties:
+    - PackageName
+    - Ensure
+- metadata:
+    Microsoft.DSC:
+      duration: PT9.5275802S
+  name: InstallTemurinLtsJdk
+  type: MyScoopPackage/MyScoopPackage
+  result:
+    desiredState:
+      PackageName: temurin-lts-jdk
+      Ensure: Present
+    actualState:
+      InDesiredState: true
+    inDesiredState: true
+    differingProperties:
+    - PackageName
+    - Ensure
+- metadata:
+    Microsoft.DSC:
+      duration: PT5.588568S
+  name: ChocolateyAndPackages
+  type: Microsoft.DSC/PowerShell
+  result:
+    desiredState:
+      resources:
+      - type: MyChocolatey/MyChocolatey
+        name: InstallChocolatey
+        properties:
+          Ensure: Present
+          MyChocolateyKey: https://chocolatey.org/install.ps1
+      - type: MyChocolateyPackage/MyChocolateyPackage
+        name: Install7Zip
+        properties:
+          PackageName: 7zip
+          Ensure: Present
+      - type: MyChocolateyPackage/MyChocolateyPackage
+        name: InstallAdobeReader
+        properties:
+          PackageName: adobereader
+          Ensure: Present
+      - type: MyChocolateyPackage/MyChocolateyPackage
+        name: InstallBulkRenameUtility
+        properties:
+          PackageName: bulkrenameutility
+          Ensure: Present
+      - type: MyChocolateyPackage/MyChocolateyPackage
+        name: InstallNotepadPlusPlus
+        properties:
+          PackageName: notepadplusplus
+          Ensure: Present
+      - type: MyChocolateyPackage/MyChocolateyPackage
+        name: InstallUrlRewrite
+        properties:
+          PackageName: urlrewrite
+          Ensure: Present
+      - type: MyChocolateyPackage/MyChocolateyPackage
+        name: InstallWebDeploy
+        properties:
+          PackageName: webdeploy
+          Ensure: Present
+      - type: MyChocolateyPackage/MyChocolateyPackage
+        name: InstallWinMerge
+        properties:
+          PackageName: winmerge
+          Ensure: Present
+      metadata:
+        Microsoft.DSC:
+          context: configuration
+    actualState:
+      result:
+      - name: InstallChocolatey
+        type: MyChocolatey/MyChocolatey
+        properties:
+          InDesiredState: true
+      - name: Install7Zip
+        type: MyChocolateyPackage/MyChocolateyPackage
+        properties:
+          InDesiredState: true
+      - name: InstallAdobeReader
+        type: MyChocolateyPackage/MyChocolateyPackage
+        properties:
+          InDesiredState: true
+      - name: InstallBulkRenameUtility
+        type: MyChocolateyPackage/MyChocolateyPackage
+        properties:
+          InDesiredState: true
+      - name: InstallNotepadPlusPlus
+        type: MyChocolateyPackage/MyChocolateyPackage
+        properties:
+          InDesiredState: true
+      - name: InstallUrlRewrite
+        type: MyChocolateyPackage/MyChocolateyPackage
+        properties:
+          InDesiredState: true
+      - name: InstallWebDeploy
+        type: MyChocolateyPackage/MyChocolateyPackage
+        properties:
+          InDesiredState: true
+      - name: InstallWinMerge
+        type: MyChocolateyPackage/MyChocolateyPackage
+        properties:
+          InDesiredState: true
+      _inDesiredState: true
+    inDesiredState: true
+    differingProperties:
+    - resources
+    - metadata
+- metadata:
+    Microsoft.DSC:
+      duration: PT4.6897348S
+  name: InstallFork
+  type: Microsoft.WinGet/Package
+  result:
+    desiredState:
+      id: Fork.Fork
+      useLatest: true
+      acceptAgreements: true
+    actualState:
+      _exist: true
+      _inDesiredState: true
+      id: Fork.Fork
+      useLatest: true
+      version: 2.10.3
+    inDesiredState: true
+    differingProperties: []
+- metadata:
+    Microsoft.DSC:
+      duration: PT1.7931721S
+  name: InstallPowerShell
+  type: Microsoft.WinGet/Package
+  result:
+    desiredState:
+      id: Microsoft.PowerShell
+      useLatest: true
+      acceptAgreements: true
+    actualState:
+      _exist: true
+      _inDesiredState: true
+      id: Microsoft.PowerShell
+      useLatest: true
+      version: 7.5.2.0
+    inDesiredState: true
+    differingProperties: []
+- metadata:
+    Microsoft.DSC:
+      duration: PT2.12562S
+  name: InstallPowerToys
+  type: Microsoft.WinGet/Package
+  result:
+    desiredState:
+      id: Microsoft.PowerToys
+      useLatest: true
+      acceptAgreements: true
+    actualState:
+      _exist: true
+      _inDesiredState: true
+      id: Microsoft.PowerToys
+      useLatest: true
+      version: 0.92.1
+    inDesiredState: true
+    differingProperties: []
+- metadata:
+    Microsoft.DSC:
+      duration: PT1.6311786S
+  name: InstallPowerAutomateDesktop
+  type: Microsoft.WinGet/Package
+  result:
+    desiredState:
+      id: Microsoft.PowerAutomateDesktop
+      useLatest: true
+      acceptAgreements: true
+    actualState:
+      _exist: true
+      _inDesiredState: true
+      id: Microsoft.PowerAutomateDesktop
+      useLatest: true
+      version: 2.58.163.25188
+    inDesiredState: true
+    differingProperties: []
+- metadata:
+    Microsoft.DSC:
+      duration: PT1.3892996S
+  name: InstallPowerBI
+  type: Microsoft.WinGet/Package
+  result:
+    desiredState:
+      id: Microsoft.PowerBI
+      useLatest: true
+      acceptAgreements: true
+    actualState:
+      _exist: true
+      _inDesiredState: true
+      id: Microsoft.PowerBI
+      useLatest: true
+      version: 2.145.1105.0
+    inDesiredState: true
+    differingProperties: []
+- metadata:
+    Microsoft.DSC:
+      duration: PT2.2631725S
+  name: InstallVSCode
+  type: Microsoft.WinGet/Package
+  result:
+    desiredState:
+      id: Microsoft.VisualStudioCode
+      useLatest: true
+      acceptAgreements: true
+    actualState:
+      _exist: true
+      _inDesiredState: true
+      id: Microsoft.VisualStudioCode
+      useLatest: true
+      version: 1.102.1
+    inDesiredState: true
+    differingProperties: []
+- metadata:
+    Microsoft.DSC:
+      duration: PT1.3937223S
+  name: InstallChrome
+  type: Microsoft.WinGet/Package
+  result:
+    desiredState:
+      id: Google.Chrome
+      useLatest: true
+      acceptAgreements: true
+    actualState:
+      _exist: true
+      _inDesiredState: true
+      id: Google.Chrome
+      useLatest: true
+      version: 138.0.7204.158
+    inDesiredState: true
+    differingProperties: []
+- metadata:
+    Microsoft.DSC:
+      duration: PT4.4772676S
+  name: VSComponents
+  type: Microsoft.VisualStudio.DSC/VSComponents
+  result:
+    desiredState:
+      ProductId: Microsoft.VisualStudio.Product.Professional
+      ChannelId: VisualStudio.17.Release
+      VSConfigFile: C:\Users\mchampion\source\repos\KoaDev\WaC\DSCv3\resources\visual-studio\professional.vsconfig
+    actualState:
+      InDesiredState: true
+    inDesiredState: true
+    differingProperties:
+    - ProductId
+    - ChannelId
+    - VSConfigFile
+- metadata:
+    Microsoft.DSC:
+      duration: PT4.3768638S
+  name: InstallCrtPaca
+  type: MyCertificate/MyCertificate
+  result:
+    desiredState:
+      Path: C:\Users\mchampion\source\repos\KoaDev\WaC\resources\certificates\_.cr-paca.fr.crt
+      Ensure: Present
+    actualState:
+      InDesiredState: true
+    inDesiredState: true
+    differingProperties:
+    - Path
+    - Ensure
+- metadata:
+    Microsoft.DSC:
+      duration: PT4.783202S
+  name: InstallCACert
+  type: MyCertificate/MyCertificate
+  result:
+    desiredState:
+      Path: C:\Users\mchampion\source\repos\KoaDev\WaC\resources\certificates\Autorite de Certification Region SUD Provence-Alpes-Cote d'Azur.crt
+      Ensure: Present
+    actualState:
+      InDesiredState: true
+    inDesiredState: true
+    differingProperties:
+    - Path
+    - Ensure
+- metadata:
+    Microsoft.DSC:
+      duration: PT7.359289S
+  name: ExcludeProjectsFolder
+  type: MyWindowsDefenderExclusion/MyWindowsDefenderExclusion
+  result:
+    desiredState:
+      Type: Path
+      Value: C:\Projets
+      Ensure: Present
+    actualState:
+      InDesiredState: true
+    inDesiredState: true
+    differingProperties:
+    - Type
+    - Value
+    - Ensure
+- metadata:
+    Microsoft.DSC:
+      duration: PT7.0564223S
+  name: ExcludeDotnetToolsFolder
+  type: MyWindowsDefenderExclusion/MyWindowsDefenderExclusion
+  result:
+    desiredState:
+      Type: Path
+      Value: C:\Users\%user%\.dotnet\tools
+      Ensure: Present
+    actualState:
+      InDesiredState: true
+    inDesiredState: true
+    differingProperties:
+    - Type
+    - Value
+    - Ensure
+- metadata:
+    Microsoft.DSC:
+      duration: PT5.0864958S
+  name: UseLTSNodeVersion
+  type: MyNodeVersion/MyNodeVersion
+  result:
+    desiredState:
+      Version: lts
+      Ensure: Used
+    actualState:
+      InDesiredState: false
+    inDesiredState: false
+    differingProperties:
+    - Version
+    - Ensure
+- metadata:
+    Microsoft.DSC:
+      duration: PT5.7421835S
+  name: InstallNodeVersion18
+  type: MyNodeVersion/MyNodeVersion
+  result:
+    desiredState:
+      Version: '18'
+      Ensure: Present
+    actualState:
+      InDesiredState: false
+    inDesiredState: false
+    differingProperties:
+    - Version
+    - Ensure
+- metadata:
+    Microsoft.DSC:
+      duration: PT4.3825887S
+  name: RegionSUD
+  type: MyHosts/MyHosts
+  result:
+    desiredState:
+      Name: RegionSUD
+      Path: C:\Users\mchampion\source\repos\KoaDev\WaC\DSCv3\resources\hosts
+    actualState:
+      InDesiredState: true
+    inDesiredState: true
+    differingProperties:
+    - Name
+    - Path
+messages: []
+hadErrors: false

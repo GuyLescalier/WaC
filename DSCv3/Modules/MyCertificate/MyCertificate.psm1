@@ -28,6 +28,7 @@ class MyCertificate
     {
         $current = [MyCertificate]::new()
         $current.Path = $this.Path
+        "C:\\Projets\\WaC\\Certificats\\Autorite de Certification Region SUD Provence-Alpes-Cote d'Azur.crt"
         $fileCert = [X509Certificate2]::new($this.Path)
         $current.Thumbprint = $fileCert.Thumbprint
 

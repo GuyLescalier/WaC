@@ -1,9 +1,7 @@
-# Inspired by https://github.com/chocolatey/cChoco
-
 @{
-    RootModule           = 'MyChocolatey.psm1'
+    RootModule           = 'MyPSProfile.psm1'
     ModuleVersion        = '0.0.1'
-    GUID                 = '0fcc04b9-b393-444d-b796-04dc402f8b67'
+    GUID                 = '5efd2ce4-0b2e-4614-b0b1-16cfe357844a'
     Author               = 'Guy Lescalier'
     CompanyName          = 'SopraSteria'
     Copyright            = '(c) Guy Lescalier. All rights reserved.'
@@ -11,5 +9,5 @@
     CmdletsToExport      = '*'
     VariablesToExport    = @()
     AliasesToExport      = @()
-    DscResourcesToExport = 'MyChocolatey'
+    DscResourcesToExport = 'MyPSProfile'
 }

@@ -1,0 +1,236 @@
+$schema: https://raw.githubusercontent.com/PowerShell/DSC/main/schemas/v3/bundled/config/document.json
+resources:
+  - name: ShowFileExtensions
+    type: Microsoft.Windows/Registry
+    properties:
+      keyPath: HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced
+      valueName: HideFileExt
+      valueData:
+        DWord: 0
+
+  - name: DisableLoopbackCheck
+    type: Microsoft.Windows/Registry
+    properties:
+      keyPath: HKLM\SYSTEM\CurrentControlSet\Control\Lsa
+      valueName: DisableLoopbackCheck
+      valueData:
+        DWord: 1
+
+  - type: MyScoop/MyScoop
+    name: InstallScoop
+
+  - type: MyScoopPackage/MyScoopPackage
+    name: InstallDotnetSdk
+    properties:
+      PackageName: dotnet-sdk
+
+  - type: MyScoopPackage/MyScoopPackage
+    name: InstallGh
+    properties:
+      PackageName: gh
+
+  - type: MyScoopPackage/MyScoopPackage
+    name: InstallOhMyPosh
+    properties:
+      PackageName: oh-my-posh
+
+  - type: MyScoopPackage/MyScoopPackage
+    name: InstallGit
+    properties:
+      PackageName: git
+
+  - type: MyScoopPackage/MyScoopPackage
+    name: InstallNvm
+    properties:
+      PackageName: nvm
+
+  - type: MyScoopPackage/MyScoopPackage
+    name: InstallTerraform
+    properties:
+      PackageName: terraform
+
+  - type: MyScoopPackage/MyScoopPackage
+    name: InstallDotnet3Sdk
+    properties:
+      PackageName: dotnet3-sdk
+
+  - type: MyScoopPackage/MyScoopPackage
+    name: InstallDotnet5Sdk
+    properties:
+      PackageName: dotnet5-sdk
+
+  - type: MyScoopPackage/MyScoopPackage
+    name: InstallDotnet6Sdk
+    properties:
+      PackageName: dotnet6-sdk
+
+  - type: MyScoopPackage/MyScoopPackage
+    name: InstallBareTail
+    properties:
+      PackageName: baretail
+
+  - type: MyScoopPackage/MyScoopPackage
+    name: InstallMockoon
+    properties:
+      PackageName: mockoon
+
+  - type: MyScoopPackage/MyScoopPackage
+    name: InstallNugetPackageExplorer
+    properties:
+      PackageName: nuget-package-explorer
+
+  - type: MyScoopPackage/MyScoopPackage
+    name: InstallPaintNet
+    properties:
+      PackageName: paint.net
+
+  - type: MyScoopPackage/MyScoopPackage
+    name: InstallPostman
+    properties:
+      PackageName: postman
+
+  - type: MyScoopPackage/MyScoopPackage
+    name: InstallVlc
+    properties:
+      PackageName: vlc
+
+  - type: MyScoopPackage/MyScoopPackage
+    name: InstallWiztree
+    properties:
+      PackageName: wiztree
+
+  - type: MyScoopPackage/MyScoopPackage
+    name: InstallCascadiaCodeNFMono
+    properties:
+      PackageName: CascadiaCode-NF-Mono
+
+  - type: MyScoopPackage/MyScoopPackage
+    name: InstallFiraCodeNF
+    properties:
+      PackageName: FiraCode-NF
+
+  - type: MyScoopPackage/MyScoopPackage
+    name: InstallTemurinLtsJdk
+    properties:
+      PackageName: temurin-lts-jdk
+
+  - type: MyChocolatey/MyChocolatey
+    name: InstallChocolatey
+    properties:
+      MyChocolateyKey: https://chocolatey.org/install.ps1
+
+  - type: MyChocolateyPackage/MyChocolateyPackage
+    name: Install7Zip
+    properties:
+      PackageName: 7zip
+
+  - type: MyChocolateyPackage/MyChocolateyPackage
+    name: InstallAdobeReader
+    properties:
+      PackageName: adobereader
+
+  - type: MyChocolateyPackage/MyChocolateyPackage
+    name: InstallBulkRenameUtility
+    properties:
+      PackageName: bulkrenameutility
+
+  - type: MyChocolateyPackage/MyChocolateyPackage
+    name: InstallNotepadPlusPlus
+    properties:
+      PackageName: notepadplusplus
+
+  - type: MyChocolateyPackage/MyChocolateyPackage
+    name: InstallUrlRewrite
+    properties:
+      PackageName: urlrewrite
+      
+  - type: MyChocolateyPackage/MyChocolateyPackage
+    name: InstallWebDeploy
+    properties:
+      PackageName: webdeploy
+
+  - type: MyChocolateyPackage/MyChocolateyPackage
+    name: InstallWinMerge
+    properties:
+      PackageName: winmerge
+
+  - type: Microsoft.WinGet/Package
+    name: InstallFork
+    properties:
+      id: Fork.Fork
+
+  - type: Microsoft.WinGet/Package
+    name: InstallPowerShell
+    properties:
+      id: Microsoft.PowerShell
+
+  - type: Microsoft.WinGet/Package
+    name: InstallPowerToys
+    properties:
+      id: Microsoft.PowerToys
+
+  - type: Microsoft.WinGet/Package
+    name: InstallPowerAutomateDesktop
+    properties:
+      id: Microsoft.PowerAutomateDesktop
+
+  - type: Microsoft.WinGet/Package
+    name: InstallPowerBI
+    properties:
+      id: Microsoft.PowerBI
+
+  - type: Microsoft.WinGet/Package
+    name: InstallVSCode
+    properties:
+      id: Microsoft.VisualStudioCode
+
+  - type: Microsoft.WinGet/Package
+    name: InstallChrome
+    properties:
+      id: Google.Chrome
+
+  - type: Microsoft.VisualStudio.DSC/VSComponents
+    name: VSComponents
+    properties:
+      ProductId: Microsoft.VisualStudio.Product.Professional
+      ChannelId: VisualStudio.17.Release
+      VSConfigFile: C:\Users\mchampion\source\repos\KoaDev\WaC\DSCv3\resources\visual-studio\professional.vsconfig
+
+  - type: MyCertificate/MyCertificate
+    name: InstallCrtPaca
+    properties:
+      Path: C:\Users\mchampion\source\repos\KoaDev\WaC\resources\certificates\_.cr-paca.fr.crt
+
+  - type: MyCertificate/MyCertificate
+    name: InstallCACert
+    properties:
+      Path: C:\Users\mchampion\source\repos\KoaDev\WaC\resources\certificates\Autorite de Certification Region SUD Provence-Alpes-Cote d'Azur.crt
+
+  - type: MyWindowsDefenderExclusion/MyWindowsDefenderExclusion
+    name: ExcludeProjectsFolder
+    properties:
+      Type: Path
+      Value: C:\Projets
+
+  - type: MyWindowsDefenderExclusion/MyWindowsDefenderExclusion
+    name: ExcludeDotnetToolsFolder
+    properties:
+      Type: Path
+      Value: C:\Users\%user%\.dotnet\tools
+
+  - type: MyNodeVersion/MyNodeVersion
+    name: UseLTSNodeVersion
+    properties:
+      Version: lts
+      Ensure: Used
+
+  - type: MyNodeVersion/MyNodeVersion
+    name: InstallNodeVersion18
+    properties:
+      Version: '18'
+
+  - type: MyHosts/MyHosts
+    name: RegionSUD
+    properties:
+      Name: RegionSUD
+      Path: C:\Users\mchampion\source\repos\KoaDev\WaC\DSCv3\resources\hosts
