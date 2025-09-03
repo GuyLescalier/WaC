@@ -2,3 +2,11 @@
 /node_modules
 /package-lock.json
 /.mw/.internal/
+/.vs
+/ConfigConverter/.vs/ConfigConverter
+/ConfigConverter/bin
+/ConfigConverter/obj
+/ConfigConverter/publish
+/Configurator/.vs
+/Configurator/obj
+/Configurator/bin/Debug
