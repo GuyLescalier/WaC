@@ -1,0 +1,450 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:local="clr-namespace:Configurator"
+    xmlns:models="clr-namespace:Configurator.Models"
+    xmlns:viewmodels="clr-namespace:Configurator.ViewModels"
+    x:Class="Configurator.MainPage"
+    x:Name="this"
+    x:DataType="local:MainPage"
+    BackgroundColor="#1E1E1E">
+
+    <!-- Styles locaux pour donner un vrai look "disabled" -->
+    <ContentPage.Resources>
+        <!-- Style de base (bleu) pour TEST ALL -->
+        <Style x:Key="PrimaryButtonStyle" TargetType="Button">
+            <Setter Property="CornerRadius" Value="0" />
+            <Setter Property="FontAttributes" Value="Bold" />
+            <Setter Property="FontSize" Value="12" />
+            <Setter Property="TextColor" Value="White" />
+            <Setter Property="HeightRequest" Value="32" />
+            <Setter Property="VisualStateManager.VisualStateGroups">
+                <VisualStateGroupList>
+                    <VisualStateGroup x:Name="CommonStates">
+                        <VisualState x:Name="Normal">
+                            <VisualState.Setters>
+                                <Setter Property="BackgroundColor" Value="#007ACC" />
+                                <Setter Property="Opacity" Value="1" />
+                            </VisualState.Setters>
+                        </VisualState>
+                        <VisualState x:Name="Disabled">
+                            <VisualState.Setters>
+                                <!-- gris + texte pâle + opacité -->
+                                <Setter Property="BackgroundColor" Value="#3A3A3A" />
+                                <Setter Property="TextColor" Value="#9A9A9A" />
+                                <Setter Property="Opacity" Value="0.6" />
+                            </VisualState.Setters>
+                        </VisualState>
+                    </VisualStateGroup>
+                </VisualStateGroupList>
+            </Setter>
+        </Style>
+
+        <!-- Style vert pour APPLY ALL CHANGES -->
+        <Style x:Key="SuccessButtonStyle" TargetType="Button" BasedOn="{StaticResource PrimaryButtonStyle}">
+            <Setter Property="VisualStateManager.VisualStateGroups">
+                <VisualStateGroupList>
+                    <VisualStateGroup x:Name="CommonStates">
+                        <VisualState x:Name="Normal">
+                            <VisualState.Setters>
+                                <Setter Property="BackgroundColor" Value="#16825D" />
+                                <Setter Property="TextColor" Value="White" />
+                                <Setter Property="Opacity" Value="1" />
+                            </VisualState.Setters>
+                        </VisualState>
+                        <VisualState x:Name="Disabled">
+                            <VisualState.Setters>
+                                <Setter Property="BackgroundColor" Value="#3A3A3A" />
+                                <Setter Property="TextColor" Value="#9A9A9A" />
+                                <Setter Property="Opacity" Value="0.6" />
+                            </VisualState.Setters>
+                        </VisualState>
+                    </VisualStateGroup>
+                </VisualStateGroupList>
+            </Setter>
+        </Style>
+    </ContentPage.Resources>
+
+    <Grid Padding="8" RowDefinitions="Auto,8,*" RowSpacing="0">
+
+        <!-- HEADER : Sélection du fichier + Actions principales -->
+        <Border Grid.Row="0"
+                BackgroundColor="#2D2D30"
+                Stroke="#3E3E42"
+                StrokeThickness="1">
+            <Grid RowDefinitions="32,Auto">
+                <!-- Header Title -->
+                <Border Grid.Row="0"
+                        BackgroundColor="#3E3E42"
+                        Stroke="#525252"
+                        StrokeThickness="0">
+                    <Grid ColumnDefinitions="*" Margin="12,0">
+                        <Label Grid.Column="0"
+                               Text="DSC Configuration Manager"
+                               FontSize="14"
+                               FontAttributes="Bold"
+                               TextColor="#FFFFFF"
+                               VerticalOptions="Center"/>
+                    </Grid>
+                </Border>
+
+                <!-- Configuration Selection & Actions -->
+                <Grid Grid.Row="1" Padding="12" ColumnDefinitions="*,12,Auto,8,Auto" ColumnSpacing="0">
+                    <!-- Configuration File Picker -->
+                    <Border Grid.Column="0" 
+                            BackgroundColor="#383838" 
+                            Stroke="#484848"
+                            StrokeThickness="1">
+                        <Grid ColumnDefinitions="4,*,Auto" HeightRequest="32">
+                            <BoxView Grid.Column="0" 
+                                     BackgroundColor="#007ACC" 
+                                     VerticalOptions="Fill"/>
+                            <Picker Grid.Column="1"
+                                    x:Name="ConfigFileListView"
+                                    ItemsSource="{Binding ConfigFiles}"
+                                    SelectedItem="{Binding SelectedConfigFile}"
+                                    Title="Select Configuration File"
+                                    FontSize="13"
+                                    TextColor="#D4D4D4"
+                                    BackgroundColor="Transparent"
+                                    Margin="8,0,0,0" />
+                            <Label Grid.Column="2" 
+                                   Text="📁" 
+                                   FontSize="12" 
+                                   TextColor="#007ACC" 
+                                   VerticalOptions="Center"
+                                   Margin="0,0,8,0"/>
+                        </Grid>
+                    </Border>
+
+                    <!-- Test All Button -->
+                    <Button Grid.Column="2"
+                            x:Name="TestAllButton"
+                            Style="{StaticResource PrimaryButtonStyle}"
+                            Text="TEST ALL"
+                            Clicked="OnRunFullConfigTestClicked"
+                            IsEnabled="{Binding IsConfigFileSelected}"
+                            WidthRequest="100"/>
+
+                    <!-- Apply All Button -->
+                    <Button Grid.Column="4"
+                            x:Name="ApplyAllChangesButton"
+                            Style="{StaticResource SuccessButtonStyle}"
+                            Text="APPLY ALL CHANGES"
+                            Clicked="OnApplyAllChangesClicked"
+                            IsEnabled="{Binding IsApplyAllEnabled}"
+                            WidthRequest="150"/>
+                </Grid>
+            </Grid>
+        </Border>
+
+        <!-- CONTENU PRINCIPAL : Preview + Résultats en colonnes -->
+        <Grid Grid.Row="2" ColumnDefinitions="1*,8,1*" ColumnSpacing="0">
+
+            <!-- COLONNE GAUCHE : Configuration Preview -->
+            <Border Grid.Column="0"
+                    BackgroundColor="#2D2D30"
+                    Stroke="#3E3E42"
+                    StrokeThickness="1">
+                <Grid RowDefinitions="32,*">
+                    <!-- Header -->
+                    <Border Grid.Row="0"
+                            BackgroundColor="#3E3E42"
+                            Stroke="#525252"
+                            StrokeThickness="0">
+                        <Grid ColumnDefinitions="*,Auto" Margin="12,0">
+                            <Label Grid.Column="0"
+                                   Text="Configuration Resources"
+                                   FontSize="13"
+                                   FontAttributes="Bold"
+                                   TextColor="#FFFFFF"
+                                   VerticalOptions="Center"/>
+                            <Label Grid.Column="1"
+                                   Text="{Binding ResourceCount, StringFormat='{0} resources'}"
+                                   FontSize="11"
+                                   TextColor="#D4D4D4"
+                                   VerticalOptions="Center"/>
+                        </Grid>
+                    </Border>
+
+                    <!-- Resources List -->
+                    <ScrollView Grid.Row="1">
+                        <CollectionView
+                            x:Name="PreviewView"
+                            ItemsSource="{Binding DscResourcePreviews}"
+                            Margin="12">
+                            <CollectionView.ItemTemplate>
+                                <DataTemplate x:DataType="viewmodels:DscResourcePreview">
+                                    <Border BackgroundColor="#383838"
+                                            Stroke="#484848"
+                                            StrokeThickness="1"
+                                            Margin="0,0,0,6">
+                                        <Grid Padding="12" RowDefinitions="Auto,Auto,Auto">
+
+                                            <!-- Resource Name & Status -->
+                                            <Grid Grid.Row="0" ColumnDefinitions="6,*,Auto,Auto">
+                                                <BoxView Grid.Column="0"
+                                                         BackgroundColor="#007ACC"
+                                                         VerticalOptions="Fill"
+                                                         WidthRequest="4"/>
+                                                <Label Grid.Column="1"
+                                                       Text="{Binding Name}"
+                                                       FontAttributes="Bold"
+                                                       FontSize="13"
+                                                       TextColor="#FFFFFF"
+                                                       VerticalOptions="Center"
+                                                       Margin="8,0,0,0"/>
+                                                <Label Grid.Column="2"
+                                                       Text="{Binding Status}"
+                                                       FontSize="10"
+                                                       TextColor="{Binding StatusColor}"
+                                                       FontAttributes="Bold"
+                                                       VerticalOptions="Center"
+                                                       Margin="0,0,8,0"/>
+                                            </Grid>
+
+                                            <!-- Resource Type -->
+                                            <Label Grid.Row="1"
+                                                   Text="{Binding Type}"
+                                                   FontSize="11"
+                                                   TextColor="#D4D4D4"
+                                                   FontAttributes="Italic"
+                                                   Margin="12,2,0,8"/>
+
+                                            <!-- Action Buttons -->
+                                            <Grid Grid.Row="2" ColumnDefinitions="1*,8,1*" ColumnSpacing="0">
+                                                <Button Grid.Column="0"
+                                                        Text="Test"
+                                                        Command="{Binding TestCommand}"
+                                                        BackgroundColor="#007ACC"
+                                                        TextColor="White"
+                                                        CornerRadius="0"
+                                                        FontAttributes="Bold"
+                                                        FontSize="11"
+                                                        HeightRequest="26"/>
+
+                                                <Button Grid.Column="2"
+                                                        Text="Apply"
+                                                        Command="{Binding ApplyCommand}"
+                                                        BackgroundColor="#16825D"
+                                                        TextColor="White"
+                                                        CornerRadius="0"
+                                                        FontAttributes="Bold"
+                                                        FontSize="11"
+                                                        HeightRequest="26"/>
+                                            </Grid>
+                                        </Grid>
+                                    </Border>
+                                </DataTemplate>
+                            </CollectionView.ItemTemplate>
+                        </CollectionView>
+                    </ScrollView>
+                </Grid>
+            </Border>
+
+            <!-- COLONNE DROITE : Résultats et détails -->
+            <Border Grid.Column="2"
+                    x:Name="ResultsViewBorder"
+                    BackgroundColor="#2D2D30"
+                    Stroke="#3E3E42"
+                    StrokeThickness="1">
+                <Grid RowDefinitions="32,*,8,Auto">
+                    <!-- Header -->
+                    <Border Grid.Row="0"
+                            BackgroundColor="#3E3E42"
+                            Stroke="#525252"
+                            StrokeThickness="0">
+                        <Grid ColumnDefinitions="*,Auto" Margin="12,0">
+                            <Label Grid.Column="0"
+                                   Text="Test Results &amp; Details"
+                                   FontSize="13"
+                                   FontAttributes="Bold"
+                                   TextColor="#FFFFFF"
+                                   VerticalOptions="Center"/>
+                            <Label Grid.Column="1"
+                                   Text="{Binding CompliancePercentage, StringFormat='{0:P0} compliant'}"
+                                   FontSize="11"
+                                   TextColor="#16825D"
+                                   FontAttributes="Bold"
+                                   VerticalOptions="Center"/>
+                        </Grid>
+                    </Border>
+
+                    <!-- Results List -->
+                    <ScrollView Grid.Row="1">
+                        <CollectionView
+                            x:Name="ResultsView"
+                            ItemsSource="{Binding DscResults}"
+                            Margin="12">
+                            <CollectionView.ItemTemplate>
+                                <DataTemplate x:DataType="viewmodels:DscResultDisplay">
+                                    <Border BackgroundColor="#383838"
+                                            Stroke="#484848"
+                                            StrokeThickness="1"
+                                            Margin="0,0,0,6">
+                                        <Grid Padding="12" RowDefinitions="Auto,4,Auto,Auto,Auto">
+
+                                            <!-- Header avec statut -->
+                                            <Grid Grid.Row="0" ColumnDefinitions="8,*,Auto">
+                                                <BoxView Grid.Column="0"
+                                                         BackgroundColor="{Binding StatusColor}"
+                                                         VerticalOptions="Fill"
+                                                         WidthRequest="6"/>
+                                                <Label Grid.Column="1"
+                                                       Text="{Binding Name}"
+                                                       FontAttributes="Bold"
+                                                       FontSize="13"
+                                                       TextColor="#FFFFFF"
+                                                       VerticalOptions="Center"
+                                                       Margin="8,0,0,0"/>
+                                                <Label Grid.Column="2"
+                                                       Text="{Binding Status}"
+                                                       TextColor="{Binding StatusColor}"
+                                                       FontAttributes="Bold"
+                                                       FontSize="11"
+                                                       VerticalOptions="Center"/>
+                                            </Grid>
+
+                                            <!-- Status Indicator Line -->
+                                            <BoxView Grid.Row="1"
+                                                     HeightRequest="2"
+                                                     BackgroundColor="{Binding StatusColor}"
+                                                     Margin="8,0"/>
+
+                                            <!-- Resource Type Badge -->
+                                            <Border Grid.Row="2"
+                                                    BackgroundColor="#484848"
+                                                    Stroke="Transparent"
+                                                    Padding="6,2"
+                                                    HorizontalOptions="Start"
+                                                    Margin="8,4,0,0">
+                                                <Label Text="{Binding Type}" 
+                                                       FontSize="10" 
+                                                       TextColor="#D4D4D4" 
+                                                       FontAttributes="Bold"/>
+                                            </Border>
+
+                                            <!-- Properties Differences -->
+                                            <VerticalStackLayout Grid.Row="3" 
+                                                                 IsVisible="{Binding HasDifferingProperties}" 
+                                                                 Margin="8,8,0,0">
+                                                <Label Text="Configuration Drift Detected:" 
+                                                       FontAttributes="Bold" 
+                                                       TextColor="#DA3B3B" 
+                                                       FontSize="11"/>
+                                                <Label Text="{Binding DifferingPropertiesList}" 
+                                                       TextColor="#D4D4D4" 
+                                                       FontSize="11"
+                                                       Margin="0,2,0,0"/>
+                                            </VerticalStackLayout>
+
+                                            <!-- Last Test Time -->
+                                            <Label Grid.Row="4"
+                                                   Text="{Binding LastTestTime, StringFormat='Last tested: {0:HH:mm:ss}'}"
+                                                   FontSize="10"
+                                                   TextColor="#9E9E9E"
+                                                   FontAttributes="Italic"
+                                                   Margin="8,4,0,0"/>
+                                        </Grid>
+                                    </Border>
+                                </DataTemplate>
+                            </CollectionView.ItemTemplate>
+                        </CollectionView>
+                    </ScrollView>
+
+                    <!-- Summary Footer -->
+                    <Border Grid.Row="3"
+                            BackgroundColor="#3E3E42"
+                            Stroke="#525252"
+                            StrokeThickness="1"
+                            IsVisible="{Binding HasResults}">
+                        <Grid ColumnDefinitions="*,*,*" Padding="12,8">
+                            <VerticalStackLayout Grid.Column="0" HorizontalOptions="Center">
+                                <Label Text="{Binding CompliantCount}" 
+                                       FontSize="16" 
+                                       FontAttributes="Bold" 
+                                       TextColor="#16825D" 
+                                       HorizontalOptions="Center"/>
+                                <Label Text="Compliant" 
+                                       FontSize="10" 
+                                       TextColor="#D4D4D4" 
+                                       HorizontalOptions="Center"/>
+                            </VerticalStackLayout>
+                            <VerticalStackLayout Grid.Column="1" HorizontalOptions="Center">
+                                <Label Text="{Binding NonCompliantCount}" 
+                                       FontSize="16" 
+                                       FontAttributes="Bold" 
+                                       TextColor="#DA3B3B" 
+                                       HorizontalOptions="Center"/>
+                                <Label Text="Non-Compliant" 
+                                       FontSize="10" 
+                                       TextColor="#D4D4D4" 
+                                       HorizontalOptions="Center"/>
+                            </VerticalStackLayout>
+                            <VerticalStackLayout Grid.Column="2" HorizontalOptions="Center">
+                                <Label Text="{Binding ErrorCount}" 
+                                       FontSize="16" 
+                                       FontAttributes="Bold" 
+                                       TextColor="#FFA500" 
+                                       HorizontalOptions="Center"/>
+                                <Label Text="Errors" 
+                                       FontSize="10" 
+                                       TextColor="#D4D4D4" 
+                                       HorizontalOptions="Center"/>
+                            </VerticalStackLayout>
+                        </Grid>
+                    </Border>
+                </Grid>
+            </Border>
+        </Grid>
+
+        <!-- Overlay de chargement -->
+        <Border Grid.RowSpan="3"
+                BackgroundColor="#80000000"
+                IsVisible="{Binding IsLoadingOverlayVisible}"
+                Stroke="Transparent">
+            <Grid HorizontalOptions="Center" VerticalOptions="Center">
+                <Border BackgroundColor="#2D2D30" 
+                        Stroke="#3E3E42"
+                        StrokeThickness="1"
+                        Padding="32,24">
+                    <Grid RowDefinitions="Auto,Auto,Auto,Auto">
+                        <ActivityIndicator Grid.Row="0"
+                                           x:Name="LoadingIndicator"
+                                           IsVisible="True"
+                                           IsRunning="False"
+                                           Color="#007ACC"
+                                           WidthRequest="32"
+                                           HeightRequest="32"/>
+                        <Label Grid.Row="1"
+                               x:Name="LoadingMessageLabel"
+                               Text="Processing configuration..."
+                               HorizontalOptions="Center"
+                               FontSize="13"
+                               TextColor="#D4D4D4"
+                               FontAttributes="Bold"
+                               Margin="0,16,0,0"/>
+                        <ProgressBar Grid.Row="2"
+                                     x:Name="OperationProgressBar"
+                                     Progress="{Binding OperationProgress}"
+                                     IsVisible="{Binding IsProgressBarVisible}"
+                                     WidthRequest="250"
+                                     Margin="0,16,0,0"/>
+                        <Button Grid.Row="3"
+                                Text="Cancel"
+                                Clicked="CancelButton_Clicked"
+                                BackgroundColor="#DA3B3B"
+                                TextColor="White"
+                                CornerRadius="0"
+                                FontAttributes="Bold"
+                                FontSize="12"
+                                HeightRequest="32"
+                                WidthRequest="120"
+                                Margin="0,16,0,0"/>
+                    </Grid>
+                </Border>
+            </Grid>
+        </Border>
+    </Grid>
+</ContentPage>
