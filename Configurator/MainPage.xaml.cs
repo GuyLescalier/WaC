@@ -284,7 +284,7 @@ namespace Configurator
                 }
 
                 if (!token.IsCancellationRequested)
-                    IsFullTestDone = true; // ✅ le test complet a bien été exécuté
+                    IsFullTestDone = true; // le test complet a bien été exécuté
             }
             catch (OperationCanceledException)
             {
@@ -490,7 +490,7 @@ namespace Configurator
                 if (token.IsCancellationRequested)
                     await DisplayAlert("Cancelled", "Operation was cancelled.", "OK");
 
-                // 🔁 Retester UNIQUEMENT les ressources appliquées
+                //Retester UNIQUEMENT les ressources appliquées
                 await RetestResources(successfullyApplied, token);
             }
             catch (OperationCanceledException)
