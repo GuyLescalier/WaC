@@ -104,14 +104,14 @@
 #   Property:
 #     - productId: Microsoft.VisualStudio.Product.Enterprise
 #       channelId: VisualStudio.17.Release
-#       vsConfigFile: C:\Projets\WaC\resources\visual-studio\.vsconfig
+#       vsConfigFile: C:\WaC\resources\visual-studio\.vsconfig
 #       includeRecommended: true
 
 # - Name: MyCertificate
 #   ModuleName: MyResources
 #   Property:
-#     - Path: C:\Projets\WaC\resources\certificates\_.cr-paca.fr.crt
-#     - Path: C:\Projets\WaC\resources\certificates\Autorite de Certification Region SUD Provence-Alpes-Cote d'Azur.crt
+#     - Path: C:\WaC\resources\certificates\_.cr-paca.fr.crt
+#     - Path: C:\WaC\resources\certificates\Autorite de Certification Region SUD Provence-Alpes-Cote d'Azur.crt
 
 # - Name: MyWindowsDefenderExclusion
 #   ModuleName: MyResources
@@ -132,4 +132,4 @@
 #   ModuleName: MyResources
 #   Property:
 #     - Name: RégionSUD
-#       Path: C:\Projets\WaC\resources\hosts
+#       Path: C:\WaC\resources\hosts

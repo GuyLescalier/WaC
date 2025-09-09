@@ -43,9 +43,9 @@
     - Name: NetFx3
     - Name: NetFx4-AdvSrvs
     - Name: NetFx4Extended-ASPNET45
-    - Name: WCF-HTTP-Activation
-    - Name: WCF-HTTP-Activation45
-    - Name: WCF-NonHTTP-Activation
+    # - Name: WCF-HTTP-Activation
+    # - Name: WCF-HTTP-Activation45
+    # - Name: WCF-NonHTTP-Activation
     - Name: WCF-Services45
 
 - Name: MyScoop
@@ -55,17 +55,27 @@
   ModuleName: MyResources
   Property:
     - PackageName: dotnet-sdk
-    - PackageName: git
-    - PackageName: nvm
-      Version: 1.1.11
     - PackageName: dotnet3-sdk
     - PackageName: dotnet5-sdk
     - PackageName: dotnet6-sdk
     - PackageName: dotnet8-sdk
+    - PackageName: temurin-lts-jdk
+    - PackageName: gh
+    - PackageName: git
+    - PackageName: nuget
+    - PackageName: nvm
+      Version: 1.1.11
+    - PackageName: oh-my-posh
+    - PackageName: terraform
+    - PackageName: CascadiaCode-NF-Mono
+    - PackageName: FiraCode-NF
     - PackageName: baretail
     - PackageName: mockoon
     - PackageName: nuget-package-explorer
     - PackageName: paint.net
+    - PackageName: postman
+    - PackageName: vlc
+    - PackageName: wiztree
 
 - Name: MyChocolatey
   ModuleName: MyResources
@@ -75,6 +85,7 @@
   Property:
     - PackageName: 7zip
     - PackageName: adobereader
+    - PackageName: bulkrenameutility
     - PackageName: notepadplusplus
     - PackageName: urlrewrite
     - PackageName: webdeploy
@@ -86,22 +97,30 @@
     - Id: Fork.Fork
     - Id: Microsoft.PowerShell
     - Id: Microsoft.PowerToys
+    # - Id: Microsoft.PowerAutomateDesktop
+    # - Id: Microsoft.PowerBI
     - Id: Microsoft.VisualStudioCode
     - Id: Google.Chrome
+    - Id: HP.ImageAssistant
 
 - Name: VSComponents
   ModuleName: Microsoft.VisualStudio.DSC
   Property:
-    - productId: Microsoft.VisualStudio.Product.Professional
+    - productId: Microsoft.VisualStudio.Product.Enterprise
       channelId: VisualStudio.17.Release
-      vsConfigFile: C:\Projets\WaC\resources\visual-studio\.vsconfig
+      vsConfigFile: C:\WaC\resources\visual-studio\enterprise.vsconfig
       includeRecommended: true
+
+- Name: MyScoopPackage
+  ModuleName: MyResources
+  Property:
+    - PackageName: rustup
 
 - Name: MyCertificate
   ModuleName: MyResources
   Property:
-    - Path: C:\Projets\WaC\resources\certificates\_.cr-paca.fr.crt
-    - Path: C:\Projets\WaC\resources\certificates\Autorite de Certification Region SUD Provence-Alpes-Cote d'Azur.crt
+    - Path: C:\WaC\resources\certificates\_.cr-paca.fr.crt
+    - Path: C:\WaC\resources\certificates\Autorite de Certification Region SUD Provence-Alpes-Cote d'Azur.crt
 
 - Name: MyWindowsDefenderExclusion
   ModuleName: MyResources
@@ -110,15 +129,18 @@
       Value: C:\Projets
     - Type: Path
       Value: C:\Users\%user%\.dotnet\tools
+    - Type: Path
+      Value: C:\Users\%user%\scoop
 
 - Name: MyNodeVersion
   ModuleName: MyResources
   Property:
     - Version: lts
       Ensure: Used
+    - Version: 18
 
 - Name: MyHosts
   ModuleName: MyResources
   Property:
     - Name: RégionSUD
-      Path: C:\Projets\WaC\resources\hosts
+      Path: C:\WaC\resources\hosts
