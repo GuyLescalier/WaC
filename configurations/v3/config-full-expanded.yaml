@@ -28,7 +28,7 @@ resources:
 - name: MyWindowsDefenderExclusion1
   type: MyWindowsDefenderExclusion/MyWindowsDefenderExclusion
   properties:
-    Value: C:\Projets
+    Value: C:\WaC
     Type: Path
 - name: MyWindowsDefenderExclusion2
   type: MyWindowsDefenderExclusion/MyWindowsDefenderExclusion
@@ -48,5 +48,5 @@ resources:
   type: MyHosts/MyHosts
   properties:
     Name: RegionSUD
-    Path: C:\Users\mchampion\source\repos\KoaDev\WaC\DSCv3\resources\hosts
+    Path: C:\WaC\resources\hosts
 

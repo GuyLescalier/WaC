@@ -323,14 +323,14 @@
       "properties": {
         "ProductId": "Microsoft.VisualStudio.Product.Professional",
         "ChannelId": "VisualStudio.17.Release",
-        "VSConfigFile": "C:\\Users\\mchampion\\source\\repos\\KoaDev\\WaC\\DSCv3\\resources\\visual-studio\\professional.vsconfig"
+        "VSConfigFile": "C:\\WaC\\resources\\visual-studio\\professional.vsconfig"
       }
     },
     {
       "type": "MyCertificate/MyCertificate",
       "name": "InstallCrtPaca",
       "properties": {
-        "Path": "C:\\Users\\mchampion\\source\\repos\\KoaDev\\WaC\\resources\\certificates\\_.cr-paca.fr.crt",
+        "Path": "C:\\WaC\\resources\\certificates\\_.cr-paca.fr.crt",
         "Ensure": "Present"
       }
     },
@@ -338,7 +338,7 @@
       "type": "MyCertificate/MyCertificate",
       "name": "InstallCACert",
       "properties": {
-        "Path": "C:\\Users\\mchampion\\source\\repos\\KoaDev\\WaC\\resources\\certificates\\Autorite de Certification Region SUD Provence-Alpes-Cote d'Azur.crt",
+        "Path": "C:\\WaC\\resources\\certificates\\Autorite de Certification Region SUD Provence-Alpes-Cote d'Azur.crt",
         "Ensure": "Present"
       }
     },
@@ -347,7 +347,7 @@
       "name": "ExcludeProjectsFolder",
       "properties": {
         "Type": "Path",
-        "Value": "C:\\Projets",
+        "Value": "C:\\WaC",
         "Ensure": "Present"
       }
     },
@@ -381,7 +381,7 @@
       "name": "RegionSUD",
       "properties": {
         "Name": "RegionSUD",
-        "Path": "C:\\Users\\mchampion\\source\\repos\\KoaDev\\WaC\\DSCv3\\resources\\hosts"
+        "Path": "C:\\WaC\\resources\\hosts"
       }
     }
   ]
