@@ -1,6 +1,20 @@
 {
-    "version": "1.0",
-    "components": [
-        "Microsoft.VisualStudio.Workload.CoreEditor"
-    ]
+  "version": "1.0",
+  "components": [
+    "Microsoft.VisualStudio.Workload.CoreEditor",
+    "Microsoft.VisualStudio.Workload.Azure",
+    "Microsoft.VisualStudio.Workload.Data",
+    "Microsoft.VisualStudio.Workload.ManagedDesktop",
+    "Microsoft.VisualStudio.Workload.NetWeb",
+    "microsoft.net.runtime.mono.tooling",
+    "microsoft.net.sdk.emscripten.net7",
+    "Microsoft.VisualStudio.Component.ClassDesigner",
+    "Microsoft.VisualStudio.Component.CoreEditor",
+    "Microsoft.VisualStudio.Component.DependencyValidation.Community",
+    "Microsoft.VisualStudio.Component.GraphDocument",
+    "Microsoft.VisualStudio.Component.SecurityIssueAnalysis",
+    "Microsoft.VisualStudio.Component.VisualStudioData",
+    "Microsoft.VisualStudio.ComponentGroup.IISDevelopment",
+    "wasm.tools"
+  ]
 }
