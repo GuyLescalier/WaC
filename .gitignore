@@ -3,3 +3,5 @@
 /package-lock.json
 /.mw/.internal/
 .vs
+bin
+obj
