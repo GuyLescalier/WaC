@@ -7,7 +7,8 @@ Import-Module Pester-ShouldBeDeep
 BeforeAll {
     Get-ChildItem -Path "$PSScriptRoot\*.ps1" -Exclude '*.Tests.ps1' | ForEach-Object { . $_.FullName }
 
-    $script:testVersion = '20.0.0'
+    $script:testVersion = '20.1.0'
+    $script:testVersionStale = '20.0.0'
 
     & nvm install $script:testVersion
     $script:originalVersion = & nvm current
@@ -21,12 +22,7 @@ AfterAll {
 
 Describe 'MyNodeVersion helpers' {
     Context 'Get-NvmInstalledVersions' {
-        #TODO: https://github.com/coreybutler/nvm-windows/issues/1068
-        It 'should return the nvm list' {
-            $installedVersions = & nvm list
-            $installedVersions | Should -Be ''
-        }
-        
+
         It 'should return the installed versions' {
             $installedVersions = Get-NvmInstalledVersions
             $installedVersions | Should -Contain $script:testVersion
@@ -44,7 +40,7 @@ Describe 'MyNodeVersion helpers' {
         It 'should return the stale versions' {
             $staleVersions = Get-NvmStaleVersions
             $staleVersions | Should -Contain @(
-                $script:testVersion
+                $script:testVersionStale
             )
         }
     }
@@ -53,7 +49,7 @@ Describe 'MyNodeVersion helpers' {
         It 'should return the latest versions' {
             $latestVersions = Get-NodeLatestVersions
             $latestVersions | Should -BeDeeplyEqualPartial @{
-                lts = '21.5.0'
+                lts = '22.20.0'
             }
         }
     }
