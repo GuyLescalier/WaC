@@ -80,7 +80,7 @@ Describe 'MyScoopPackage' {
 
             # Assert
             $packageInfo | Should -BeOfType 'Hashtable'
-            $packageInfo.Keys | Sort-Object | Should -Be @('Ensure', 'Version')
+            $packageInfo.Keys | Sort-Object | Should -Be @('Ensure', 'PackageName', 'Version')
             $packageInfo['Ensure'] | Should -Be 'Present'
             $packageInfo['Version'] | Should -Not -BeNullOrEmpty
             $packageInfo['Version'] | Should -Match '^\d+\.\d+\.\d+$'
@@ -95,7 +95,7 @@ Describe 'MyScoopPackage' {
 
             # Assert
             $packageInfo | Should -BeOfType 'Hashtable'
-            $packageInfo.Keys | Sort-Object | Should -Be @('Ensure', 'Version')
+            $packageInfo.Keys | Sort-Object | Should -Be @('Ensure', 'PackageName', 'Version')
             $packageInfo['Ensure'] | Should -Be 'Absent'
             $packageInfo['Version'] | Should -BeNullOrEmpty
         }
