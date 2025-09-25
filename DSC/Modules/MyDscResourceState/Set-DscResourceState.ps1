@@ -39,3 +39,24 @@ function Set-DscResourceState
         Result     = $setResult
     }
 }
+
+function New-MergedHashtable
+{
+    [CmdletBinding()]
+    param (
+        [Parameter(Mandatory = $true, Position = 0, ValueFromRemainingArguments = $true)]
+        [hashtable[]]$Hashtables
+    )
+
+    $mergedHashtable = @{}
+
+    foreach ($hashtable in $Hashtables)
+    {
+        foreach ($key in $hashtable.Keys)
+        {
+            $mergedHashtable[$key] = $hashtable[$key]
+        }
+    }
+
+    return $mergedHashtable
+}

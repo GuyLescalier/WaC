@@ -1,6 +1,20 @@
 Import-Module Functional
 Import-Module Pester-ShouldBeDeep
 
+function Test-IsWindowsServer 
+{
+    try 
+    { 
+        ((Get-CimInstance Win32_OperatingSystem -ErrorAction Stop).ProductType -in 2,3) 
+    }
+    catch 
+    { 
+        $false 
+    }
+}
+
+$script:IsWindowsServer = Test-IsWindowsServer
+
 BeforeAll {
     . $PSScriptRoot\Set-DscResourceState.ps1
 
@@ -65,7 +79,7 @@ Describe 'MyDscResourceState' {
     }
 
     Context 'Set-DscResourceState specific cases' {
-        It 'Sets desired state for WCF-HTTP-Activation Windows optional feature' {
+        It 'Sets desired state for WCF-HTTP-Activation Windows optional feature' -Skip:(!$script:IsWindowsServer) {
             # Arrange: Set up any preconditions and inputs
             $resource = @{
                 Name     = 'WindowsOptionalFeature'

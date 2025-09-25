@@ -1,6 +1,20 @@
 Import-Module Functional
 Import-Module Pester-ShouldBeDeep
 
+function Test-IsWindowsServer 
+{
+    try 
+    { 
+        ((Get-CimInstance Win32_OperatingSystem -ErrorAction Stop).ProductType -in 2,3) 
+    }
+    catch 
+    { 
+        $false 
+    }
+}
+
+$script:IsWindowsServer = Test-IsWindowsServer
+
 BeforeAll {
     . $PSScriptRoot\Get-DscResourceState.ps1
 
@@ -83,7 +97,7 @@ Describe 'MyDscResourceState' {
 
             $expected = @{
                 ValueType = 'String'
-                ValueData = @('C:\Program Files')
+                ValueData = 'C:\Program Files'
                 Ensure    = 'Present'
             }
 
@@ -95,7 +109,7 @@ Describe 'MyDscResourceState' {
             $result.State | Should -BeDeeplyEqualPartial $expected
         }
 
-        It 'Gets the state of an existing Windows optional feature' {
+        It 'Gets the state of an existing Windows optional feature' -Skip:(!$script:IsWindowsServer) {
             # Arrange: Set up any preconditions and inputs
             $resource = @{
                 Name     = 'WindowsOptionalFeature'
@@ -220,7 +234,7 @@ Describe 'MyDscResourceState' {
                 Ensure      = 'Present'
                 # InstalledVersion  = '1.92.0'
                 # MatchOption       = 1
-                IsInstalled = $true
+                # IsInstalled       = $true          # No longer existing in WinGetPackage
                 # UseLatest         = $false
                 # InstallMode       = 1
                 # IsUpdateAvailable = $false                
@@ -261,7 +275,7 @@ Describe 'MyDscResourceState' {
                 Name       = 'MyCertificate'
                 ModuleName = 'MyResources'
                 Property   = @{
-                    Path = 'C:\Projets\WaC\resources\certificates\_.cr-paca.fr.crt'
+                    Path = 'C:\WaC\resources\certificates\_.cr-paca.fr.crt'
                 }
             }
 
@@ -287,7 +301,7 @@ Describe 'MyDscResourceState' {
                 ModuleName = 'MyResources'
                 Property   = @{
                     Type  = 'Path'
-                    Value = 'C:\Projets'
+                    Value = 'C:\Wac'
                 }
             }
 
@@ -335,7 +349,7 @@ Describe 'MyDscResourceState' {
                 ModuleName = 'MyResources'
                 Property   = @{
                     Name = 'RégionSUD'
-                    Path = 'C:\Projets\WaC\resources\hosts'
+                    Path = 'C:\WaC\resources\hosts'
                 }
             }
 

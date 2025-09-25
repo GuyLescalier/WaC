@@ -27,7 +27,6 @@ $DscResourcesDefaultProperties = @{
     }
     WinGetPackage       = @{
         UseLatest         = $true
-        IsUpdateAvailable = $false
     }
 }
 
