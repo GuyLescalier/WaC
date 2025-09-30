@@ -11,12 +11,14 @@ BeforeAll {
     $script:testVersionStale = '20.0.0'
 
     & nvm install $script:testVersion
+    & nvm install $script:testVersionStale
     $script:originalVersion = & nvm current
     & nvm use $script:testVersion
 }
 
 AfterAll {
     & nvm uninstall $script:testVersion
+    & nvm uninstall $script:testVersionStale
     & nvm use $script:originalVersion
 }
 
