@@ -1,1 +1,0 @@
-dsc config set/get/test --file "path\DSCv3\config-full-expanded.yaml"

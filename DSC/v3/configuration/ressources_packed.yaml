@@ -1,0 +1,106 @@
+- name: Registry - [ValueName]
+  type: Microsoft.Windows/Registry
+  properties:
+    - keyPath: HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced
+      valueName: HideFileExt
+      valueData:
+        DWord: 0
+    - keyPath: HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Lsa
+      valueName: DisableLoopbackCheck
+      valueData:
+        DWord: 1
+
+- name: MyScoop
+  type: MyResources/MyScoop
+  properties:
+      
+- name: Scoop Package - [PackageName]
+  type: MyResources/MyScoopPackage
+  properties:
+    - PackageName: dotnet-sdk
+    - PackageName: dotnet3-sdk
+    - PackageName: dotnet5-sdk
+    - PackageName: dotnet6-sdk
+    - PackageName: dotnet8-sdk
+    - PackageName: temurin-lts-jdk
+    - PackageName: gh
+    - PackageName: git
+    - PackageName: nuget
+    - PackageName: nvm
+    - PackageName: oh-my-posh
+    - PackageName: terraform
+    - PackageName: CascadiaCode-NF-Mono
+    - PackageName: FiraCode-NF
+    - PackageName: baretail
+    - PackageName: mockoon
+    - PackageName: nuget-package-explorer
+    - PackageName: paint.net
+    - PackageName: postman
+    - PackageName: vlc
+    - PackageName: wiztree
+
+- name: MyChocolatey
+  type: MyResources/MyChocolatey
+  properties:
+
+- name: MyChocolateyPackage - [PackageName]
+  type: MyResources/MyChocolateyPackage
+  properties:
+    - PackageName: 7zip
+    - PackageName: adobereader
+    - PackageName: bulkrenameutility
+    - PackageName: notepadplusplus
+    - PackageName: urlrewrite
+    - PackageName: webdeploy
+    - PackageName: winmerge
+
+- name: WinGetPackage - [Id]
+  type: Microsoft.WinGet.DSC
+  properties:
+    - Id: Fork.Fork
+    - Id: Microsoft.PowerShell
+    - Id: Microsoft.PowerToys
+    - Id: Microsoft.PowerAutomateDesktop
+    - Id: Microsoft.PowerBI
+    - Id: Microsoft.VisualStudioCode
+    - Id: Google.Chrome
+    - Id: HP.ImageAssistant
+
+- name: VSComponents
+  type: Microsoft.VisualStudio.DSC
+  properties:
+      productId: Microsoft.VisualStudio.Product.Enterprise
+      channelId: VisualStudio.17.Release
+      vsConfigFile: C:\WaC\resources\visual-studio\enterprise.vsconfig
+      includeRecommended: true
+
+- name: MyCertificate - [resourceName]
+  type: MyResources/MyCertificate
+  properties:
+    - Path: C:\WaC\resources\certificates\_.cr-paca.fr.crt
+      resourceName: CR-PACA
+    - Path: C:\WaC\resources\certificates\Autorite de Certification Region SUD Provence-Alpes-Cote d'Azur.crt
+      resourceName: AC-PACA
+
+- name: MyWindowsDefenderExclusion - [Value]
+  type: MyResources/MyWindowsDefenderExclusion
+  properties:
+    - Type: Path
+      Value: C:\Projets
+    - Type: Path
+      Value: C:\Users\%user%\.dotnet\tools
+    - Type: Path
+      Value: C:\Users\%user%\scoop
+
+- name: MyNodeVersion - [Version]
+  type: MyResources/MyNodeVersion
+  properties:
+    - Version: lts
+      Ensure: Used
+    - Version: 18
+
+- name: MyHosts - [Name]
+  type: MyResources/MyHosts
+  properties:
+      Path: C:\WaC\resources\hosts
+      Name: PACA

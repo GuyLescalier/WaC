@@ -15,14 +15,15 @@ $script:CacheDuration = [TimeSpan]::FromMinutes(5)
 
 function Get-RawScoopList
 {
-    $result = & scoop list
-
-    if (-not $?)
-    {
-        throw "Failed to get scoop list: $result"
+    try {
+         $json = & scoop export | ConvertFrom-Json
+    }
+    catch {
+        throw "Failed to parse scoop export JSON: $_"
     }
     
-    return $result ? $result : @()
+    # scoop export outputs a JSON object with 'apps' and 'buckets' keys. We only need the 'apps'.
+    return $json.apps ?? @()
 }
 
 function Get-RawScoopStatus
@@ -32,14 +33,14 @@ function Get-RawScoopStatus
     {
         & scoop update
     }
-    
+
     $result = & scoop status
-    
+
     if (-not $?)
     {
         throw "Failed to get scoop status: $result"
     }
-    
+
     return $result ? $result : @()
 }
 
@@ -68,28 +69,6 @@ function Update-ScoopListCache
 
 function Get-ScoopPackageInfo
 {
-    param (
-        [string]$PackageName
-    )
-
-    if (-not $script:ScoopListCache -or $script:ScoopListCacheExpires -le (Get-Date))
-    {
-        Update-ScoopListCache
-    }
-
-    if ($script:ScoopListCache.ContainsKey($PackageName))
-    {
-        return @{
-            Ensure  = [MyEnsure]::Present
-            Version = $script:ScoopListCache[$packageName].Version
-        }
-    }
-
-    return $null
-}
-
-function Get-ScoopPackageInfo()
-{
     param(
         [Parameter(Mandatory = $true)]
         [string] $packageName
@@ -117,14 +96,16 @@ function Get-ScoopPackageInfo()
     if ($packages.ContainsKey($packageName))
     {
         return @{
-            Ensure  = [MyEnsure]::Present
-            Version = $packages[$packageName].Version
+            PackageName = $packageName # Add this line
+            Ensure      = [MyEnsure]::Present
+            Version     = $packages[$packageName].Version
         }
     }
 
     return @{
-        Ensure  = [MyEnsure]::Absent
-        Version = $null
+        PackageName = $packageName # Add this line for absent packages too
+        Ensure      = [MyEnsure]::Absent
+        Version     = $null
     }
 }
 
@@ -135,7 +116,10 @@ function Update-ScoopStatusCache
             
         if (-not $scoopStatus)
         {
-            throw 'Unable to get scoop status'
+            # Empty status is normal when no updates are available
+            $script:ScoopStatusCache = @{}
+            $script:ScoopStatusCacheExpires = (Get-Date) + $script:CacheDuration
+            return
         }
 
         try
@@ -170,16 +154,20 @@ function Get-ScoopPackageLatestAvailableVersion
     return $null
 }
 
-function Update-ScoopPackage()
+function Update-ScoopPackage
 {
     param(
         [Parameter(Mandatory = $true)]
         [string] $packageName
     )
 
+    # Suppress all output to avoid contaminating DSC response
     $output = & scoop update $packageName *>&1
-    if (-not $?)
-    {
+    
+    # Check if command succeeded by looking for error indicators in output
+    $errorIndicators = $output | Where-Object { $_ -match "error|failed|not found" }
+    
+    if ($errorIndicators) {
         $outputString = $output | Out-String
         throw "Failed to update scoop package '$packageName'.`nDetails: $outputString"
     }
@@ -187,33 +175,43 @@ function Update-ScoopPackage()
     Clear-Cache
 }
 
-function Install-ScoopPackage()
+function Install-ScoopPackage
 {
     param(
         [Parameter(Mandatory = $true)]
         [string] $packageName
     )
     
-    & scoop install $target
-    if (-not $?)
-    {
-        throw "Failed to install scoop package '$target'"
+    # Suppress all output to avoid contaminating DSC response
+    $output = & scoop install $packageName *>&1
+    
+    # Check for success by looking for error patterns
+    $errorIndicators = $output | Where-Object { $_ -match "error|failed|not found|couldn't find" }
+    
+    if ($errorIndicators) {
+        $outputString = $output | Out-String
+        throw "Failed to install scoop package '$packageName'.`nDetails: $outputString"
     }
 
     Clear-Cache
 }
 
-function Uninstall-ScoopPackage()
+function Uninstall-ScoopPackage
 {
     param(
         [Parameter(Mandatory = $true)]
         [string] $packageName
     )
 
-    & scoop uninstall $this.PackageName
-    if (-not $?)
-    {
-        throw "Failed to uninstall scoop package '$($this.PackageName)'"
+    # Suppress all output to avoid contaminating DSC response
+    $output = & scoop uninstall $packageName *>&1
+    
+    # Check for success by looking for error patterns
+    $errorIndicators = $output | Where-Object { $_ -match "error|failed|not found|isn't installed" }
+    
+    if ($errorIndicators) {
+        $outputString = $output | Out-String
+        throw "Failed to uninstall scoop package '$packageName'.`nDetails: $outputString"
     }
 
     Clear-Cache
