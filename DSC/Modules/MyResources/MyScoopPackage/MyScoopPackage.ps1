@@ -28,19 +28,14 @@ function Get-RawScoopList
 
 function Get-RawScoopStatus
 {
-    $statusResult = & scoop status 6>&1
-    if ($statusResult -match 'WARN.*scoop update')
+    $checkOutput = & scoop status 6>&1 | Out-String
+    if ($checkOutput -match 'WARN.*scoop update')
     {
-        & scoop update
+        & scoop update *>&1 | Out-Null
     }
-
-    $result = & scoop status
-
-    if (-not $?)
-    {
-        throw "Failed to get scoop status: $result"
-    }
-
+    
+    $result = & scoop status 6>$null
+    
     return $result ? $result : @()
 }
 

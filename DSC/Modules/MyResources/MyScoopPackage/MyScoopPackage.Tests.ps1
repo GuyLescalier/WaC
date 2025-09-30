@@ -26,7 +26,7 @@ Describe 'MyScoopPackage' {
             $scoopStatus = Get-RawScoopStatus
 
             # Assert
-            # $scoopStatus | Should -BeOfType '[PSCustomObject]'
+            $scoopStatus | Should -BeOfType '[PSCustomObject]'
             if ($scoopStatus)
             {
                 $scoopStatus | ForEach-Object {
@@ -80,7 +80,6 @@ Describe 'MyScoopPackage' {
 
             # Assert
             $packageInfo | Should -BeOfType 'Hashtable'
-            $packageInfo.Keys | Sort-Object | Should -Be @('Ensure', 'Version')
             $packageInfo.Keys | Sort-Object | Should -Be @('Ensure', 'PackageName', 'Version')
             $packageInfo['Ensure'] | Should -Be 'Present'
             $packageInfo['Version'] | Should -Not -BeNullOrEmpty
@@ -96,7 +95,6 @@ Describe 'MyScoopPackage' {
 
             # Assert
             $packageInfo | Should -BeOfType 'Hashtable'
-            $packageInfo.Keys | Sort-Object | Should -Be @('Ensure', 'Version')
             $packageInfo.Keys | Sort-Object | Should -Be @('Ensure', 'PackageName', 'Version')
             $packageInfo['Ensure'] | Should -Be 'Absent'
             $packageInfo['Version'] | Should -BeNullOrEmpty
