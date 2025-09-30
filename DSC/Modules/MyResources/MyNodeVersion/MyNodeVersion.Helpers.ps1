@@ -95,6 +95,18 @@ function Get-NodeLatestVersions
                 $versionsHashTable['latest'] = ($latestVersion.version -replace '^v')
             }
 
+            # Ajouter des combo clef valeur : {majorVersion = latestVersion}
+            $versions | ForEach-Object {
+                $versionString = $_.version -replace '^v'
+                $majorVersion = [int]($versionString -split '\.')[0]
+    
+                $current = $versionsHashTable[$majorVersion]
+                if (-not $current -or [version]$versionString -gt [version]$current)
+                {
+                    $versionsHashTable[$majorVersion] = $versionString
+                }
+            }
+            
             $script:nodeLatestVersionsCache = $versionsHashTable
             $script:LastNodeLatestVersionsRefreshed = Get-Date
         }
