@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:local="clr-namespace:Configurator"
+    xmlns:models="clr-namespace:Configurator.Models"
+    xmlns:viewmodels="clr-namespace:Configurator.ViewModels"
+    xmlns:views="clr-namespace:Configurator.Views"
+    x:Class="Configurator.MainPage"
+    x:Name="this"
+    x:DataType="local:MainPage"
+    BackgroundColor="#1E1E1E">
+
+    <!-- Styles locaux pour donner un vrai look "disabled" -->
+    <ContentPage.Resources>
+        <!-- Style de base (bleu) pour TEST ALL -->
+        <Style x:Key="PrimaryButtonStyle" TargetType="Button">
+            <Setter Property="CornerRadius" Value="0" />
+            <Setter Property="FontAttributes" Value="Bold" />
+            <Setter Property="FontSize" Value="12" />
+            <Setter Property="TextColor" Value="White" />
+            <Setter Property="HeightRequest" Value="32" />
+            <Setter Property="VisualStateManager.VisualStateGroups">
+                <VisualStateGroupList>
+                    <VisualStateGroup x:Name="CommonStates">
+                        <VisualState x:Name="Normal">
+                            <VisualState.Setters>
+                                <Setter Property="BackgroundColor" Value="#007ACC" />
+                                <Setter Property="Opacity" Value="1" />
+                            </VisualState.Setters>
+                        </VisualState>
+                        <VisualState x:Name="Disabled">
+                            <VisualState.Setters>
+                                <!-- gris + texte pâle + opacité -->
+                                <Setter Property="BackgroundColor" Value="#3A3A3A" />
+                                <Setter Property="TextColor" Value="#9A9A9A" />
+                                <Setter Property="Opacity" Value="0.6" />
+                            </VisualState.Setters>
+                        </VisualState>
+                    </VisualStateGroup>
+                </VisualStateGroupList>
+            </Setter>
+        </Style>
+
+        <!-- Style vert pour APPLY ALL CHANGES -->
+        <Style x:Key="SuccessButtonStyle" TargetType="Button" BasedOn="{StaticResource PrimaryButtonStyle}">
+            <Setter Property="VisualStateManager.VisualStateGroups">
+                <VisualStateGroupList>
+                    <VisualStateGroup x:Name="CommonStates">
+                        <VisualState x:Name="Normal">
+                            <VisualState.Setters>
+                                <Setter Property="BackgroundColor" Value="#16825D" />
+                                <Setter Property="TextColor" Value="White" />
+                                <Setter Property="Opacity" Value="1" />
+                            </VisualState.Setters>
+                        </VisualState>
+                        <VisualState x:Name="Disabled">
+                            <VisualState.Setters>
+                                <Setter Property="BackgroundColor" Value="#3A3A3A" />
+                                <Setter Property="TextColor" Value="#9A9A9A" />
+                                <Setter Property="Opacity" Value="0.6" />
+                            </VisualState.Setters>
+                        </VisualState>
+                    </VisualStateGroup>
+                </VisualStateGroupList>
+            </Setter>
+        </Style>
+    </ContentPage.Resources>
+
+    <Grid Padding="8" RowDefinitions="Auto,8,*,Auto" RowSpacing="0">
+
+        
+        <views:HeaderView Grid.Row="0"
+                          SelectedFileDisplay="{Binding SelectedFileDisplay}"
+                          IsConfigFileSelected="{Binding IsConfigFileSelected}"
+                          IsApplyAllEnabled="{Binding IsApplyAllEnabled}"
+                          OpenFileClicked="OnOpenFileClicked"
+                          RunFullConfigTestClicked="OnRunFullConfigTestClicked"
+                          ApplyAllChangesClicked="OnApplyAllChangesClicked" />
+
+
+        <!-- CONTENU PRINCIPAL : Liste des ressources -->
+        <views:ResourceListView Grid.Row="2" ItemsSource="{Binding DscResources}" />
+
+        <!-- Barre de statut -->
+        <views:StatusBarView Grid.Row="3" 
+                             BindingContext="{Binding CurrentNotification}"
+                             CancelCommand="{Binding CancelNotificationCommand}" />
+
+    </Grid>
+</ContentPage>
