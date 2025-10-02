@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentView xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:viewmodels="clr-namespace:Configurator.ViewModels"
+             x:Class="Configurator.Views.StatusBarView"
+             x:Name="this">
+    <Border BackgroundColor="#3E3E42" Stroke="#525252" StrokeThickness="0">
+        <Grid ColumnDefinitions="*,Auto" Padding="12,8">
+            <VerticalStackLayout Grid.Column="0" Spacing="4">
+                <Label Text="{Binding Message}" TextColor="White" FontSize="12" />
+                <ProgressBar Progress="{Binding Progress}" IsVisible="{Binding IsProgressBarVisible}" />
+            </VerticalStackLayout>
+            <Button Grid.Column="1" Text="Cancel" Command="{Binding Source={x:Reference this}, Path=CancelCommand}" IsVisible="{Binding IsCancellable}" 
+                    BackgroundColor="#DA3B3B" TextColor="White" CornerRadius="0" FontAttributes="Bold" FontSize="12" HeightRequest="32" WidthRequest="120"/>
+        </Grid>
+    </Border>
+</ContentView>
