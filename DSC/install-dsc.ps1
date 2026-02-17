@@ -1,5 +1,5 @@
 ﻿<#
-.SYNOPSIS
+.SYNOPSIS 
     Installe ou met à jour Microsoft Desired State Configuration v3.x.
 
 .DESCRIPTION
