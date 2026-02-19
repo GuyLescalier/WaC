@@ -52,6 +52,9 @@ function Set-ResourceState {
     }    
 }
 
+$inputJson   = [Console]::In.ReadToEnd()
+$inputObject = $inputJson | ConvertFrom-Json
+
 $result = switch ($Operation) {
     'Get' { Get-ResourceState -InputObject $inputObject }
     'Test' { Test-ResourceState -InputObject $inputObject }
