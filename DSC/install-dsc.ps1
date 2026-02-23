@@ -9,7 +9,27 @@
 #>
 #Requires -RunAsAdministrator
 
-# ---------- 0. Pré-requis winget ----------
+[CmdletBinding()]
+param(
+    [Parameter()]
+    [string]$RepositoryPath = (Join-Path $PSScriptRoot "DSC\resources"),    
+
+    [Parameter()]
+    [string]$RepositoryName = "WaCLocalRepo"
+)
+
+
+# ---------- Pré-requis ----------
+Set-ExecutionPolicy -Scope CurrentUser -ExecutionPolicy Bypass
+Set-PSRepository PSGallery -InstallationPolicy Trusted
+
+Install-Module powershell-yaml
+Install-Module PSDscResources -Repository PSGallery
+Install-Module PSDesiredStateConfiguration -Repository PSGallery
+Install-Module Microsoft.WinGet.DSC
+Install-Module Microsoft.VisualStudio.DSC
+
+
 Write-Host "`n╔════════════════════════════════════════════════════════════╗" -ForegroundColor Cyan
 Write-Host '║        Installation DSC v3 & PowerShell 7.5                ║' -ForegroundColor Cyan
 Write-Host "╚════════════════════════════════════════════════════════════╝`n" -ForegroundColor Cyan
@@ -24,7 +44,7 @@ Write-Host '✓ Winget détecté' -ForegroundColor Green
 
 # ---------- 1. Installation de PowerShell 7.5 ----------
 Write-Host "`n┌─────────────────────────────────────────────────────────┐" -ForegroundColor Cyan
-Write-Host '│  Étape 1/5 : Installation de PowerShell 7.5             │' -ForegroundColor Cyan
+Write-Host '│  Étape 1/7 : Installation de PowerShell 7.5             │' -ForegroundColor Cyan
 Write-Host '└─────────────────────────────────────────────────────────┘' -ForegroundColor Cyan
 
 $ps7Installed = Get-Command pwsh -ErrorAction SilentlyContinue
@@ -74,7 +94,7 @@ else
 
 # ---------- 2. Recherche du package DSC ----------
 Write-Host "`n┌─────────────────────────────────────────────────────────┐" -ForegroundColor Cyan
-Write-Host '│  Étape 2/5 : Recherche du package DSC                   │' -ForegroundColor Cyan
+Write-Host '│  Étape 2/7 : Recherche du package DSC                   │' -ForegroundColor Cyan
 Write-Host '└─────────────────────────────────────────────────────────┘' -ForegroundColor Cyan
 
 $pkgInfo = (winget search DesiredStateConfiguration --source msstore --exact --accept-source-agreements |
@@ -91,7 +111,7 @@ Write-Host "  ✓ Package ID détecté : $pkgInfo" -ForegroundColor Green
 
 # ---------- 3. Installation / mise à jour DSC ----------
 Write-Host "`n┌─────────────────────────────────────────────────────────┐" -ForegroundColor Cyan
-Write-Host '│  Étape 3/5 : Installation de DSC v3.x                   │' -ForegroundColor Cyan
+Write-Host '│  Étape 3/7 : Installation de DSC v3.x                   │' -ForegroundColor Cyan
 Write-Host '└─────────────────────────────────────────────────────────┘' -ForegroundColor Cyan
 
 winget install --id $pkgInfo --source msstore --accept-package-agreements --accept-source-agreements --silent
@@ -129,97 +149,96 @@ else
     Write-Host "  ✓ DSC v$dscVersion est installé" -ForegroundColor Green
 }
 
-# ---------- 4. Ajout du dossier "Modules" au PSModulePath ----------
+# ---------- 4 : Enregistrement du repository ----------
+# ====================================
+# ÉTAPE 1 : ENREGISTREMENT DU REPOSITORY
+# ====================================
 Write-Host "`n┌─────────────────────────────────────────────────────────┐" -ForegroundColor Cyan
-Write-Host '│  Étape 4/5 : Configuration du PSModulePath              │' -ForegroundColor Cyan
+Write-Host '│  Étape 4/7 : Enregistrement du repository               │' -ForegroundColor Cyan
 Write-Host '└─────────────────────────────────────────────────────────┘' -ForegroundColor Cyan
 
-$scriptDir = Split-Path -Parent $MyInvocation.MyCommand.Path
-$localModuleDir = Join-Path $scriptDir 'Modules'
+# Utilisation du RepositoryPath dynamique
+$existingRepo = Get-PSRepository -Name $RepositoryName -ErrorAction SilentlyContinue
 
-if (Test-Path $localModuleDir)
+if (-not $existingRepo) 
 {
-    foreach ($scope in 'Process', 'Machine')
-    {
-        $current = [Environment]::GetEnvironmentVariable('PSModulePath', $scope)
-        if (-not $current)
-        {
-            $current = '' 
-        }
+    Write-Host "  Repository '$RepositoryName' non trouvé, enregistrement..." -ForegroundColor Gray
+    Register-PSResourceRepository -Name $RepositoryName -SourceLocation $RepositoryPath -InstallationPolicy Trusted
+    Write-Host "  ✓ Repository enregistré" -ForegroundColor Green
+} 
+else 
+{
+    Write-Host "  ✓ Repository déjà enregistré" -ForegroundColor Green
+}
 
-        if (($current -split ';') -notcontains $localModuleDir)
-        {
-            $newValue = if ($current.Trim())
-            {
-                "$current;$localModuleDir" 
-            }
-            else
-            {
-                $localModuleDir 
-            }
-            [Environment]::SetEnvironmentVariable('PSModulePath', $newValue, $scope)
-            Write-Host "  ✓ Ajout de $localModuleDir à PSModulePath ($scope)" -ForegroundColor Green
-        }
-        else
-        {
-            Write-Host "  ℹ $localModuleDir déjà dans PSModulePath ($scope)" -ForegroundColor Gray
-        }
+# ---------- Étape 5 : Suppression des anciennes versions de ressources----------
+Write-Host "`n┌──────────────────────────────────────────────────────────────────────┐" -ForegroundColor Cyan
+Write-Host '│  Étape 5/7 : Suppression des anciennes versions de ressources        │' -ForegroundColor Cyan
+Write-Host '└──────────────────────────────────────────────────────────────────────┘' -ForegroundColor Cyan
+
+Write-Host "   Vérification des anciennes versions..." -ForegroundColor Gray
+
+$oldVersions = Get-Module -Name MyResources -ListAvailable
+
+if ($oldVersions) 
+{
+    foreach ($ver in $oldVersions) 
+    {
+        Write-Host "   Suppression de la version existante : $($ver.Version) située dans $($ver.ModuleBase)" -ForegroundColor Magenta
+
+        Remove-Item -Path $ver.ModuleBase -Recurse -Force -ErrorAction Stop
+        Write-Host "   ✓ Version $($ver.Version) supprimée." -ForegroundColor Green
     }
 }
-else
-{
-    Write-Host "  ⚠ Le dossier de modules local n'existe pas : $localModuleDir" -ForegroundColor Yellow
-}
 
-# ---------- 5. Copie du dossier "resources" vers C:\WaC\resources ----------
+
+# ---------- Étape 6 : Installation du module MyResources ----------
 Write-Host "`n┌─────────────────────────────────────────────────────────┐" -ForegroundColor Cyan
-Write-Host '│  Étape 5/5 : Copie des ressources                       │' -ForegroundColor Cyan
+Write-Host '│  Étape 6/7 : Installation du module MyResources         │' -ForegroundColor Cyan
 Write-Host '└─────────────────────────────────────────────────────────┘' -ForegroundColor Cyan
 
-$localResourcesDir = Join-Path $scriptDir 'resources'
-$targetResourcesDir = 'C:\WaC\resources'
+Install-PSResource -Name MyResources -Repository $RepositoryName -TrustRepository -ErrorAction Stop
 
-if (Test-Path $localResourcesDir)
-{
-    if (-not (Test-Path $targetResourcesDir))
-    {
-        New-Item -ItemType Directory -Path $targetResourcesDir -Force | Out-Null
-        Write-Host "  ✓ Création du dossier cible : $targetResourcesDir" -ForegroundColor Green
-    }
+$installedModule = Get-Module -Name MyResources -ListAvailable | Select-Object -First 1
 
-    Copy-Item -Path $localResourcesDir\* -Destination $targetResourcesDir -Recurse -Force
-    Write-Host "  ✓ Dossier 'resources' copié vers $targetResourcesDir" -ForegroundColor Green
-}
-else
-{
-    Write-Host "  ⚠ Le dossier 'resources' n'existe pas dans : $localResourcesDir" -ForegroundColor Yellow
+if (-not $installedModule) {
+    Write-Host "  ✗ Erreur : Module MyResources non trouvé après installation" -ForegroundColor Red
+    exit 1
 }
 
-# ---------- 6. Résumé final ----------
-Write-Host "`n╔════════════════════════════════════════════════════════════╗" -ForegroundColor Green
-Write-Host '║              Installation terminée avec succès             ║' -ForegroundColor Green
-Write-Host '╚════════════════════════════════════════════════════════════╝' -ForegroundColor Green
+Write-Host "  Module installé :" -ForegroundColor Gray
+Write-Host "    Version : $($installedModule.Version)" -ForegroundColor Gray
+Write-Host "    Chemin  : $($installedModule.ModuleBase)" -ForegroundColor Gray
 
-Write-Host "`n  Composants installés :" -ForegroundColor White
-Write-Host '    • PowerShell 7.5 : ' -NoNewline -ForegroundColor White
-if (Get-Command pwsh -ErrorAction SilentlyContinue)
-{
-    Write-Host '✓ Installé' -ForegroundColor Green
-}
-else
-{
-    Write-Host '✗ Non détecté' -ForegroundColor Red
-}
 
-Write-Host '    • DSC v3.x       : ' -NoNewline -ForegroundColor White
-if (Get-Command dsc -ErrorAction SilentlyContinue)
-{
-    Write-Host '✓ Installé' -ForegroundColor Green
-}
-else
-{
-    Write-Host '✗ Non détecté' -ForegroundColor Red
-}
+# ---------- Étape 7 : Configuration du PATH ----------
+Write-Host "`n┌─────────────────────────────────────────────────────────┐" -ForegroundColor Cyan
+Write-Host '│  Étape 7/7 : Configuration du PATH                      │' -ForegroundColor Cyan
+Write-Host '└─────────────────────────────────────────────────────────┘' -ForegroundColor Cyan
+
+$dscResourcePath = Join-Path $installedModule.ModuleBase "resources"
+
+Write-Host " Dossier des ressources identifié : $dscResourcePath" -ForegroundColor Gray
+
+$resourceDirs = Get-ChildItem $dscResourcePath -Directory
+
+$pathList = @(
+    $resourceDirs.FullName                                  # Les ressources
+    $PSHOME                                                 # PowerShell 7 
+    [Environment]::SystemDirectory                          # System32 
+    (Get-Module Microsoft.WinGet.DSC -ListAvailable).ModuleBase # WinGet
+    $env:Path.Split([IO.Path]::PathSeparator)                     # Les chemins déjà présents dans PATH 
+) | Where-Object { $_ } | Select-Object -Unique
+
+# 2. On joint tout avec le séparateur (;)
+$finalPath = $pathList -join [IO.Path]::PathSeparator
+
+# 3. On applique la configuration 
+[Environment]::SetEnvironmentVariable("PATH", $finalPath, "User")
+$env:PATH = $finalPath
+
+Write-Host " ✓ Variable PATH mise à jour." -ForegroundColor Green
+
 
 # ---------- 7. Ouverture de PowerShell 7 en administrateur ----------
 Write-Host "`n  → Lancement de PowerShell 7 en administrateur..." -ForegroundColor Cyan
