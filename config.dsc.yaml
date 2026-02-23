@@ -1,0 +1,13 @@
+$schema: https://raw.githubusercontent.com/PowerShell/DSC/main/schemas/v3/bundled/config/document.json
+resources:
+  - name: MyScoop
+    type: MyCompany.Installer/TestMyScoop
+    properties:
+      name: Scoop
+      ensure: Present
+  # - name: Scoop Package - temurin-lts-jdk
+  #   type: MyCompany.Packages/TestMyScoopPackage
+  #   properties:
+  #     packageName: temurin-lts-jdk
+  #     ensure: Present
+  #     version: latest
