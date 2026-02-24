@@ -163,7 +163,7 @@ $existingRepo = Get-PSRepository -Name $RepositoryName -ErrorAction SilentlyCont
 if (-not $existingRepo) 
 {
     Write-Host "  Repository '$RepositoryName' non trouvé, enregistrement..." -ForegroundColor Gray
-    Register-PSResourceRepository -Name $RepositoryName -SourceLocation $RepositoryPath -InstallationPolicy Trusted
+    Register-PSResourceRepository -Name $RepositoryName -Uri $RepositoryPath -Trusted
     Write-Host "  ✓ Repository enregistré" -ForegroundColor Green
 } 
 else 
