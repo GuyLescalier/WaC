@@ -23,11 +23,12 @@ param(
 Set-ExecutionPolicy -Scope CurrentUser -ExecutionPolicy Bypass
 Set-PSRepository PSGallery -InstallationPolicy Trusted
 
-Install-Module powershell-yaml
-Install-Module PSDscResources -Repository PSGallery
-Install-Module PSDesiredStateConfiguration -Repository PSGallery
-Install-Module Microsoft.WinGet.DSC
-Install-Module Microsoft.VisualStudio.DSC
+Install-PSResource powershell-yaml -Repository PSGallery 
+Install-PSResource PSDscResources -Repository PSGallery
+Install-PSResource PSDesiredStateConfiguration -Repository PSGallery
+Install-PSResource Microsoft.WinGet.DSC -Repository PSGallery
+Install-PSResource Microsoft.VisualStudio.DSC -Repository PSGallery
+Install-PSResource -Name Microsoft.WinGet.Client -Repository PSGallery -TrustRepository
 
 
 Write-Host "`n╔════════════════════════════════════════════════════════════╗" -ForegroundColor Cyan
@@ -97,9 +98,7 @@ Write-Host "`n┌─────────────────────
 Write-Host '│  Étape 2/7 : Recherche du package DSC                   │' -ForegroundColor Cyan
 Write-Host '└─────────────────────────────────────────────────────────┘' -ForegroundColor Cyan
 
-$pkgInfo = (winget search DesiredStateConfiguration --source msstore --exact --accept-source-agreements |
-        Where-Object { $_ -match '^DesiredStateConfiguration\s' } |
-        Select-Object -First 1).ToString().Split(' ', [System.StringSplitOptions]::RemoveEmptyEntries)[1]
+$pkgInfo = Find-WinGetPackage -Name "DesiredStateConfiguration" 
 
 if (-not $pkgInfo)
 {
@@ -107,14 +106,14 @@ if (-not $pkgInfo)
     exit 1
 }
 
-Write-Host "  ✓ Package ID détecté : $pkgInfo" -ForegroundColor Green
+Write-Host "  ✓ Package ID détecté : $($pkgInfo.Id)" -ForegroundColor Green
 
 # ---------- 3. Installation / mise à jour DSC ----------
 Write-Host "`n┌─────────────────────────────────────────────────────────┐" -ForegroundColor Cyan
 Write-Host '│  Étape 3/7 : Installation de DSC v3.x                   │' -ForegroundColor Cyan
 Write-Host '└─────────────────────────────────────────────────────────┘' -ForegroundColor Cyan
 
-winget install --id $pkgInfo --source msstore --accept-package-agreements --accept-source-agreements --silent
+winget install --id $pkgInfo.Id --source msstore --accept-package-agreements --accept-source-agreements --silent
 
 if ($LASTEXITCODE -ne 0)
 {
