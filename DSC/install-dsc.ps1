@@ -247,7 +247,7 @@ $resourceDirs = Get-ChildItem $dscResourcePath -Directory
 $pathList = @(
     $resourceDirs.FullName                                  # Les ressources
     $PSHOME                                                 # PowerShell 7 
-    [Environment]::SystemDirectory                          # System32 
+    #[Environment]::SystemDirectory                          # System32 
     (Get-Module Microsoft.WinGet.DSC -ListAvailable).ModuleBase # WinGet
     $env:Path.Split([IO.Path]::PathSeparator)                     # Les chemins déjà présents dans PATH 
 ) | Where-Object { $_ } | Select-Object -Unique
