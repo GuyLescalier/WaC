@@ -23,32 +23,32 @@ param(
 Set-ExecutionPolicy -Scope CurrentUser -ExecutionPolicy Bypass
 Set-PSRepository PSGallery -InstallationPolicy Trusted
 
-if ( -not Get-Module -ListAvailable -Name powershell-yaml )
+if ( -not (Get-Module -ListAvailable -Name powershell-yaml ))
 {
     Install-PSResource -Name powershell-yaml -Repository PSGallery
 }
 
-if ( -not Get-Module -ListAvailable -Name PSDscResources )
+if ( -not (Get-Module -ListAvailable -Name PSDscResources ))
 {
     Install-PSResource -Name PSDscResources -Repository PSGallery
 }
 
-if ( -not Get-Module -ListAvailable -Name PSDesiredStateConfiguration )
+if ( -not (Get-Module -ListAvailable -Name PSDesiredStateConfiguration ))
 {
     Install-PSResource -Name PSDesiredStateConfiguration -Repository PSGallery
 }
 
-if ( -not Get-Module -ListAvailable -Name Microsoft.WinGet.DSC )
+if ( -not (Get-Module -ListAvailable -Name Microsoft.WinGet.DSC ))
 {
     Install-PSResource -Name Microsoft.WinGet.DSC -Repository PSGallery -TrustRepository
 }
 
-if ( -not Get-Module -ListAvailable -Name Microsoft.VisualStudio.DSC )
+if ( -not (Get-Module -ListAvailable -Name Microsoft.VisualStudio.DSC ))
 {
     Install-PSResource -Name Microsoft.VisualStudio.DSC -Repository PSGallery -TrustRepository
 }
 
-if ( -not Get-Module -ListAvailable -Name Microsoft.WinGet.Client )
+if ( -not (Get-Module -ListAvailable -Name Microsoft.WinGet.Client ))
 {
     Install-PSResource -Name Microsoft.WinGet.Client -Repository PSGallery -TrustRepository
 }
