@@ -12,46 +12,20 @@
 [CmdletBinding()]
 param(
     [Parameter()]
-    [string]$RepositoryPath = (Join-Path $PSScriptRoot "DSC\resources"),    
+    [string]$RepositoryPath,    
 
     [Parameter()]
     [string]$RepositoryName = "WaCLocalRepo"
 )
 
+if (-not $RepositoryPath) {
+    $RepositoryPath = Join-Path -Path $PSScriptRoot -ChildPath "resources"
+}
 
 # ---------- Pré-requis ----------
 Set-ExecutionPolicy -Scope CurrentUser -ExecutionPolicy Bypass
 Set-PSRepository PSGallery -InstallationPolicy Trusted
 
-if ( -not (Get-Module -ListAvailable -Name powershell-yaml ))
-{
-    Install-PSResource -Name powershell-yaml -Repository PSGallery
-}
-
-if ( -not (Get-Module -ListAvailable -Name PSDscResources ))
-{
-    Install-PSResource -Name PSDscResources -Repository PSGallery
-}
-
-if ( -not (Get-Module -ListAvailable -Name PSDesiredStateConfiguration ))
-{
-    Install-PSResource -Name PSDesiredStateConfiguration -Repository PSGallery
-}
-
-if ( -not (Get-Module -ListAvailable -Name Microsoft.WinGet.DSC ))
-{
-    Install-PSResource -Name Microsoft.WinGet.DSC -Repository PSGallery -TrustRepository
-}
-
-if ( -not (Get-Module -ListAvailable -Name Microsoft.VisualStudio.DSC ))
-{
-    Install-PSResource -Name Microsoft.VisualStudio.DSC -Repository PSGallery -TrustRepository
-}
-
-if ( -not (Get-Module -ListAvailable -Name Microsoft.WinGet.Client ))
-{
-    Install-PSResource -Name Microsoft.WinGet.Client -Repository PSGallery -TrustRepository
-}
 
 
 Write-Host "`n╔════════════════════════════════════════════════════════════╗" -ForegroundColor Cyan
@@ -114,6 +88,54 @@ else
 {
     $installedVersion = (pwsh --version).Split()[-1]
     Write-Host "  ✓ PowerShell version $installedVersion disponible" -ForegroundColor Green
+}
+
+if ($PSVersionTable.PSVersion.Major -lt 7) {
+	$pwshPath = "C:\Program Files\PowerShell\7\pwsh.exe"
+	if (Test-Path $pwshPath) {
+
+		Write-Host "On relance le script avec PowerShell (v7) "
+        & $pwshPath -File $PSCommandPath 
+        exit    
+    } else {
+		Write-Host "On relance le script avec Windows PowerShell (v5) "
+		powershell -File $PSCommandPath
+		exit
+	}
+}
+
+
+Write-Host 'Installation des Modules' -ForegroundColor Cyan
+
+
+if ( -not (Get-Module -ListAvailable -Name Microsoft.WinGet.DSC ))
+{
+	Install-PSResource -Name Microsoft.WinGet.DSC -Repository PSGallery -TrustRepository
+}
+
+if ( -not (Get-Module -ListAvailable -Name powershell-yaml ))
+{
+    Install-PSResource -Name powershell-yaml -Repository PSGallery -TrustRepository
+}
+
+if ( -not (Get-Module -ListAvailable -Name PSDscResources ))
+{
+    Install-PSResource -Name PSDscResources -Repository PSGallery -TrustRepository
+}
+
+if ( -not (Get-Module -ListAvailable -Name PSDesiredStateConfiguration ))
+{
+    Install-PSResource -Name PSDesiredStateConfiguration -Repository PSGallery -TrustRepository
+}
+
+if ( -not (Get-Module -ListAvailable -Name Microsoft.VisualStudio.DSC ))
+{
+    Install-PSResource -Name Microsoft.VisualStudio.DSC -Repository PSGallery -TrustRepository
+}
+
+if ( -not (Get-Module -ListAvailable -Name Microsoft.WinGet.Client ))
+{
+    Install-PSResource -Name Microsoft.WinGet.Client -Repository PSGallery -TrustRepository
 }
 
 # ---------- 2. Recherche du package DSC ----------
@@ -180,7 +202,7 @@ Write-Host '│  Étape 4/7 : Enregistrement du repository               │' -F
 Write-Host '└─────────────────────────────────────────────────────────┘' -ForegroundColor Cyan
 
 # Utilisation du RepositoryPath dynamique
-$existingRepo = Get-PSRepository -Name $RepositoryName -ErrorAction SilentlyContinue
+$existingRepo = Get-PSResourceRepository -Name $RepositoryName -ErrorAction SilentlyContinue
 
 if (-not $existingRepo) 
 {
