@@ -22,15 +22,34 @@ if (-not $RepositoryPath) {
     $RepositoryPath = Join-Path -Path $PSScriptRoot -ChildPath "resources"
 }
 
-# ---------- Pré-requis ----------
-Set-ExecutionPolicy -Scope CurrentUser -ExecutionPolicy Bypass
-Set-PSResourceRepository -Name "PSGallery" -Trusted
+function InstallWinget {
+    
+    $wingetAvailable = Get-Command winget -ErrorAction SilentlyContinue
 
+    if (-not $wingetAvailable) {
+        Write-Host "Winget non détecté. Tentative d'installation automatique..." -ForegroundColor Yellow
+        
+        $progressPreference = 'silentlyContinue'
+        Write-Host "Installing WinGet PowerShell module from PSGallery..."
+        Install-PackageProvider -Name NuGet -Force | Out-Null
+        Install-Module -Name Microsoft.WinGet.Client -Force -Repository PSGallery | Out-Null
+        Write-Host "Using Repair-WinGetPackageManager cmdlet to bootstrap WinGet..."
+        Repair-WinGetPackageManager -AllUsers
+        Write-Host "Done."
+            
+        $wingetAvailable = Get-Command winget -ErrorAction SilentlyContinue
 
+    }
 
-Write-Host "`n╔════════════════════════════════════════════════════════════╗" -ForegroundColor Cyan
-Write-Host '║        Installation DSC v3 & PowerShell 7.5                ║' -ForegroundColor Cyan
-Write-Host "╚════════════════════════════════════════════════════════════╝`n" -ForegroundColor Cyan
+    if ($wingetAvailable) {
+        Write-Host 'Winget disponible' -ForegroundColor Green
+    }
+    else {
+        Write-Host 'Winget/App Installer est introuvable.' -ForegroundColor Red
+        Write-Error "Veuillez installer 'App Installer' manuellement via le Microsoft Store."
+        exit 1
+    }
+}
 
 if (-not (Get-Command winget -ErrorAction SilentlyContinue))
 {
@@ -41,7 +60,7 @@ if (-not (Get-Command winget -ErrorAction SilentlyContinue))
 Write-Host '✓ Winget détecté' -ForegroundColor Green
 
 
-function installationPowerShell7 {
+function InstallationPowerShell7 {
 
     $ps7Installed = Get-Command pwsh -ErrorAction SilentlyContinue
     if ($ps7Installed)
@@ -104,7 +123,10 @@ function installationPowerShell7 {
     
 }
 
-
+function PréRequis {
+    Set-ExecutionPolicy -Scope CurrentUser -ExecutionPolicy Bypass
+    Set-PSResourceRepository -Name "PSGallery" -Trusted
+}
 
 function InstallationDesModules {
     if ( -not (Get-Module -ListAvailable -Name Microsoft.WinGet.DSC ))
@@ -273,7 +295,6 @@ function ConfigurationPath {
 
 
 
-# ---------- 7. Ouverture de PowerShell 7 en administrateur ----------
 function OuverturePowerShell7Admin {
     Write-Host "`n  → Lancement de PowerShell 7 en administrateur..." -ForegroundColor Cyan
     Start-Sleep -Seconds 2
@@ -299,8 +320,16 @@ function OuverturePowerShell7Admin {
 
 $functions = @(
     @{
+        Message = "Installation WinGet (si nécessaire)"
+        Function = "InstallWinget"
+    }
+    @{
         Message = "Installation de PowerShell 7.5"
-        Function = "installationPowerShell7"    
+        Function = "InstallationPowerShell7"    
+    },
+    @{
+        Message = "Configuration des pré-requis pour l'installation de DSC"
+        Function = "PréRequis"    
     },
     @{
         Message = "Installation des modules requis pour DSC"
@@ -335,6 +364,11 @@ $functions = @(
         Function = "OuverturePowerShell7Admin"
     }
 )
+
+Write-Host "`n╔════════════════════════════════════════════════════════════╗" -ForegroundColor Cyan
+Write-Host '║        Installation DSC v3 & PowerShell 7.5                ║' -ForegroundColor Cyan
+Write-Host "╚════════════════════════════════════════════════════════════╝`n" -ForegroundColor Cyan
+
 
 $functionCount = $functions.count
 
