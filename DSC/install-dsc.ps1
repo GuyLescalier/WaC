@@ -260,6 +260,10 @@ $functions = @(
         Function = "InstallWinget"
     }
     @{
+        Message  = "Installation WinGet (si nécessaire)"
+        Function = "InstallWinget"
+    }
+    @{
         Message  = "Installation de PowerShell 7.5"
         Function = "InstallationPowerShell7"    
     },
