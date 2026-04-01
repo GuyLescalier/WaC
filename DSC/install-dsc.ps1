@@ -24,8 +24,7 @@ if (-not $RepositoryPath) {
 
 # ---------- Pré-requis ----------
 Set-ExecutionPolicy -Scope CurrentUser -ExecutionPolicy Bypass
-Set-PSResourceRepository PSGallery -InstallationPolicy Trusted
-
+Set-PSResourceRepository -Name "PSGallery" -Trusted
 
 
 Write-Host "`n╔════════════════════════════════════════════════════════════╗" -ForegroundColor Cyan
