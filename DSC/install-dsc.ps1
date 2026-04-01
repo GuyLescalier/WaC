@@ -24,7 +24,7 @@ if (-not $RepositoryPath) {
 
 # ---------- Pré-requis ----------
 Set-ExecutionPolicy -Scope CurrentUser -ExecutionPolicy Bypass
-Set-PSRepository PSGallery -InstallationPolicy Trusted
+Set-PSResourceRepository PSGallery -InstallationPolicy Trusted
 
 
 
