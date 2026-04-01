@@ -27,6 +27,7 @@ Set-ExecutionPolicy -Scope CurrentUser -ExecutionPolicy Bypass
 Set-PSResourceRepository -Name "PSGallery" -Trusted
 
 
+
 Write-Host "`n╔════════════════════════════════════════════════════════════╗" -ForegroundColor Cyan
 Write-Host '║        Installation DSC v3 & PowerShell 7.5                ║' -ForegroundColor Cyan
 Write-Host "╚════════════════════════════════════════════════════════════╝`n" -ForegroundColor Cyan
@@ -39,265 +40,320 @@ if (-not (Get-Command winget -ErrorAction SilentlyContinue))
 }
 Write-Host '✓ Winget détecté' -ForegroundColor Green
 
-# ---------- 1. Installation de PowerShell 7.5 ----------
-Write-Host "`n┌─────────────────────────────────────────────────────────┐" -ForegroundColor Cyan
-Write-Host '│  Étape 1/7 : Installation de PowerShell 7.5             │' -ForegroundColor Cyan
-Write-Host '└─────────────────────────────────────────────────────────┘' -ForegroundColor Cyan
 
-$ps7Installed = Get-Command pwsh -ErrorAction SilentlyContinue
-if ($ps7Installed)
-{
-    $currentVersion = (pwsh --version).Split()[-1]
-    Write-Host "  ℹ PowerShell 7 déjà installé (version $currentVersion)" -ForegroundColor Yellow
-}
-else
-{
-    Write-Host '  → PowerShell 7 non détecté. Installation en cours...' -ForegroundColor White
-}
+function installationPowerShell7 {
 
-winget install --id Microsoft.PowerShell --source winget --accept-package-agreements --accept-source-agreements --silent
-
-if ($LASTEXITCODE -ne 0)
-{
-    $acceptableExitCodes = @(
-        0           # Success
-        -1978335189 # APPINSTALLER_CLI_ERROR_UPDATE_NOT_APPLICABLE
-    )
-    if ($LASTEXITCODE -notin $acceptableExitCodes)
+    $ps7Installed = Get-Command pwsh -ErrorAction SilentlyContinue
+    if ($ps7Installed)
     {
-        Write-Host "  ✗ Erreur lors de l'installation de PowerShell 7 (code $LASTEXITCODE)" -ForegroundColor Red
-        exit $LASTEXITCODE
+        $currentVersion = (pwsh --version).Split()[-1]
+        Write-Host "  ℹ PowerShell 7 déjà installé (version $currentVersion)" -ForegroundColor Yellow
     }
     else
     {
-        Write-Host '  ✓ PowerShell 7 est déjà à jour' -ForegroundColor Green
+        Write-Host '  → PowerShell 7 non détecté. Installation en cours...' -ForegroundColor White
+        winget install --id Microsoft.PowerShell --source winget --accept-package-agreements --accept-source-agreements --silent
     }
-}
-else
-{
-    Write-Host '  ✓ PowerShell 7.5 installé avec succès' -ForegroundColor Green
-}
-
-# Vérification de l'installation
-if (-not (Get-Command pwsh -ErrorAction SilentlyContinue))
-{
-    Write-Host "  ⚠ pwsh.exe n'est pas encore dans le PATH" -ForegroundColor Yellow
-}
-else
-{
-    $installedVersion = (pwsh --version).Split()[-1]
-    Write-Host "  ✓ PowerShell version $installedVersion disponible" -ForegroundColor Green
-}
-
-if ($PSVersionTable.PSVersion.Major -lt 7) {
-	$pwshPath = "C:\Program Files\PowerShell\7\pwsh.exe"
-	if (Test-Path $pwshPath) {
-
-		Write-Host "On relance le script avec PowerShell (v7) "
-        & $pwshPath -File $PSCommandPath 
-        exit    
-    } else {
-		Write-Host "On relance le script avec Windows PowerShell (v5) "
-		powershell -File $PSCommandPath
-		exit
-	}
-}
 
 
-Write-Host 'Installation des Modules' -ForegroundColor Cyan
-
-
-if ( -not (Get-Module -ListAvailable -Name Microsoft.WinGet.DSC ))
-{
-	Install-PSResource -Name Microsoft.WinGet.DSC -Repository PSGallery -TrustRepository
-}
-
-if ( -not (Get-Module -ListAvailable -Name powershell-yaml ))
-{
-    Install-PSResource -Name powershell-yaml -Repository PSGallery -TrustRepository
-}
-
-if ( -not (Get-Module -ListAvailable -Name PSDscResources ))
-{
-    Install-PSResource -Name PSDscResources -Repository PSGallery -TrustRepository
-}
-
-if ( -not (Get-Module -ListAvailable -Name PSDesiredStateConfiguration ))
-{
-    Install-PSResource -Name PSDesiredStateConfiguration -Repository PSGallery -TrustRepository
-}
-
-if ( -not (Get-Module -ListAvailable -Name Microsoft.VisualStudio.DSC ))
-{
-    Install-PSResource -Name Microsoft.VisualStudio.DSC -Repository PSGallery -TrustRepository
-}
-
-if ( -not (Get-Module -ListAvailable -Name Microsoft.WinGet.Client ))
-{
-    Install-PSResource -Name Microsoft.WinGet.Client -Repository PSGallery -TrustRepository
-}
-
-# ---------- 2. Recherche du package DSC ----------
-Write-Host "`n┌─────────────────────────────────────────────────────────┐" -ForegroundColor Cyan
-Write-Host '│  Étape 2/7 : Recherche du package DSC                   │' -ForegroundColor Cyan
-Write-Host '└─────────────────────────────────────────────────────────┘' -ForegroundColor Cyan
-
-$pkgInfo = Find-WinGetPackage -Name "DesiredStateConfiguration" 
-
-if (-not $pkgInfo)
-{
-    Write-Host "  ✗ Impossible de trouver l'ID du package DesiredStateConfiguration" -ForegroundColor Red
-    exit 1
-}
-
-Write-Host "  ✓ Package ID détecté : $($pkgInfo.Id)" -ForegroundColor Green
-
-# ---------- 3. Installation / mise à jour DSC ----------
-Write-Host "`n┌─────────────────────────────────────────────────────────┐" -ForegroundColor Cyan
-Write-Host '│  Étape 3/7 : Installation de DSC v3.x                   │' -ForegroundColor Cyan
-Write-Host '└─────────────────────────────────────────────────────────┘' -ForegroundColor Cyan
-
-winget install --id $pkgInfo.Id --source msstore --accept-package-agreements --accept-source-agreements --silent
-
-if ($LASTEXITCODE -ne 0)
-{
-    $acceptableExitCodes = @(
-        0           # Success
-        -1978335189 # APPINSTALLER_CLI_ERROR_UPDATE_NOT_APPLICABLE
-    )
-
-    if ($LASTEXITCODE -notin $acceptableExitCodes)
+    if ($LASTEXITCODE -ne 0)
     {
-        Write-Host "  ✗ Erreur inattendue lors de l'installation de DSC ($LASTEXITCODE)" -ForegroundColor Red
-        exit $LASTEXITCODE
+        $acceptableExitCodes = @(
+            0           # Success
+            -1978335189 # APPINSTALLER_CLI_ERROR_UPDATE_NOT_APPLICABLE
+        )
+        if ($LASTEXITCODE -notin $acceptableExitCodes)
+        {
+            Write-Host "  ✗ Erreur lors de l'installation de PowerShell 7 (code $LASTEXITCODE)" -ForegroundColor Red
+            exit $LASTEXITCODE
+        }
+        else
+        {
+            Write-Host '  ✓ PowerShell 7 est déjà à jour' -ForegroundColor Green
+        }
     }
     else
     {
-        Write-Host "  ✓ DSC est déjà installé ou à jour ($LASTEXITCODE)" -ForegroundColor Green
+        Write-Host '  ✓ PowerShell 7.5 installé avec succès' -ForegroundColor Green
     }
-}
-else
-{
-    Write-Host '  ✓ DSC installé avec succès' -ForegroundColor Green
-}
 
-# Validation de l'installation
-if (-not (Get-Command dsc -ErrorAction SilentlyContinue))
-{
-    Write-Host "  ⚠ dsc.exe n'est pas dans le PATH actuel" -ForegroundColor Yellow
-}
-else
-{
-    $dscVersion = (dsc --version).Split()[-1]
-    Write-Host "  ✓ DSC v$dscVersion est installé" -ForegroundColor Green
-}
-
-# ---------- 4 : Enregistrement du repository ----------
-# ====================================
-# ÉTAPE 1 : ENREGISTREMENT DU REPOSITORY
-# ====================================
-Write-Host "`n┌─────────────────────────────────────────────────────────┐" -ForegroundColor Cyan
-Write-Host '│  Étape 4/7 : Enregistrement du repository               │' -ForegroundColor Cyan
-Write-Host '└─────────────────────────────────────────────────────────┘' -ForegroundColor Cyan
-
-# Utilisation du RepositoryPath dynamique
-$existingRepo = Get-PSResourceRepository -Name $RepositoryName -ErrorAction SilentlyContinue
-
-if (-not $existingRepo) 
-{
-    Write-Host "  Repository '$RepositoryName' non trouvé, enregistrement..." -ForegroundColor Gray
-    Register-PSResourceRepository -Name $RepositoryName -Uri $RepositoryPath -Trusted
-    Write-Host "  ✓ Repository enregistré" -ForegroundColor Green
-} 
-else 
-{
-    Write-Host "  ✓ Repository déjà enregistré" -ForegroundColor Green
-}
-
-# ---------- Étape 5 : Suppression des anciennes versions de ressources----------
-Write-Host "`n┌──────────────────────────────────────────────────────────────────────┐" -ForegroundColor Cyan
-Write-Host '│  Étape 5/7 : Suppression des anciennes versions de ressources        │' -ForegroundColor Cyan
-Write-Host '└──────────────────────────────────────────────────────────────────────┘' -ForegroundColor Cyan
-
-Write-Host "   Vérification des anciennes versions..." -ForegroundColor Gray
-
-$oldVersions = Get-Module -Name MyResources -ListAvailable
-
-if ($oldVersions) 
-{
-    foreach ($ver in $oldVersions) 
+    # Vérification de l'installation
+    if (-not (Get-Command pwsh -ErrorAction SilentlyContinue))
     {
-        Write-Host "   Suppression de la version existante : $($ver.Version) située dans $($ver.ModuleBase)" -ForegroundColor Magenta
+        Write-Host "  ⚠ pwsh.exe n'est pas encore dans le PATH" -ForegroundColor Yellow
+    }
+    else
+    {
+        $installedVersion = (pwsh --version).Split()[-1]
+        Write-Host "  ✓ PowerShell version $installedVersion disponible" -ForegroundColor Green
+    }
 
-        Remove-Item -Path $ver.ModuleBase -Recurse -Force -ErrorAction Stop
-        Write-Host "   ✓ Version $($ver.Version) supprimée." -ForegroundColor Green
+    if ($PSVersionTable.PSVersion.Major -lt 7) {
+        $pwshPath = "C:\Program Files\PowerShell\7\pwsh.exe"
+        if (Test-Path $pwshPath) {
+
+            Write-Host "On relance le script avec PowerShell (v7) "
+            & $pwshPath -File $PSCommandPath 
+            exit    
+        } else {
+            Write-Host "On relance le script avec Windows PowerShell (v5) "
+            powershell -File $PSCommandPath
+            exit
+        }
+    }
+    
+}
+
+
+
+function InstallationDesModules {
+    if ( -not (Get-Module -ListAvailable -Name Microsoft.WinGet.DSC ))
+    {
+        Install-PSResource -Name Microsoft.WinGet.DSC -Repository PSGallery -TrustRepository
+    }
+
+    if ( -not (Get-Module -ListAvailable -Name powershell-yaml ))
+    {
+        Install-PSResource -Name powershell-yaml -Repository PSGallery -TrustRepository
+    }
+
+    if ( -not (Get-Module -ListAvailable -Name PSDscResources ))
+    {
+        Install-PSResource -Name PSDscResources -Repository PSGallery -TrustRepository
+    }
+
+    if ( -not (Get-Module -ListAvailable -Name PSDesiredStateConfiguration ))
+    {
+        Install-PSResource -Name PSDesiredStateConfiguration -Repository PSGallery -TrustRepository
+    }
+
+    if ( -not (Get-Module -ListAvailable -Name Microsoft.VisualStudio.DSC ))
+    {
+        Install-PSResource -Name Microsoft.VisualStudio.DSC -Repository PSGallery -TrustRepository
+    }
+
+    if ( -not (Get-Module -ListAvailable -Name Microsoft.WinGet.Client ))
+    {
+        Install-PSResource -Name Microsoft.WinGet.Client -Repository PSGallery -TrustRepository
     }
 }
 
 
-# ---------- Étape 6 : Installation du module MyResources ----------
-Write-Host "`n┌─────────────────────────────────────────────────────────┐" -ForegroundColor Cyan
-Write-Host '│  Étape 6/7 : Installation du module MyResources         │' -ForegroundColor Cyan
-Write-Host '└─────────────────────────────────────────────────────────┘' -ForegroundColor Cyan
+function RecherchePackageDSC {
+    $pkgInfo = Find-WinGetPackage -Name "DesiredStateConfiguration" 
 
-Install-PSResource -Name MyResources -Repository $RepositoryName -TrustRepository -ErrorAction Stop
+    if (-not $pkgInfo)
+    {
+        Write-Host "  ✗ Impossible de trouver l'ID du package DesiredStateConfiguration" -ForegroundColor Red
+        exit 1
+    }
 
-$installedModule = Get-Module -Name MyResources -ListAvailable | Select-Object -First 1
-
-if (-not $installedModule) {
-    Write-Host "  ✗ Erreur : Module MyResources non trouvé après installation" -ForegroundColor Red
-    exit 1
+    Write-Host "  ✓ Package ID détecté : $($pkgInfo.Id)" -ForegroundColor Green
 }
 
-Write-Host "  Module installé :" -ForegroundColor Gray
-Write-Host "    Version : $($installedModule.Version)" -ForegroundColor Gray
-Write-Host "    Chemin  : $($installedModule.ModuleBase)" -ForegroundColor Gray
+
+function InstallationDSC {
+    winget install --id $pkgInfo.Id --source msstore --accept-package-agreements --accept-source-agreements --silent
+
+    if ($LASTEXITCODE -ne 0)
+    {
+        $acceptableExitCodes = @(
+            0           # Success
+            -1978335189 # APPINSTALLER_CLI_ERROR_UPDATE_NOT_APPLICABLE
+        )
+
+        if ($LASTEXITCODE -notin $acceptableExitCodes)
+        {
+            Write-Host "  ✗ Erreur inattendue lors de l'installation de DSC ($LASTEXITCODE)" -ForegroundColor Red
+            exit $LASTEXITCODE
+        }
+        else
+        {
+            Write-Host "  ✓ DSC est déjà installé ou à jour ($LASTEXITCODE)" -ForegroundColor Green
+        }
+    }
+    else
+    {
+        Write-Host '  ✓ DSC installé avec succès' -ForegroundColor Green
+    }
+
+    # Validation de l'installation
+    if (-not (Get-Command dsc -ErrorAction SilentlyContinue))
+    {
+        Write-Host "  ⚠ dsc.exe n'est pas dans le PATH actuel" -ForegroundColor Yellow
+    }
+    else
+    {
+        $dscVersion = (dsc --version).Split()[-1]
+        Write-Host "  ✓ DSC v$dscVersion est installé" -ForegroundColor Green
+    }
+
+}
 
 
-# ---------- Étape 7 : Configuration du PATH ----------
-Write-Host "`n┌─────────────────────────────────────────────────────────┐" -ForegroundColor Cyan
-Write-Host '│  Étape 7/7 : Configuration du PATH                      │' -ForegroundColor Cyan
-Write-Host '└─────────────────────────────────────────────────────────┘' -ForegroundColor Cyan
+function EnregistrementRepository {
+    $existingRepo = Get-PSResourceRepository -Name $RepositoryName -ErrorAction SilentlyContinue
 
-$dscResourcePath = Join-Path $installedModule.ModuleBase "resources"
+    if (-not $existingRepo) 
+    {
+        Write-Host "  Repository '$RepositoryName' non trouvé, enregistrement..." -ForegroundColor Gray
+        Register-PSResourceRepository -Name $RepositoryName -Uri $RepositoryPath -Trusted
+        Write-Host "  ✓ Repository enregistré" -ForegroundColor Green
+    } 
+    else 
+    {
+        Write-Host "  ✓ Repository déjà enregistré" -ForegroundColor Green
+    }
+}
 
-Write-Host " Dossier des ressources identifié : $dscResourcePath" -ForegroundColor Gray
+function SuppressionAnciennesRessources {
+    Write-Host "   Vérification des anciennes versions..." -ForegroundColor Gray
 
-$resourceDirs = Get-ChildItem $dscResourcePath -Directory
+    $oldVersions = Get-Module -Name MyResources -ListAvailable
 
-$pathList = @(
-    $resourceDirs.FullName                                  # Les ressources
-    $PSHOME                                                 # PowerShell 7 
-    #[Environment]::SystemDirectory                          # System32 
-    (Get-Module Microsoft.WinGet.DSC -ListAvailable).ModuleBase # WinGet
-    $env:Path.Split([IO.Path]::PathSeparator)                     # Les chemins déjà présents dans PATH 
-) | Where-Object { $_ } | Select-Object -Unique
+    if ($oldVersions) 
+    {
+        foreach ($ver in $oldVersions) 
+        {
+            Write-Host "   Suppression de la version existante : $($ver.Version) située dans $($ver.ModuleBase)" -ForegroundColor Magenta
 
-# 2. On joint tout avec le séparateur (;)
-$finalPath = $pathList -join [IO.Path]::PathSeparator
+            Remove-Item -Path $ver.ModuleBase -Recurse -Force -ErrorAction Stop
+            Write-Host "   ✓ Version $($ver.Version) supprimée." -ForegroundColor Green
+        }
+    }
+    else
+    {
+        Write-Host "   ✓ Aucune version précédente de MyResources détectée" -ForegroundColor Green
+    }
 
-# 3. On applique la configuration 
-[Environment]::SetEnvironmentVariable("PATH", $finalPath, "User")
-$env:PATH = $finalPath
+}
 
-Write-Host " ✓ Variable PATH mise à jour." -ForegroundColor Green
+function InstallationModuleMyResources {
+
+    Install-PSResource -Name MyResources -Repository $RepositoryName -TrustRepository -ErrorAction Stop
+
+    $installedModule = Get-Module -Name MyResources -ListAvailable | Select-Object -First 1
+
+    if (-not $installedModule) {
+        Write-Host "  ✗ Erreur : Module MyResources non trouvé après installation" -ForegroundColor Red
+        exit 1
+    }
+
+    Write-Host "  Module installé :" -ForegroundColor Gray
+    Write-Host "    Version : $($installedModule.Version)" -ForegroundColor Gray
+    Write-Host "    Chemin  : $($installedModule.ModuleBase)" -ForegroundColor Gray
+
+}
+
+function ConfigurationPath {
+    $dscResourcePath = Join-Path $installedModule.ModuleBase "resources"
+
+    Write-Host " Dossier des ressources identifié : $dscResourcePath" -ForegroundColor Gray
+
+    $resourceDirs = Get-ChildItem $dscResourcePath -Directory
+
+    $pathList = @(
+        $resourceDirs.FullName                                  # Les ressources
+        $PSHOME                                                 # PowerShell 7 
+        #[Environment]::SystemDirectory                          # System32 
+        (Get-Module Microsoft.WinGet.DSC -ListAvailable).ModuleBase # WinGet
+        $env:Path.Split([IO.Path]::PathSeparator)                     # Les chemins déjà présents dans PATH 
+    ) | Where-Object { $_ } | Select-Object -Unique
+
+    # 2. On joint tout avec le séparateur (;)
+    $finalPath = $pathList -join [IO.Path]::PathSeparator
+
+    # 3. On applique la configuration 
+    [Environment]::SetEnvironmentVariable("PATH", $finalPath, "User")
+    $env:PATH = $finalPath
+
+    Write-Host " ✓ Variable PATH mise à jour." -ForegroundColor Green
+
+}
+
 
 
 # ---------- 7. Ouverture de PowerShell 7 en administrateur ----------
-Write-Host "`n  → Lancement de PowerShell 7 en administrateur..." -ForegroundColor Cyan
-Start-Sleep -Seconds 2
+function OuverturePowerShell7Admin {
+    Write-Host "`n  → Lancement de PowerShell 7 en administrateur..." -ForegroundColor Cyan
+    Start-Sleep -Seconds 2
 
-$pwshPath = (Get-Command pwsh -ErrorAction SilentlyContinue).Source
-if ($pwshPath)
-{
-    Start-Process -FilePath $pwshPath -Verb RunAs
-    Write-Host '  ✓ PowerShell 7 lancé avec succès' -ForegroundColor Green
-}
-else
-{
-    Write-Host '  ✗ Impossible de localiser pwsh.exe' -ForegroundColor Red
-    Write-Host '  → Veuillez ouvrir manuellement PowerShell 7 en administrateur' -ForegroundColor Yellow
+    $pwshPath = (Get-Command pwsh -ErrorAction SilentlyContinue).Source
+    if ($pwshPath)
+    {
+        Start-Process -FilePath $pwshPath -Verb RunAs
+        Write-Host '  ✓ PowerShell 7 lancé avec succès' -ForegroundColor Green
+    }
+    else
+    {
+        Write-Host '  ✗ Impossible de localiser pwsh.exe' -ForegroundColor Red
+        Write-Host '  → Veuillez ouvrir manuellement PowerShell 7 en administrateur' -ForegroundColor Yellow
+    }
+
+    Write-Host "`n  Appuyez sur une touche pour fermer cette fenêtre..." -ForegroundColor Gray
+    $null = $Host.UI.RawUI.ReadKey('NoEcho,IncludeKeyDown')
+        
 }
 
-Write-Host "`n  Appuyez sur une touche pour fermer cette fenêtre..." -ForegroundColor Gray
-$null = $Host.UI.RawUI.ReadKey('NoEcho,IncludeKeyDown')
+
+
+$functions = @(
+    @{
+        Message = "Installation de PowerShell 7.5"
+        Function = "installationPowerShell7"    
+    },
+    @{
+        Message = "Installation des modules requis pour DSC"
+        Function = "InstallationDesModules"
+    },
+    @{
+        Message = "Recherche des packages DSC"
+        Function = "RecherchePackageDSC"
+    },
+    @{
+        Message = "Installation de DSC v3.x"
+        Function = "InstallationDSC"
+    },
+    @{
+        Message = "Enregistrement du repository local"
+        Function = "EnregistrementRepository"
+    },
+    @{
+        Message = "Suppression des anciennes versions de ressources"
+        Function = "SuppressionAnciennesRessources"
+    },
+    @{
+        Message = "Installation du module MyResources"
+        Function = "InstallationModuleMyResources"
+    },
+    @{
+        Message = "Configuration du PATH pour les ressources DSC"
+        Function = "ConfigurationPath"
+    },
+    @{
+        Message = "Ouverture de PowerShell 7 en administrateur"
+        Function = "OuverturePowerShell7Admin"
+    }
+)
+
+$functionCount = $functions.count
+
+for ($i = 0; $i -lt $functionCount; $i++) {
+
+    $f = $functions[$i]
+
+    $LargeurCadre = 75 
+
+    $TexteEtape = "  Étape $($i + 1)/$functionCount : $($f.Message)"
+
+    $LigneInterne = $TexteEtape.PadRight($LargeurCadre - 2)
+
+    $BarreHorizontale = "─" * ($LargeurCadre - 2)
+
+    Write-Host "`n┌$BarreHorizontale┐" -ForegroundColor Cyan
+    Write-Host "│$LigneInterne│" -ForegroundColor Cyan
+    Write-Host "└$BarreHorizontale┘" -ForegroundColor Cyan
+
+
+    & $f.Function
+}
