@@ -207,8 +207,11 @@ function SuppressionAnciennesRessources {
 
 function InstallationModuleMyResources {
 
+<<<<<<< HEAD
     Test-PowerShellVersion
 
+=======
+>>>>>>> a438599 (fix: $RepositoryPath value)
     Install-PSResource -Name MyResources -Repository $RepositoryName -TrustRepository 
 
     $installedModule = Get-Module -Name MyResources -ListAvailable | Select-Object -First 1
@@ -228,7 +231,11 @@ function ConfigurationPath {
 
     $installedModule = Get-Module -Name MyResources -ListAvailable | Select-Object -First 1
 
+<<<<<<< HEAD
     $dscResourcePath = $installedModule.ModuleBase
+=======
+    $dscResourcePath =  $installedModule.ModuleBase
+>>>>>>> a438599 (fix: $RepositoryPath value)
 
     Write-Host " Dossier des ressources identifié : $dscResourcePath" -ForegroundColor Gray
 
