@@ -153,44 +153,36 @@ function InstallationDesModules {
 }
 
 
-function RecherchePackageDSC {
-    $pkgInfo = Find-WinGetPackage -Name "DesiredStateConfiguration" 
-
-    if (-not $pkgInfo)
-    {
-        Write-Host "  ✗ Impossible de trouver l'ID du package DesiredStateConfiguration" -ForegroundColor Red
-        exit 1
-    }
-
-    Write-Host "  ✓ Package ID détecté : $($pkgInfo.Id)" -ForegroundColor Green
-}
-
-
 function InstallationDSC {
-    winget install --id $pkgInfo.Id --source msstore --accept-package-agreements --accept-source-agreements --silent
 
-    if ($LASTEXITCODE -ne 0)
-    {
-        $acceptableExitCodes = @(
-            0           # Success
-            -1978335189 # APPINSTALLER_CLI_ERROR_UPDATE_NOT_APPLICABLE
-        )
-
-        if ($LASTEXITCODE -notin $acceptableExitCodes)
+    if (-not (Get-Command dsc -ErrorAction SilentlyContinue))
         {
-            Write-Host "  ✗ Erreur inattendue lors de l'installation de DSC ($LASTEXITCODE)" -ForegroundColor Red
-            exit $LASTEXITCODE
+
+        $pkgInfo = Find-WinGetPackage -Name "DesiredStateConfiguration" 
+        winget install --id $pkgInfo.Id --source msstore --accept-package-agreements --accept-source-agreements --silent
+
+        if ($LASTEXITCODE -ne 0)
+        {
+            $acceptableExitCodes = @(
+                0           # Success
+                -1978335189 # APPINSTALLER_CLI_ERROR_UPDATE_NOT_APPLICABLE
+            )
+
+            if ($LASTEXITCODE -notin $acceptableExitCodes)
+            {
+                Write-Host "  ✗ Erreur inattendue lors de l'installation de DSC ($LASTEXITCODE)" -ForegroundColor Red
+                exit $LASTEXITCODE
+            }
+            else
+            {
+                Write-Host "  ✓ DSC est déjà installé ou à jour ($LASTEXITCODE)" -ForegroundColor Green
+            }
         }
         else
         {
-            Write-Host "  ✓ DSC est déjà installé ou à jour ($LASTEXITCODE)" -ForegroundColor Green
+            Write-Host '  ✓ DSC installé avec succès' -ForegroundColor Green
         }
     }
-    else
-    {
-        Write-Host '  ✓ DSC installé avec succès' -ForegroundColor Green
-    }
-
     # Validation de l'installation
     if (-not (Get-Command dsc -ErrorAction SilentlyContinue))
     {
@@ -326,10 +318,6 @@ $functions = @(
     @{
         Message = "Installation des modules requis pour DSC"
         Function = "InstallationDesModules"
-    },
-    @{
-        Message = "Recherche des packages DSC"
-        Function = "RecherchePackageDSC"
     },
     @{
         Message = "Installation de DSC v3.x"
