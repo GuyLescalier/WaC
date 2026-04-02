@@ -23,7 +23,7 @@ if (-not $RepositoryPath) {
 }
 
 function InstallWinget {
-    
+
     $wingetAvailable = Get-Command winget -ErrorAction SilentlyContinue
 
     if (-not $wingetAvailable) {
@@ -50,14 +50,6 @@ function InstallWinget {
         exit 1
     }
 }
-
-if (-not (Get-Command winget -ErrorAction SilentlyContinue))
-{
-    Write-Host '✗ ' -ForegroundColor Red -NoNewline
-    Write-Error "Winget/App Installer n'est pas disponible. Installez-le d'abord dans le Microsoft Store."
-    exit 1
-}
-Write-Host '✓ Winget détecté' -ForegroundColor Green
 
 
 function InstallationPowerShell7 {
