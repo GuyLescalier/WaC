@@ -19,7 +19,7 @@ param(
 )
 
 if (-not $RepositoryPath) {
-    $RepositoryPath = Join-Path -Path $PSScriptRoot -ChildPath "resources"
+    $RepositoryPath = Join-Path $PSScriptRoot "resources\PSRepository"
 }
 
 function InstallWinget {
@@ -236,7 +236,7 @@ function SuppressionAnciennesRessources {
 
 function InstallationModuleMyResources {
 
-    Install-PSResource -Name MyResources -Repository $RepositoryName -TrustRepository -ErrorAction Stop
+    Install-PSResource -Name MyResources -Repository $RepositoryName -TrustRepository 
 
     $installedModule = Get-Module -Name MyResources -ListAvailable | Select-Object -First 1
 
@@ -252,7 +252,10 @@ function InstallationModuleMyResources {
 }
 
 function ConfigurationPath {
-    $dscResourcePath = Join-Path $installedModule.ModuleBase "resources"
+
+    $installedModule = Get-Module -Name MyResources -ListAvailable | Select-Object -First 1
+
+    $dscResourcePath =  $installedModule.ModuleBase
 
     Write-Host " Dossier des ressources identifié : $dscResourcePath" -ForegroundColor Gray
 
