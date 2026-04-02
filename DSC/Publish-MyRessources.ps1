@@ -170,6 +170,8 @@ try
     Publish-Module -Path . -Repository WaCLocalRepo -Force
     
     Write-Host "✓ Module publié avec succès via Publish-Module" -ForegroundColor Green
+
+    Set-Location $PSScriptRoot
 }
 finally 
 {
