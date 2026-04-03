@@ -22,6 +22,17 @@ if (-not $RepositoryPath) {
     $RepositoryPath = Join-Path $PSScriptRoot "resources\PSRepository"
 }
 
+function Test-PowerShellVersion {
+    if ($PSVersionTable.PSVersion.Major -lt 7) {
+        Write-Host "le script doit être relancé dans PowerShell (v7) pour continuer." -ForegroundColor Red
+        exit 1
+    }
+
+    Write-Host "PowerShell version $($PSVersionTable.PSVersion) détecté." -ForegroundColor Green
+
+}
+
+
 function InstallWinget {
 
     $wingetAvailable = Get-Command winget -ErrorAction SilentlyContinue
@@ -90,40 +101,26 @@ function InstallationPowerShell7 {
         $installedVersion = (pwsh --version).Split()[-1]
         Write-Host "  ✓ PowerShell version $installedVersion disponible" -ForegroundColor Green
     }
-
-    if ($PSVersionTable.PSVersion.Major -lt 7) {
-        $pwshPath = "C:\Program Files\PowerShell\7\pwsh.exe"
-        if (Test-Path $pwshPath) {
-
-            Write-Host "On relance le script avec PowerShell (v7) "
-            & $pwshPath -File $PSCommandPath 
-            exit    
-        }
-        else {
-            Write-Host "On relance le script avec Windows PowerShell (v5) "
-            powershell -File $PSCommandPath
-            exit
-        }
-    }
-    
 }
 
 function PréRequis {
+
+    Test-PowerShellVersion
+
     Set-ExecutionPolicy -Scope CurrentUser -ExecutionPolicy Bypass
     Set-PSResourceRepository -Name "PSGallery" -Trusted
 }
 
 function InstallationDesModules {
+
+    Test-PowerShellVersion
+
     if ( -not (Get-Module -ListAvailable -Name Microsoft.WinGet.DSC )) {
         Install-PSResource -Name Microsoft.WinGet.DSC -Repository PSGallery -TrustRepository
     }
 
     if ( -not (Get-Module -ListAvailable -Name powershell-yaml )) {
         Install-PSResource -Name powershell-yaml -Repository PSGallery -TrustRepository
-    }
-
-    if ( -not (Get-Module -ListAvailable -Name PSDscResources )) {
-        Install-PSResource -Name PSDscResources -Repository PSGallery -TrustRepository
     }
 
     if ( -not (Get-Module -ListAvailable -Name Microsoft.VisualStudio.DSC )) {
@@ -174,6 +171,9 @@ function InstallationDSC {
 
 
 function EnregistrementRepository {
+
+    Test-PowerShellVersion
+
     $existingRepo = Get-PSResourceRepository -Name $RepositoryName -ErrorAction SilentlyContinue
 
     if (-not $existingRepo) {
@@ -206,6 +206,8 @@ function SuppressionAnciennesRessources {
 }
 
 function InstallationModuleMyResources {
+
+    Test-PowerShellVersion
 
     Install-PSResource -Name MyResources -Repository $RepositoryName -TrustRepository 
 
@@ -252,28 +254,6 @@ function ConfigurationPath {
 }
 
 
-
-function OuverturePowerShell7Admin {
-    Write-Host "`n  → Lancement de PowerShell 7 en administrateur..." -ForegroundColor Cyan
-    Start-Sleep -Seconds 2
-
-    $pwshPath = (Get-Command pwsh -ErrorAction SilentlyContinue).Source
-    if ($pwshPath) {
-        Start-Process -FilePath $pwshPath -Verb RunAs
-        Write-Host '  ✓ PowerShell 7 lancé avec succès' -ForegroundColor Green
-    }
-    else {
-        Write-Host '  ✗ Impossible de localiser pwsh.exe' -ForegroundColor Red
-        Write-Host '  → Veuillez ouvrir manuellement PowerShell 7 en administrateur' -ForegroundColor Yellow
-    }
-
-    Write-Host "`n  Appuyez sur une touche pour fermer cette fenêtre..." -ForegroundColor Gray
-    $null = $Host.UI.RawUI.ReadKey('NoEcho,IncludeKeyDown')
-        
-}
-
-
-
 $functions = @(
     @{
         Message  = "Installation WinGet (si nécessaire)"
@@ -310,10 +290,6 @@ $functions = @(
     @{
         Message  = "Configuration du PATH pour les ressources DSC"
         Function = "ConfigurationPath"
-    },
-    @{
-        Message  = "Ouverture de PowerShell 7 en administrateur"
-        Function = "OuverturePowerShell7Admin"
     }
 )
 
