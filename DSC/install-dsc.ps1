@@ -55,46 +55,38 @@ function InstallWinget {
 function InstallationPowerShell7 {
 
     $ps7Installed = Get-Command pwsh -ErrorAction SilentlyContinue
-    if ($ps7Installed)
-    {
+    if ($ps7Installed) {
         $currentVersion = (pwsh --version).Split()[-1]
         Write-Host "  ℹ PowerShell 7 déjà installé (version $currentVersion)" -ForegroundColor Yellow
     }
-    else
-    {
+    else {
         Write-Host '  → PowerShell 7 non détecté. Installation en cours...' -ForegroundColor White
         winget install --id Microsoft.PowerShell --source winget --accept-package-agreements --accept-source-agreements --silent
     }
 
 
-    if ($LASTEXITCODE -ne 0)
-    {
+    if ($LASTEXITCODE -ne 0) {
         $acceptableExitCodes = @(
             0           # Success
             -1978335189 # APPINSTALLER_CLI_ERROR_UPDATE_NOT_APPLICABLE
         )
-        if ($LASTEXITCODE -notin $acceptableExitCodes)
-        {
+        if ($LASTEXITCODE -notin $acceptableExitCodes) {
             Write-Host "  ✗ Erreur lors de l'installation de PowerShell 7 (code $LASTEXITCODE)" -ForegroundColor Red
             exit $LASTEXITCODE
         }
-        else
-        {
+        else {
             Write-Host '  ✓ PowerShell 7 est déjà à jour' -ForegroundColor Green
         }
     }
-    else
-    {
+    else {
         Write-Host '  ✓ PowerShell 7.5 installé avec succès' -ForegroundColor Green
     }
 
     # Vérification de l'installation
-    if (-not (Get-Command pwsh -ErrorAction SilentlyContinue))
-    {
+    if (-not (Get-Command pwsh -ErrorAction SilentlyContinue)) {
         Write-Host "  ⚠ pwsh.exe n'est pas encore dans le PATH" -ForegroundColor Yellow
     }
-    else
-    {
+    else {
         $installedVersion = (pwsh --version).Split()[-1]
         Write-Host "  ✓ PowerShell version $installedVersion disponible" -ForegroundColor Green
     }
@@ -106,7 +98,8 @@ function InstallationPowerShell7 {
             Write-Host "On relance le script avec PowerShell (v7) "
             & $pwshPath -File $PSCommandPath 
             exit    
-        } else {
+        }
+        else {
             Write-Host "On relance le script avec Windows PowerShell (v5) "
             powershell -File $PSCommandPath
             exit
@@ -121,33 +114,23 @@ function PréRequis {
 }
 
 function InstallationDesModules {
-    if ( -not (Get-Module -ListAvailable -Name Microsoft.WinGet.DSC ))
-    {
+    if ( -not (Get-Module -ListAvailable -Name Microsoft.WinGet.DSC )) {
         Install-PSResource -Name Microsoft.WinGet.DSC -Repository PSGallery -TrustRepository
     }
 
-    if ( -not (Get-Module -ListAvailable -Name powershell-yaml ))
-    {
+    if ( -not (Get-Module -ListAvailable -Name powershell-yaml )) {
         Install-PSResource -Name powershell-yaml -Repository PSGallery -TrustRepository
     }
 
-    if ( -not (Get-Module -ListAvailable -Name PSDscResources ))
-    {
+    if ( -not (Get-Module -ListAvailable -Name PSDscResources )) {
         Install-PSResource -Name PSDscResources -Repository PSGallery -TrustRepository
     }
 
-    if ( -not (Get-Module -ListAvailable -Name PSDesiredStateConfiguration ))
-    {
-        Install-PSResource -Name PSDesiredStateConfiguration -Repository PSGallery -TrustRepository
-    }
-
-    if ( -not (Get-Module -ListAvailable -Name Microsoft.VisualStudio.DSC ))
-    {
+    if ( -not (Get-Module -ListAvailable -Name Microsoft.VisualStudio.DSC )) {
         Install-PSResource -Name Microsoft.VisualStudio.DSC -Repository PSGallery -TrustRepository
     }
 
-    if ( -not (Get-Module -ListAvailable -Name Microsoft.WinGet.Client ))
-    {
+    if ( -not (Get-Module -ListAvailable -Name Microsoft.WinGet.Client )) {
         Install-PSResource -Name Microsoft.WinGet.Client -Repository PSGallery -TrustRepository
     }
 }
@@ -155,41 +138,34 @@ function InstallationDesModules {
 
 function InstallationDSC {
 
-    if (-not (Get-Command dsc -ErrorAction SilentlyContinue))
-        {
+    if (-not (Get-Command dsc -ErrorAction SilentlyContinue)) {
 
         $pkgInfo = Find-WinGetPackage -Name "DesiredStateConfiguration" 
         winget install --id $pkgInfo.Id --source msstore --accept-package-agreements --accept-source-agreements --silent
 
-        if ($LASTEXITCODE -ne 0)
-        {
+        if ($LASTEXITCODE -ne 0) {
             $acceptableExitCodes = @(
                 0           # Success
                 -1978335189 # APPINSTALLER_CLI_ERROR_UPDATE_NOT_APPLICABLE
             )
 
-            if ($LASTEXITCODE -notin $acceptableExitCodes)
-            {
+            if ($LASTEXITCODE -notin $acceptableExitCodes) {
                 Write-Host "  ✗ Erreur inattendue lors de l'installation de DSC ($LASTEXITCODE)" -ForegroundColor Red
                 exit $LASTEXITCODE
             }
-            else
-            {
+            else {
                 Write-Host "  ✓ DSC est déjà installé ou à jour ($LASTEXITCODE)" -ForegroundColor Green
             }
         }
-        else
-        {
+        else {
             Write-Host '  ✓ DSC installé avec succès' -ForegroundColor Green
         }
     }
     # Validation de l'installation
-    if (-not (Get-Command dsc -ErrorAction SilentlyContinue))
-    {
+    if (-not (Get-Command dsc -ErrorAction SilentlyContinue)) {
         Write-Host "  ⚠ dsc.exe n'est pas dans le PATH actuel" -ForegroundColor Yellow
     }
-    else
-    {
+    else {
         $dscVersion = (dsc --version).Split()[-1]
         Write-Host "  ✓ DSC v$dscVersion est installé" -ForegroundColor Green
     }
@@ -200,14 +176,12 @@ function InstallationDSC {
 function EnregistrementRepository {
     $existingRepo = Get-PSResourceRepository -Name $RepositoryName -ErrorAction SilentlyContinue
 
-    if (-not $existingRepo) 
-    {
+    if (-not $existingRepo) {
         Write-Host "  Repository '$RepositoryName' non trouvé, enregistrement..." -ForegroundColor Gray
         Register-PSResourceRepository -Name $RepositoryName -Uri $RepositoryPath -Trusted
         Write-Host "  ✓ Repository enregistré" -ForegroundColor Green
     } 
-    else 
-    {
+    else {
         Write-Host "  ✓ Repository déjà enregistré" -ForegroundColor Green
     }
 }
@@ -217,18 +191,15 @@ function SuppressionAnciennesRessources {
 
     $oldVersions = Get-Module -Name MyResources -ListAvailable
 
-    if ($oldVersions) 
-    {
-        foreach ($ver in $oldVersions) 
-        {
+    if ($oldVersions) {
+        foreach ($ver in $oldVersions) {
             Write-Host "   Suppression de la version existante : $($ver.Version) située dans $($ver.ModuleBase)" -ForegroundColor Magenta
 
             Remove-Item -Path $ver.ModuleBase -Recurse -Force -ErrorAction Stop
             Write-Host "   ✓ Version $($ver.Version) supprimée." -ForegroundColor Green
         }
     }
-    else
-    {
+    else {
         Write-Host "   ✓ Aucune version précédente de MyResources détectée" -ForegroundColor Green
     }
 
@@ -255,7 +226,7 @@ function ConfigurationPath {
 
     $installedModule = Get-Module -Name MyResources -ListAvailable | Select-Object -First 1
 
-    $dscResourcePath =  $installedModule.ModuleBase
+    $dscResourcePath = $installedModule.ModuleBase
 
     Write-Host " Dossier des ressources identifié : $dscResourcePath" -ForegroundColor Gray
 
@@ -287,13 +258,11 @@ function OuverturePowerShell7Admin {
     Start-Sleep -Seconds 2
 
     $pwshPath = (Get-Command pwsh -ErrorAction SilentlyContinue).Source
-    if ($pwshPath)
-    {
+    if ($pwshPath) {
         Start-Process -FilePath $pwshPath -Verb RunAs
         Write-Host '  ✓ PowerShell 7 lancé avec succès' -ForegroundColor Green
     }
-    else
-    {
+    else {
         Write-Host '  ✗ Impossible de localiser pwsh.exe' -ForegroundColor Red
         Write-Host '  → Veuillez ouvrir manuellement PowerShell 7 en administrateur' -ForegroundColor Yellow
     }
@@ -307,43 +276,43 @@ function OuverturePowerShell7Admin {
 
 $functions = @(
     @{
-        Message = "Installation WinGet (si nécessaire)"
+        Message  = "Installation WinGet (si nécessaire)"
         Function = "InstallWinget"
     }
     @{
-        Message = "Installation de PowerShell 7.5"
+        Message  = "Installation de PowerShell 7.5"
         Function = "InstallationPowerShell7"    
     },
     @{
-        Message = "Configuration des pré-requis pour l'installation de DSC"
+        Message  = "Configuration des pré-requis pour l'installation de DSC"
         Function = "PréRequis"    
     },
     @{
-        Message = "Installation des modules requis pour DSC"
+        Message  = "Installation des modules requis pour DSC"
         Function = "InstallationDesModules"
     },
     @{
-        Message = "Installation de DSC v3.x"
+        Message  = "Installation de DSC v3.x"
         Function = "InstallationDSC"
     },
     @{
-        Message = "Enregistrement du repository local"
+        Message  = "Enregistrement du repository local"
         Function = "EnregistrementRepository"
     },
     @{
-        Message = "Suppression des anciennes versions de ressources"
+        Message  = "Suppression des anciennes versions de ressources"
         Function = "SuppressionAnciennesRessources"
     },
     @{
-        Message = "Installation du module MyResources"
+        Message  = "Installation du module MyResources"
         Function = "InstallationModuleMyResources"
     },
     @{
-        Message = "Configuration du PATH pour les ressources DSC"
+        Message  = "Configuration du PATH pour les ressources DSC"
         Function = "ConfigurationPath"
     },
     @{
-        Message = "Ouverture de PowerShell 7 en administrateur"
+        Message  = "Ouverture de PowerShell 7 en administrateur"
         Function = "OuverturePowerShell7Admin"
     }
 )
