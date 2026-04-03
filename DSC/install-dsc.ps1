@@ -101,6 +101,25 @@ function InstallationPowerShell7 {
         $installedVersion = (pwsh --version).Split()[-1]
         Write-Host "  ✓ PowerShell version $installedVersion disponible" -ForegroundColor Green
     }
+<<<<<<< HEAD
+=======
+
+    if ($PSVersionTable.PSVersion.Major -lt 7) {
+        $pwshPath = "C:\Program Files\PowerShell\7\pwsh.exe"
+        if (Test-Path $pwshPath) {
+
+            Write-Host "On relance le script avec PowerShell (v7) "
+            & $pwshPath -File $PSCommandPath 
+            exit    
+        }
+        else {
+            Write-Host "On relance le script avec Windows PowerShell (v5) "
+            powershell -File $PSCommandPath
+            exit
+        }
+    }
+    
+>>>>>>> f021bf3 (fix: remove DSC v2 resource)
 }
 
 function PréRequis {
@@ -112,9 +131,12 @@ function PréRequis {
 }
 
 function InstallationDesModules {
+<<<<<<< HEAD
 
     Test-PowerShellVersion
 
+=======
+>>>>>>> f021bf3 (fix: remove DSC v2 resource)
     if ( -not (Get-Module -ListAvailable -Name Microsoft.WinGet.DSC )) {
         Install-PSResource -Name Microsoft.WinGet.DSC -Repository PSGallery -TrustRepository
     }
@@ -123,6 +145,13 @@ function InstallationDesModules {
         Install-PSResource -Name powershell-yaml -Repository PSGallery -TrustRepository
     }
 
+<<<<<<< HEAD
+=======
+    if ( -not (Get-Module -ListAvailable -Name PSDscResources )) {
+        Install-PSResource -Name PSDscResources -Repository PSGallery -TrustRepository
+    }
+
+>>>>>>> f021bf3 (fix: remove DSC v2 resource)
     if ( -not (Get-Module -ListAvailable -Name Microsoft.VisualStudio.DSC )) {
         Install-PSResource -Name Microsoft.VisualStudio.DSC -Repository PSGallery -TrustRepository
     }
@@ -232,10 +261,14 @@ function ConfigurationPath {
     $installedModule = Get-Module -Name MyResources -ListAvailable | Select-Object -First 1
 
 <<<<<<< HEAD
+<<<<<<< HEAD
     $dscResourcePath = $installedModule.ModuleBase
 =======
     $dscResourcePath =  $installedModule.ModuleBase
 >>>>>>> a438599 (fix: $RepositoryPath value)
+=======
+    $dscResourcePath = $installedModule.ModuleBase
+>>>>>>> f021bf3 (fix: remove DSC v2 resource)
 
     Write-Host " Dossier des ressources identifié : $dscResourcePath" -ForegroundColor Gray
 
@@ -261,16 +294,44 @@ function ConfigurationPath {
 }
 
 
+<<<<<<< HEAD
+=======
+
+function OuverturePowerShell7Admin {
+    Write-Host "`n  → Lancement de PowerShell 7 en administrateur..." -ForegroundColor Cyan
+    Start-Sleep -Seconds 2
+
+    $pwshPath = (Get-Command pwsh -ErrorAction SilentlyContinue).Source
+    if ($pwshPath) {
+        Start-Process -FilePath $pwshPath -Verb RunAs
+        Write-Host '  ✓ PowerShell 7 lancé avec succès' -ForegroundColor Green
+    }
+    else {
+        Write-Host '  ✗ Impossible de localiser pwsh.exe' -ForegroundColor Red
+        Write-Host '  → Veuillez ouvrir manuellement PowerShell 7 en administrateur' -ForegroundColor Yellow
+    }
+
+    Write-Host "`n  Appuyez sur une touche pour fermer cette fenêtre..." -ForegroundColor Gray
+    $null = $Host.UI.RawUI.ReadKey('NoEcho,IncludeKeyDown')
+        
+}
+
+
+
+>>>>>>> f021bf3 (fix: remove DSC v2 resource)
 $functions = @(
     @{
         Message  = "Installation WinGet (si nécessaire)"
         Function = "InstallWinget"
     }
     @{
+<<<<<<< HEAD
         Message  = "Installation WinGet (si nécessaire)"
         Function = "InstallWinget"
     }
     @{
+=======
+>>>>>>> f021bf3 (fix: remove DSC v2 resource)
         Message  = "Installation de PowerShell 7.5"
         Function = "InstallationPowerShell7"    
     },
@@ -301,6 +362,13 @@ $functions = @(
     @{
         Message  = "Configuration du PATH pour les ressources DSC"
         Function = "ConfigurationPath"
+<<<<<<< HEAD
+=======
+    },
+    @{
+        Message  = "Ouverture de PowerShell 7 en administrateur"
+        Function = "OuverturePowerShell7Admin"
+>>>>>>> f021bf3 (fix: remove DSC v2 resource)
     }
 )
 
