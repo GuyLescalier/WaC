@@ -102,6 +102,7 @@ function InstallationPowerShell7 {
         Write-Host "  ✓ PowerShell version $installedVersion disponible" -ForegroundColor Green
     }
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 
     if ($PSVersionTable.PSVersion.Major -lt 7) {
@@ -120,6 +121,8 @@ function InstallationPowerShell7 {
     }
     
 >>>>>>> f021bf3 (fix: remove DSC v2 resource)
+=======
+>>>>>>> f464715 (feat: Test-PowerShellVersion function)
 }
 
 function PréRequis {
@@ -132,11 +135,17 @@ function PréRequis {
 
 function InstallationDesModules {
 <<<<<<< HEAD
+<<<<<<< HEAD
 
     Test-PowerShellVersion
 
 =======
 >>>>>>> f021bf3 (fix: remove DSC v2 resource)
+=======
+
+    Test-PowerShellVersion
+
+>>>>>>> f464715 (feat: Test-PowerShellVersion function)
     if ( -not (Get-Module -ListAvailable -Name Microsoft.WinGet.DSC )) {
         Install-PSResource -Name Microsoft.WinGet.DSC -Repository PSGallery -TrustRepository
     }
@@ -146,12 +155,15 @@ function InstallationDesModules {
     }
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
     if ( -not (Get-Module -ListAvailable -Name PSDscResources )) {
         Install-PSResource -Name PSDscResources -Repository PSGallery -TrustRepository
     }
 
 >>>>>>> f021bf3 (fix: remove DSC v2 resource)
+=======
+>>>>>>> f464715 (feat: Test-PowerShellVersion function)
     if ( -not (Get-Module -ListAvailable -Name Microsoft.VisualStudio.DSC )) {
         Install-PSResource -Name Microsoft.VisualStudio.DSC -Repository PSGallery -TrustRepository
     }
@@ -237,10 +249,15 @@ function SuppressionAnciennesRessources {
 function InstallationModuleMyResources {
 
 <<<<<<< HEAD
+<<<<<<< HEAD
     Test-PowerShellVersion
 
 =======
 >>>>>>> a438599 (fix: $RepositoryPath value)
+=======
+    Test-PowerShellVersion
+
+>>>>>>> f464715 (feat: Test-PowerShellVersion function)
     Install-PSResource -Name MyResources -Repository $RepositoryName -TrustRepository 
 
     $installedModule = Get-Module -Name MyResources -ListAvailable | Select-Object -First 1
@@ -295,6 +312,7 @@ function ConfigurationPath {
 
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 
 function OuverturePowerShell7Admin {
@@ -319,6 +337,8 @@ function OuverturePowerShell7Admin {
 
 
 >>>>>>> f021bf3 (fix: remove DSC v2 resource)
+=======
+>>>>>>> f464715 (feat: Test-PowerShellVersion function)
 $functions = @(
     @{
         Message  = "Installation WinGet (si nécessaire)"
@@ -363,12 +383,15 @@ $functions = @(
         Message  = "Configuration du PATH pour les ressources DSC"
         Function = "ConfigurationPath"
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
     },
     @{
         Message  = "Ouverture de PowerShell 7 en administrateur"
         Function = "OuverturePowerShell7Admin"
 >>>>>>> f021bf3 (fix: remove DSC v2 resource)
+=======
+>>>>>>> f464715 (feat: Test-PowerShellVersion function)
     }
 )
 
