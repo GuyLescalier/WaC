@@ -1,29 +1,19 @@
 [CmdletBinding()]
-param(
-    [Parameter()]
-    [string]$ModulePath
-)
-
-# --- Détection de Module Path ---
-if (-not $ModulePath) {
-    $ModulePath = Join-Path $PSScriptRoot "Modules\MyResources"
-
-    Write-Host "This is PS script root : $PSScriptRoot" -ForegroundColor Gray
-
-    Write-Host "ModulePath auto-détecté: $ModulePath" -ForegroundColor Gray
-}
-
-
+param()
 
 # ====================================
 # PUBLICATION DU MODULE
 # ====================================
 function Publish-MyResourcesModule {
+
+    # force English output to avoid parsing issues during Publish-Module
+    # related to : https://github.com/PowerShell/PowerShellGetv2/issues/606
     
     $originalNuGetLang = $env:NUGET_CLI_LANGUAGE
 
+    $ModulePath = (Join-Path $PSScriptRoot "Modules\MyResources")
+
     try {
-        # $env:DOTNET_CLI_UI_LANGUAGE = "en-US"
         $env:NUGET_CLI_LANGUAGE = "en-US"
     
         Write-Host "  Culture forcée en anglais" -ForegroundColor Gray    
@@ -37,7 +27,6 @@ function Publish-MyResourcesModule {
         Set-Location $PSScriptRoot
     }
     finally {
-        # $env:DOTNET_CLI_UI_LANGUAGE = $originalLang
         $env:NUGET_CLI_LANGUAGE = $originalNuGetLang
     }
 
