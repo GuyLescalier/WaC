@@ -279,6 +279,7 @@ function ConfigurationPath {
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     $dscResourcePath = $installedModule.ModuleBase
 =======
     $dscResourcePath =  $installedModule.ModuleBase
@@ -286,16 +287,22 @@ function ConfigurationPath {
 =======
     $dscResourcePath = $installedModule.ModuleBase
 >>>>>>> f021bf3 (fix: remove DSC v2 resource)
+=======
+    #$dscResourcePath = $installedModule.ModuleBase
+	$DicoverResourceExtensionPath = $installedModule.ModuleBase
+>>>>>>> aba648b (fix: update ConfigurationPath)
 
-    Write-Host " Dossier des ressources identifié : $dscResourcePath" -ForegroundColor Gray
 
-    $resourceDirs = Get-ChildItem $dscResourcePath -Directory
+   # Write-Host " Dossier des ressources identifié : $dscResourcePath" -ForegroundColor Gray
+
+    #$resourceDirs = Get-ChildItem $dscResourcePath -Directory
 
     $pathList = @(
-        $resourceDirs.FullName                                  # Les ressources
-        $PSHOME                                                 # PowerShell 7 
+        #$resourceDirs.FullName                                  # Les ressources
+        #$PSHOME                                                 # PowerShell 7 
         #[Environment]::SystemDirectory                          # System32 
-        (Get-Module Microsoft.WinGet.DSC -ListAvailable).ModuleBase # WinGet
+		$DicoverResourceExtensionPath
+        #(Get-Module Microsoft.WinGet.DSC -ListAvailable).ModuleBase # WinGet
         $env:Path.Split([IO.Path]::PathSeparator)                     # Les chemins déjà présents dans PATH 
     ) | Where-Object { $_ } | Select-Object -Unique
 
