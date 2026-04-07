@@ -121,7 +121,7 @@ function Update-Version {
 # Delete possible existant versions
 # ====================================
 function Remove-OldPackages {
-    $packagePattern = Join-Path $RepositoryPath "MyDscResources.*.nupkg"
+    $packagePattern = Join-Path $RepositoryPath "MyResources.*.nupkg"
 
     $oldPackages = Get-ChildItem -Path $packagePattern -ErrorAction SilentlyContinue
 
