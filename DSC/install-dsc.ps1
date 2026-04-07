@@ -227,6 +227,7 @@ function EnregistrementRepository {
     }
 }
 
+<<<<<<< HEAD
 # function SuppressionAnciennesRessources {
 #     Write-Host "   Vérification des anciennes versions..." -ForegroundColor Gray
 
@@ -275,6 +276,8 @@ function InstallationModuleMyResources {
 }
 =======
 >>>>>>> dc80aad (refactor: move "InstallationModuleMyResources"  to manage-resources.ps1)
+=======
+>>>>>>> 608c5c1 (refactor: move install and remove resources to file manage-resources.ps1)
 
 function ConfigurationPath {
 
@@ -320,7 +323,7 @@ function ConfigurationPath {
 
 }
 
-. "$PSScriptRoot\manage-resources.ps1"
+# . "$PSScriptRoot\manage-resources.ps1"
 
 <<<<<<< HEAD
 <<<<<<< HEAD
@@ -383,13 +386,9 @@ $functions = @(
         Function = "EnregistrementRepository"
     },
     # @{
-    #     Message  = "Suppression des anciennes versions de ressources"
-    #     Function = "SuppressionAnciennesRessources"
+    #     Message  = "Installation des ressources DSC "
+    #     Function = "Install-resourcess"
     # },
-    @{
-        Message  = "Installation des ressources DSC "
-        Function = "Install-Resources"
-    },
     @{
         Message  = "Configuration du PATH pour les ressources DSC"
         Function = "ConfigurationPath"
