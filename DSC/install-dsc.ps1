@@ -246,6 +246,7 @@ function SuppressionAnciennesRessources {
 
 }
 
+<<<<<<< HEAD
 function InstallationModuleMyResources {
 
 <<<<<<< HEAD
@@ -272,11 +273,14 @@ function InstallationModuleMyResources {
     Write-Host "    Chemin  : $($installedModule.ModuleBase)" -ForegroundColor Gray
 
 }
+=======
+>>>>>>> dc80aad (refactor: move "InstallationModuleMyResources"  to manage-resources.ps1)
 
 function ConfigurationPath {
 
     $installedModule = Get-Module -Name MyResources -ListAvailable | Select-Object -First 1
 
+<<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
@@ -296,20 +300,19 @@ function ConfigurationPath {
    # Write-Host " Dossier des ressources identifié : $dscResourcePath" -ForegroundColor Gray
 
     #$resourceDirs = Get-ChildItem $dscResourcePath -Directory
+=======
+    $DicoverResourceExtensionPath = $installedModule.ModuleBase
+>>>>>>> dc80aad (refactor: move "InstallationModuleMyResources"  to manage-resources.ps1)
 
     $pathList = @(
-        #$resourceDirs.FullName                                  # Les ressources
-        #$PSHOME                                                 # PowerShell 7 
-        #[Environment]::SystemDirectory                          # System32 
-		$DicoverResourceExtensionPath
-        #(Get-Module Microsoft.WinGet.DSC -ListAvailable).ModuleBase # WinGet
+        $DicoverResourceExtensionPath                                 # Le chemin de l'extension de découverte des ressources 
         $env:Path.Split([IO.Path]::PathSeparator)                     # Les chemins déjà présents dans PATH 
     ) | Where-Object { $_ } | Select-Object -Unique
 
-    # 2. On joint tout avec le séparateur (;)
+    # On joint tout avec le séparateur (;)
     $finalPath = $pathList -join [IO.Path]::PathSeparator
 
-    # 3. On applique la configuration 
+    # On applique la configuration 
     [Environment]::SetEnvironmentVariable("PATH", $finalPath, "User")
     $env:PATH = $finalPath
 
@@ -317,6 +320,7 @@ function ConfigurationPath {
 
 }
 
+. "$PSScriptRoot\manage-resources.ps1"
 
 <<<<<<< HEAD
 <<<<<<< HEAD
@@ -383,8 +387,8 @@ $functions = @(
         Function = "SuppressionAnciennesRessources"
     },
     @{
-        Message  = "Installation du module MyResources"
-        Function = "InstallationModuleMyResources"
+        Message  = "Installation des ressources DSC "
+        Function = "Install-Resources"
     },
     @{
         Message  = "Configuration du PATH pour les ressources DSC"
