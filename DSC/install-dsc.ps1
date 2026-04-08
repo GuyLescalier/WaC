@@ -186,66 +186,22 @@ function EnregistrementRepository {
     }
 }
 
-function SuppressionAnciennesRessources {
-    Write-Host "   Vérification des anciennes versions..." -ForegroundColor Gray
-
-    $oldVersions = Get-Module -Name MyResources -ListAvailable
-
-    if ($oldVersions) {
-        foreach ($ver in $oldVersions) {
-            Write-Host "   Suppression de la version existante : $($ver.Version) située dans $($ver.ModuleBase)" -ForegroundColor Magenta
-
-            Remove-Item -Path $ver.ModuleBase -Recurse -Force -ErrorAction Stop
-            Write-Host "   ✓ Version $($ver.Version) supprimée." -ForegroundColor Green
-        }
-    }
-    else {
-        Write-Host "   ✓ Aucune version précédente de MyResources détectée" -ForegroundColor Green
-    }
-
-}
-
-function InstallationModuleMyResources {
-
-    Test-PowerShellVersion
-
-    Install-PSResource -Name MyResources -Repository $RepositoryName -TrustRepository 
-
-    $installedModule = Get-Module -Name MyResources -ListAvailable | Select-Object -First 1
-
-    if (-not $installedModule) {
-        Write-Host "  ✗ Erreur : Module MyResources non trouvé après installation" -ForegroundColor Red
-        exit 1
-    }
-
-    Write-Host "  Module installé :" -ForegroundColor Gray
-    Write-Host "    Version : $($installedModule.Version)" -ForegroundColor Gray
-    Write-Host "    Chemin  : $($installedModule.ModuleBase)" -ForegroundColor Gray
-
-}
 
 function ConfigurationPath {
 
     $installedModule = Get-Module -Name MyResources -ListAvailable | Select-Object -First 1
 
-    $dscResourcePath = $installedModule.ModuleBase
-
-    Write-Host " Dossier des ressources identifié : $dscResourcePath" -ForegroundColor Gray
-
-    $resourceDirs = Get-ChildItem $dscResourcePath -Directory
+    $DicoverResourceExtensionPath = $installedModule.ModuleBase
 
     $pathList = @(
-        $resourceDirs.FullName                                  # Les ressources
-        $PSHOME                                                 # PowerShell 7 
-        #[Environment]::SystemDirectory                          # System32 
-        (Get-Module Microsoft.WinGet.DSC -ListAvailable).ModuleBase # WinGet
+        $DicoverResourceExtensionPath                                 # Le chemin de l'extension de découverte des ressources 
         $env:Path.Split([IO.Path]::PathSeparator)                     # Les chemins déjà présents dans PATH 
     ) | Where-Object { $_ } | Select-Object -Unique
 
-    # 2. On joint tout avec le séparateur (;)
+    # On joint tout avec le séparateur (;)
     $finalPath = $pathList -join [IO.Path]::PathSeparator
 
-    # 3. On applique la configuration 
+    # On applique la configuration 
     [Environment]::SetEnvironmentVariable("PATH", $finalPath, "User")
     $env:PATH = $finalPath
 
@@ -278,14 +234,6 @@ $functions = @(
     @{
         Message  = "Enregistrement du repository local"
         Function = "EnregistrementRepository"
-    },
-    @{
-        Message  = "Suppression des anciennes versions de ressources"
-        Function = "SuppressionAnciennesRessources"
-    },
-    @{
-        Message  = "Installation du module MyResources"
-        Function = "InstallationModuleMyResources"
     },
     @{
         Message  = "Configuration du PATH pour les ressources DSC"
