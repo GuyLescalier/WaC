@@ -209,7 +209,6 @@ function ConfigurationPath {
 
 }
 
-# . "$PSScriptRoot\manage-resources.ps1"
 
 $functions = @(
     @{
@@ -236,10 +235,6 @@ $functions = @(
         Message  = "Enregistrement du repository local"
         Function = "EnregistrementRepository"
     },
-    # @{
-    #     Message  = "Installation des ressources DSC "
-    #     Function = "Install-resourcess"
-    # },
     @{
         Message  = "Configuration du PATH pour les ressources DSC"
         Function = "ConfigurationPath"
