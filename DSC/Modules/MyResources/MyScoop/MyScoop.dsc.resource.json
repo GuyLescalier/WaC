@@ -2,7 +2,7 @@
   "$schema": "https://raw.githubusercontent.com/PowerShell/DSC/main/schemas/v3/resource/manifest.json",
   "type": "MyCompany.Installer/MyScoop",
   "version": "0.0.1",
-  "description": "Installs or removes the Old Scoop package manager",
+  "description": "Installs or removes the Scoop package manager",
   "get": {
     "executable": "pwsh",
     "args": ["-NoProfile", "-NonInteractive", "-File", "./MyScoop.ps1", "Get"],
@@ -23,12 +23,13 @@
     "embedded": {
       "$schema": "https://json-schema.org/draft/2020-12/schema",
       "type": "object",
-      "required": [],
+      "required": ["name"],
       "properties": {
         "name": {
           "type": "string",
           "description": "Resource identifier",
-          "default": "MyScoop"
+          "default": "MyScoop",
+          "key": true
         },
         "ensure": {
           "type": "string",
