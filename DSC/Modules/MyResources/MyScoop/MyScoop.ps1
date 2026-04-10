@@ -40,21 +40,27 @@ function Test-ResourceState {
 function Set-ResourceState {
     param($InputObject)
 
-    if(! (Test-ScoopInstalled)){
+    if (! (Test-ScoopInstalled)) {
+        try {
+            $installerPath = Join-Path $env:TEMP "scoop-install-$(New-Guid).ps1"
 
-        $installerPath = Join-Path $env:TEMP "scoop-install-$(New-Guid).ps1"
+            Invoke-RestMethod -Uri 'https://get.scoop.sh' -OutFile $installerPath
 
-        Invoke-RestMethod -Uri 'https://get.scoop.sh' -OutFile $installerPath
-
-        & $installerPath
-        
-    } else {
+            & $installerPath
+        }
+        finally {
+            if (Test-Path $installerPath) {
+                Remove-Item $installerPath -Force -ErrorAction SilentlyContinue
+            }
+        }
+    }
+    else {
         #scoop uninstall scoop --purge
         Remove-Item -Recurse -Force ~\scoop
     }    
 }
 
-$inputJson   = [Console]::In.ReadToEnd()
+$inputJson = [Console]::In.ReadToEnd()
 $inputObject = $inputJson | ConvertFrom-Json
 
 $result = switch ($Operation) {
