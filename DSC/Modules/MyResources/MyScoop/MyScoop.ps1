@@ -1,3 +1,5 @@
+# This resource require administrator privileges.
+
 param(
     [Parameter(Position = 0)]
     [ValidateSet('Get', 'Set', 'Test')]
