@@ -1,6 +1,6 @@
 {
   "$schema": "https://raw.githubusercontent.com/PowerShell/DSC/main/schemas/v3/resource/manifest.json",
-  "type": "MyCompany.Installer/TestMyScoop",
+  "type": "MyCompany.Installer/MyScoop",
   "version": "0.0.1",
   "description": "Installs or removes the Old Scoop package manager",
   "get": {

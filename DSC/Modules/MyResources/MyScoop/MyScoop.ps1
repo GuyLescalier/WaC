@@ -1,3 +1,5 @@
+# This resource require administrator privileges.
+
 param(
     [Parameter(Position = 0)]
     [ValidateSet('Get', 'Set', 'Test')]
@@ -51,6 +53,9 @@ function Set-ResourceState {
         Remove-Item -Recurse -Force ~\scoop
     }    
 }
+
+$inputJson   = [Console]::In.ReadToEnd()
+$inputObject = $inputJson | ConvertFrom-Json
 
 $result = switch ($Operation) {
     'Get' { Get-ResourceState -InputObject $inputObject }
