@@ -17,7 +17,7 @@ function Get-ResourceState {
     $isInstalled = Test-ScoopInstalled
 
     $state = @{
-        name   = if ($InputObject.name) { $InputObject.name } else { 'Scoop' }
+        name   = $InputObject.name
         ensure = if ($isInstalled) { 'Present' } else { 'Absent' }
     }
     
@@ -28,7 +28,7 @@ function Test-ResourceState {
     param($InputObject)
 
     $currentState = Get-ResourceState -InputObject $InputObject
-    $desiredEnsure = if ($InputObject.ensure) { $InputObject.ensure } else { 'Present' }
+    $desiredEnsure = $InputObject.ensure
 
     $inDesiredState = ($currentState.ensure -eq $desiredEnsure)
 
