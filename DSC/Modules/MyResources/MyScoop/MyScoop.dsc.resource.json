@@ -11,12 +11,14 @@
   "set": {
     "executable": "pwsh",
     "args": ["-NoProfile", "-NonInteractive", "-File", "./MyScoop.ps1", "Set"],
-    "input": "stdin"
+    "input": "stdin",
+    "return": "state"
   },
   "test": {
     "executable": "pwsh",
     "args": ["-NoProfile", "-NonInteractive", "-File", "./MyScoop.ps1", "Test"],
-    "input": "stdin"
+    "input": "stdin",
+    "return": "state"
   },
   "schema": {
     "embedded": {
