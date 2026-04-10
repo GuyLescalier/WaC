@@ -11,8 +11,7 @@
   "set": {
     "executable": "pwsh",
     "args": ["-NoProfile", "-NonInteractive", "-File", "./MyScoop.ps1", "Set"],
-    "input": "stdin",
-    "implementsPretest": false
+    "input": "stdin"
   },
   "test": {
     "executable": "pwsh",
