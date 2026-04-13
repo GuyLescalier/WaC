@@ -6,7 +6,7 @@ param(
 
 function Test-GitInstalled {
     try {
-        $null = Get-Command git -ErrorAction Stop
+        Get-Command git -ErrorAction Stop | Out-Null
         return $true
     }
     catch {
@@ -44,7 +44,7 @@ function Get-ResourceState {
 function Test-ResourceState {
     param($InputObject)
     $currentState = Get-ResourceState -InputObject $inputObject
-    $desiredEnsure = if ($InputObject.ensure) { $InputObject.ensure } else { 'Present' }
+    $desiredEnsure = $InputObject.ensure
 
     $inDesiredState = ($currentState.ensure -eq $desiredEnsure) 
 
@@ -56,15 +56,20 @@ function Test-ResourceState {
 function Set-ResourceState {
     param($InputObject)
 
-    $ensure = $InputObject.ensure ?? 'Present'
+    $ensure = $InputObject.ensure
 
     if ($ensure -eq 'Present') { 
+
+        if (-not (Test-GitInstalled)) {
+            scoop install git
+        }
+
         scoop bucket add $InputObject.name
+    
     } 
     else {
         scoop bucket rm $InputObject.name 
     }
-
 }
 
 try {
