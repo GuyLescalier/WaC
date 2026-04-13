@@ -55,9 +55,17 @@ function Set-ResourceState {
         }
     }
     else {
-        #scoop uninstall scoop --purge
-        Remove-Item -Recurse -Force ~\scoop
-    }    
+        try {
+            # Revisit this once one these issues are resolved:
+            # https://github.com/ScoopInstaller/Scoop/issues/5734
+            # https://github.com/ScoopInstaller/Scoop/issues/6447
+
+            echo y | powershell -ExecutionPolicy Bypass -Command "scoop uninstall scoop"
+        }
+        catch {
+            throw "failed to uninstall scoop, all installed resources via scoop must be removed before uninstalling scoop itself."
+        }
+    }
 }
 
 try {
