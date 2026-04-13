@@ -72,15 +72,12 @@ try {
     exit 0
 }
 catch {
-    $errorOutput = @{
-        name            = if ($inputObject.name) { $inputObject.name } else { 'Scoop' }
-        ensure          = 'Absent'
-        error           = $_.Exception.Message
-        _inDesiredState = $false
-    }
+    $errorJson = @{
+        message   = $_.Exception.Message
+        operation = $Operation
+        level     = "error"
+    } | ConvertTo-Json -Compress
 
-    $jsonOutput = $errorOutput | ConvertTo-Json -Compress -Depth 10
-    Write-Output $jsonOutput
-
-    exit 0
+    Write-Error $errorJson
+    exit 1
 }
