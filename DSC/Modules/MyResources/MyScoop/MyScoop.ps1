@@ -60,16 +60,29 @@ function Set-ResourceState {
     }    
 }
 
-$inputJson = [Console]::In.ReadToEnd()
-$inputObject = $inputJson | ConvertFrom-Json
+try {
+    $inputJson = [Console]::In.ReadToEnd()
+    $inputObject = $inputJson | ConvertFrom-Json
 
-$result = switch ($Operation) {
-    'Get' { Get-ResourceState -InputObject $inputObject }
-    'Test' { Test-ResourceState -InputObject $inputObject }
-    'Set' { Set-ResourceState -InputObject $inputObject }
+    $result = switch ($Operation) {
+        'Get' { Get-ResourceState -InputObject $inputObject }
+        'Test' { Test-ResourceState -InputObject $inputObject }
+        'Set' { Set-ResourceState -InputObject $inputObject }
+    }
+
+    $jsonOutput = $result | ConvertTo-Json -Compress -Depth 10
+    Write-Output $jsonOutput
+
+    exit 0
+
 }
+catch {
+    $errorJson = @{
+        message   = $_.Exception.Message
+        operation = $Operation
+        level     = "error"
+    } | ConvertTo-Json -Compress
 
-$jsonOutput = $result | ConvertTo-Json -Compress -Depth 10
-Write-Output $jsonOutput
-
-exit 0
+    Write-Error $errorJson
+    exit 1
+}
