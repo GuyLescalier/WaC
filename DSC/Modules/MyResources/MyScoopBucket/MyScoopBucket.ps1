@@ -4,6 +4,17 @@ param(
     [string]$Operation = 'Get'
 )
 
+function Test-GitInstalled {
+    try {
+        $null = Get-Command git -ErrorAction Stop
+        return $true
+    }
+    catch {
+        return $false
+    }
+}
+
+
 function Test-ScoopBucketInstalled { 
     param($InputObject) 
     try { 
