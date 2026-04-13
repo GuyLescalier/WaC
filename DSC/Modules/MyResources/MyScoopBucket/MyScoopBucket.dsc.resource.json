@@ -23,8 +23,7 @@
       "./MyScoopBucket.ps1",
       "Set"
     ],
-    "input": "stdin",
-    "implementsPretest": false
+    "input": "stdin"
   },
   "test": {
     "executable": "pwsh",
@@ -35,17 +34,19 @@
       "./MyScoopBucket.ps1",
       "Test"
     ],
-    "input": "stdin"
+    "input": "stdin",
+    "return": "state"
   },
   "schema": {
     "embedded": {
       "$schema": "https://json-schema.org/draft/2020-12/schema",
       "type": "object",
-      "required": ["name"],
+      "required": [],
       "properties": {
         "name": {
           "type": "string",
-          "description": "Bucket name"
+          "description": "Bucket name",
+          "key": true
         },
         "ensure": {
           "type": "string",
