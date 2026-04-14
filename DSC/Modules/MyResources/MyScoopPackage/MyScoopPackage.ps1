@@ -1,221 +1,124 @@
-. $PSScriptRoot\Convert-ObjectArrayToHashtable.ps1
-. $PSScriptRoot\Invoke-RetryableOperation.ps1
+param(
+    [Parameter(Position = 0)]
+    [ValidateSet('Get', 'Set', 'Test')]
+    [string]$Operation = 'Get'
+)
 
-enum MyEnsure
-{
-    Absent
-    Present
-}
-
-$script:ScoopListCache
-$script:ScoopListCacheExpires
-$script:ScoopStatusCache
-$script:ScoopStatusCacheExpires
-$script:CacheDuration = [TimeSpan]::FromMinutes(5)
-
-function Get-RawScoopList
-{
-    try {
-         $json = & scoop export | ConvertFrom-Json
-    }
-    catch {
-        throw "Failed to parse scoop export JSON: $_"
-    }
-    
-    # scoop export outputs a JSON object with 'apps' and 'buckets' keys. We only need the 'apps'.
-    return $json.apps ?? @()
-}
-
-function Get-RawScoopStatus
-{
-    $checkOutput = & scoop status 6>&1 | Out-String
-    if ($checkOutput -match 'WARN.*scoop update')
-    {
-        & scoop update *>&1 | Out-Null
-    }
-    
-    $result = & scoop status 6>$null
-    
-    return $result ? $result : @()
-}
-
-function Update-ScoopListCache
-{
-    Invoke-RetryableOperation {
-        $scoopList = Get-RawScoopList
-
-        if (-not $scoopList)
-        {
-            throw 'Unable to get scoop list'
-        }
-
-        try
-        {
-            $packages = Convert-ObjectArrayToHashtable $scoopList 'Name'
-            $script:ScoopListCache = $packages
-            $script:ScoopListCacheExpires = (Get-Date) + $script:CacheDuration
-        }
-        catch
-        {
-            throw "Failed to convert scoop list '$($scoopList | ConvertTo-Json -EnumsAsStrings -Depth 100 -Compress)' to hashtable.`nDetails: $_"
-        }
+function Assert-ScoopIsInstalled {
+    if ($null -eq (Get-Command scoop -ErrorAction SilentlyContinue)) {
+        throw "Scoop is not installed."
     }
 }
 
-function Get-ScoopPackageInfo
-{
-    param(
-        [Parameter(Mandatory = $true)]
-        [string] $packageName
-    )
-
-    if ($script:ScoopListCache -and $script:ScoopListCacheExpires -gt (Get-Date))
-    {
-        $packages = $script:ScoopListCache
-    }
-    else
-    {
-        $scoopList = Get-RawScoopList
-        try
-        {
-            $packages = Convert-ObjectArrayToHashtable $scoopList 'Name'
-            $script:ScoopListCache = $packages
-            $script:ScoopListCacheExpires = (Get-Date) + $script:CacheDuration
-        }
-        catch
-        {
-            throw "Failed to convert scoop list '$($scoopList | ConvertTo-Json -EnumsAsStrings -Depth 100 -Compress)' to hashtable.`nDetails: $_"
-        }
-    }
-    
-    if ($packages.ContainsKey($packageName))
-    {
-        return @{
-            PackageName = $packageName # Add this line
-            Ensure      = [MyEnsure]::Present
-            Version     = $packages[$packageName].Version
-        }
-    }
-
-    return @{
-        PackageName = $packageName # Add this line for absent packages too
-        Ensure      = [MyEnsure]::Absent
-        Version     = $null
-    }
-}
-
-function Update-ScoopStatusCache
-{
-    Invoke-RetryableOperation {
-        $scoopStatus = Get-RawScoopStatus
-            
-        if (-not $scoopStatus)
-        {
-            # Empty status is normal when no updates are available
-            $script:ScoopStatusCache = @{}
-            $script:ScoopStatusCacheExpires = (Get-Date) + $script:CacheDuration
-            return
-        }
-
-        try
-        {
-            $packages = Convert-ObjectArrayToHashtable $scoopStatus 'Name'
-            $script:ScoopStatusCache = $packages
-            $script:ScoopStatusCacheExpires = (Get-Date) + $script:CacheDuration
-        }
-        catch
-        {
-            throw "Failed to convert scoop status '$($scoopStatus | ConvertTo-Json -EnumsAsStrings -Depth 100 -Compress)' to hashtable.`nDetails: $_"
-        }
-    }
-}
-
-function Get-ScoopPackageLatestAvailableVersion
-{
+function Assert-PackageInfoIsValid {
     param (
+        [Parameter(Mandatory)]
+        $PackageInfo,
+
+        [Parameter(Mandatory)]
         [string]$PackageName
     )
-
-    if (-not $script:ScoopStatusCache -or $script:ScoopStatusCacheExpires -le (Get-Date))
-    {
-        Update-ScoopStatusCache
+    
+    if ($null -eq $pkgInfo.Name) {
+        throw "Could not find manifest for '$pkgName' in local buckets."
     }
-
-    if ($script:ScoopStatusCache.ContainsKey($PackageName))
-    {
-        return $script:ScoopStatusCache[$PackageName].'Latest Version'
-    }
-
-    return $null
+    
 }
 
-function Update-ScoopPackage
-{
-    param(
-        [Parameter(Mandatory = $true)]
-        [string] $packageName
-    )
+function Get-ResourceState {
+    param($InputObject)
 
-    # Suppress all output to avoid contaminating DSC response
-    $output = & scoop update $packageName *>&1
-    
-    # Check if command succeeded by looking for error indicators in output
-    $errorIndicators = $output | Where-Object { $_ -match "error|failed|not found" }
-    
-    if ($errorIndicators) {
-        $outputString = $output | Out-String
-        throw "Failed to update scoop package '$packageName'.`nDetails: $outputString"
+    Assert-ScoopIsInstalled
+
+    $pkgName = $InputObject.packageName
+
+    $pkgInfo = scoop "info" $pkgName 6>$null
+
+    Assert-PackageInfoIsValid -PackageInfo $pkgInfo -PackageName $pkgName
+
+
+    if ($null -ne ($pkgInfo.Installed) ) {
+        return @{
+            packageName      = $pkgName
+            ensure           = 'Present'
+            version          = $InputObject.version
+            installedVersion = $pkgInfo.Version
+        }
     }
-
-    Clear-Cache
+    else {
+        return @{
+            packageName = $pkgName
+            ensure      = 'Absent'
+        }
+    }
 }
 
-function Install-ScoopPackage
-{
-    param(
-        [Parameter(Mandatory = $true)]
-        [string] $packageName
-    )
-    
-    # Suppress all output to avoid contaminating DSC response
-    $output = & scoop install $packageName *>&1
-    
-    # Check for success by looking for error patterns
-    $errorIndicators = $output | Where-Object { $_ -match "error|failed|not found|couldn't find" }
-    
-    if ($errorIndicators) {
-        $outputString = $output | Out-String
-        throw "Failed to install scoop package '$packageName'.`nDetails: $outputString"
+function Test-ResourceState {
+    param($InputObject)
+
+    Assert-ScoopIsInstalled
+
+    $currentState = Get-ResourceState -InputObject $InputObject
+
+    $desiredEnsure = $InputObject.ensure
+
+    $inDesired = ($currentState.ensure -eq $desiredEnsure)
+
+    # If the package should be present and a specific version is requested,
+    # verify that the installed version matches the expected version.
+
+    if ( ($inDesired) -and ($desiredEnsure -eq 'Present') -and ($InputObject.version -ne 'latest') ) {
+        $inDesired = ($currentState.installedVersion -eq $InputObject.version)
     }
 
-    Clear-Cache
+    $currentState._inDesiredState = $inDesired
+    return $currentState
 }
 
-function Uninstall-ScoopPackage
-{
-    param(
-        [Parameter(Mandatory = $true)]
-        [string] $packageName
-    )
+function Set-ResourceState {
+    param($InputObject)
 
-    # Suppress all output to avoid contaminating DSC response
-    $output = & scoop uninstall $packageName *>&1
-    
-    # Check for success by looking for error patterns
-    $errorIndicators = $output | Where-Object { $_ -match "error|failed|not found|isn't installed" }
-    
-    if ($errorIndicators) {
-        $outputString = $output | Out-String
-        throw "Failed to uninstall scoop package '$packageName'.`nDetails: $outputString"
+    Assert-ScoopIsInstalled
+
+    $pkgName = $InputObject.packageName
+    $desiredEnsure = $InputObject.ensure
+
+    if ($desiredEnsure -eq 'Present') {
+
+        $version = $InputObject.version
+
+        $installArg = if ($version -ne 'latest') { "$pkgName@$version" } else { $pkgName }
+
+        scoop "install" $installArg
+    }
+    else {
+        scoop "uninstall" $pkgName
+    }
+}
+
+try {
+    $inputJson = [Console]::In.ReadToEnd()
+    $inputObject = $inputJson | ConvertFrom-Json
+
+    $result = switch ($Operation) {
+        'Get' { Get-ResourceState -InputObject $inputObject }
+        'Test' { Test-ResourceState -InputObject $inputObject }
+        'Set' { Set-ResourceState -InputObject $inputObject }
     }
 
-    Clear-Cache
-}
+    $jsonOutput = $result | ConvertTo-Json -Compress -Depth 10
+    Write-Output $jsonOutput
 
-function Clear-Cache
-{
-    $script:ScoopListCache = $null
-    $script:ScoopListCacheExpires = $null
-    $script:ScoopStatusCache = $null
-    $script:ScoopStatusCacheExpires = $null
+    exit 0
+
+}
+catch {
+    $errorJson = @{
+        message   = $_.Exception.Message
+        operation = $Operation
+        level     = "error"
+    } | ConvertTo-Json -Compress
+
+    Write-Error $errorJson
+    exit 1
 }
