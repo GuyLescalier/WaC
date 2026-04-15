@@ -33,21 +33,6 @@ function convert-latestToVersion {
     return $version    
 }
 
-function Assert-PackageInfoIsValid {
-    param (
-        [Parameter(Mandatory)]
-        $PackageInfo,
-
-        [Parameter(Mandatory)]
-        [string]$PackageName
-    )
-    
-    if ($null -eq $PackageInfo.Name) {
-        throw "Could not find manifest for '$PackageName' in local buckets."
-    }
-
-}
-
 function Get-ResourceState {
     param($InputObject)
 
@@ -57,7 +42,9 @@ function Get-ResourceState {
 
     $pkgInfo = scoop "info" $pkgName 6>$null
 
-    Assert-PackageInfoIsValid -PackageInfo $pkgInfo -PackageName $pkgName
+    if ($null -eq $pkgInfo.Name) {
+        throw "Could not find manifest for '$PkgName' in local buckets."
+    }
 
 
     if ($null -ne ($pkgInfo.Installed) ) {
