@@ -21,11 +21,17 @@ function Test-GitInstalled {
 }
 
 
-function convert-latestToVersion {
+function Get-LatestVersion {
     param(
         [Parameter(Mandatory)]
         [string]$pkgName
     )
+
+    if (-not (Test-GitInstalled)) {
+        scoop install git
+    }
+
+    scoop update
 
     $manifest = scoop cat $pkgName | ConvertFrom-Json
     $version = $manifest.version
@@ -50,7 +56,7 @@ function Get-ResourceState {
     if ($null -ne ($pkgInfo.Installed) ) {
 
         if ($InputObject.version -eq 'latest') {
-            $version = convert-latestToVersion -pkgName $pkgName
+            $version = Get-LatestVersion -pkgName $pkgName
         }
         else {
             $version = $InputObject.version
@@ -107,7 +113,7 @@ function Set-ResourceState {
         $currentState = Get-ResourceState -InputObject $InputObject
 
         if ($InputObject.version -eq 'latest') {
-            $version = convert-latestToVersion -pkgName $pkgName
+            $version = Get-LatestVersion -pkgName $pkgName
         }
         else {
             $version = $InputObject.version
