@@ -46,7 +46,8 @@
         "name": {
           "type": "string",
           "description": "Resource identifier",
-          "default": "MyChocolatey"
+          "default": "MyChocolatey",
+          "key": true
         },
         "ensure": {
           "type": "string",
