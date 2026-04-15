@@ -45,7 +45,8 @@
       "properties": {
         "packageName": {
           "type": "string",
-          "description": "Name of the Scoop package"
+          "description": "Name of the Scoop package",
+          "key": true
         },
         "version": {
           "type": "string",
