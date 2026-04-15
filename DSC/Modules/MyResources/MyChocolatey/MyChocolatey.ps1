@@ -4,114 +4,36 @@ param(
     [string]$Operation = 'Get'
 )
 
-# Configuration des préférences d'erreur
-$ErrorActionPreference = 'Stop'
-$ProgressPreference = 'SilentlyContinue'
-
-# Lecture de l'entrée JSON depuis stdin
-$inputJson = [Console]::In.ReadToEnd()
-$inputObject = if ($inputJson) { 
-    try {
-        $inputJson | ConvertFrom-Json 
-    }
-    catch {
-        @{ name = 'Chocolatey'; ensure = 'Present' }
-    }
-}
-else { 
-    @{ name = 'Chocolatey'; ensure = 'Present' } 
-}
-
-#region Helper Functions
 
 function Test-ChocolateyInstalled {
-    try {
-        $chocoPath = "$env:ProgramData\chocolatey\choco.exe"
-        return (Test-Path $chocoPath)
-    }
-    catch {
-        return $false
-    }
+    return $null -ne (Get-Command choco -ErrorAction SilentlyContinue)
 }
-
-function Get-ChocolateyVersion {
-    try {
-        if (Test-ChocolateyInstalled) {
-            $version = & "$env:ProgramData\chocolatey\choco.exe" --version 2>$null
-            return $version.Trim()
-        }
-        return $null
-    }
-    catch {
-        return $null
-    }
-}
-
-#endregion
 
 #region DSC Operations
 
 function Get-ResourceState {
     param($InputObject)
     
-    $logEntry = @{
-        message = "Hello from Get-ResourceState "
-        level   = "error"
+    $isInstalled = Test-ChocolateyInstalled
+    $state = @{
+        name   = $InputObject.name
+        ensure = if ($isInstalled) { 'Present' } else { 'Absent' }
     }
-    
-    $jsonLog = $logEntry | ConvertTo-Json -Compress
-    [Console]::Error.WriteLine($jsonLog)
 
-    try {
-        $isInstalled = Test-ChocolateyInstalled
-        
-        $state = @{
-            name   = if ($InputObject.name) { $InputObject.name } else { 'Chocolatey' }
-            ensure = if ($isInstalled) { 'Present' } else { 'Absent' }
-        }
-        
-        # Ajouter des infos supplémentaires si installé
-        if ($isInstalled) {
-            $version = Get-ChocolateyVersion
-            if ($version) {
-                $state.version = $version
-            }
-            $state.installPath = "$env:ProgramData\chocolatey"
-        }
-        
-        return $state
-    }
-    catch {
-        # En cas d'erreur, retourner un état minimal valide
-        return @{
-            name   = if ($InputObject.name) { $InputObject.name } else { 'Chocolatey' }
-            ensure = 'Absent'
-            error  = $_.Exception.Message
-        }
-    }
+    return $state
 }
 
 function Test-ResourceState {
     param($InputObject)
     
-    try {
-        $currentState = Get-ResourceState -InputObject $InputObject
-        $desiredEnsure = if ($InputObject.ensure) { $InputObject.ensure } else { 'Present' }
+    $currentState = Get-ResourceState -InputObject $InputObject
+    $desiredEnsure = $InputObject.ensure
         
-        $inDesiredState = ($currentState.ensure -eq $desiredEnsure)
+    $inDesiredState = ($currentState.ensure -eq $desiredEnsure)
         
-        $currentState._inDesiredState = $inDesiredState
-        return $currentState
-    }
-    catch {
-        # Retourner un état avec erreur mais JSON valide
-        return @{
-            name            = if ($InputObject.name) { $InputObject.name } else { 'Chocolatey' }
-            ensure          = 'Absent'
-            _inDesiredState = $false
-            error           = $_.Exception.Message
-        }
-    }
+    $currentState._inDesiredState = $inDesiredState
+    return $currentState
+
 }
 
 function Set-ResourceState {
@@ -223,35 +145,30 @@ function Set-ResourceState {
     }
 }
 
-#endregion
 
-# Exécution de l'opération
 try {
+    $inputJson = [Console]::In.ReadToEnd()
+    $inputObject = $inputJson | ConvertFrom-Json
+
     $result = switch ($Operation) {
         'Get' { Get-ResourceState -InputObject $inputObject }
         'Test' { Test-ResourceState -InputObject $inputObject }
         'Set' { Set-ResourceState -InputObject $inputObject }
     }
-    
-    # Sortie en JSON (toujours réussir avec un JSON valide)
+
     $jsonOutput = $result | ConvertTo-Json -Compress -Depth 10
     Write-Output $jsonOutput
-    
-    # Exit 0 même si des erreurs mineures sont présentes
+
     exit 0
+
 }
 catch {
-    # Dernier filet de sécurité : retourner un JSON d'erreur mais exit 0
-    $errorOutput = @{
-        name            = if ($inputObject.name) { $inputObject.name } else { 'Chocolatey' }
-        ensure          = 'Absent'
-        error           = $_.Exception.Message
-        _inDesiredState = $false
-    }
-    
-    $jsonOutput = $errorOutput | ConvertTo-Json -Compress -Depth 10
-    Write-Output $jsonOutput
-    
-    # Exit 0 pour que DSC puisse lire le JSON d'erreur
-    exit 0
+    $errorJson = @{
+        message   = $_.Exception.Message
+        operation = $Operation
+        level     = "error"
+    } | ConvertTo-Json -Compress
+
+    Write-Error $errorJson
+    exit 1
 }

@@ -9,7 +9,7 @@
       "-NoProfile",
       "-NonInteractive",
       "-File",
-      "./Chocolatey.ps1",
+      "./MyChocolatey.ps1",
       "Get"
     ],
     "input": "stdin"
@@ -20,11 +20,10 @@
       "-NoProfile",
       "-NonInteractive",
       "-File",
-      "./Chocolatey.ps1",
+      "./MyChocolatey.ps1",
       "Set"
     ],
-    "input": "stdin",
-    "implementsPretest": false
+    "input": "stdin"
   },
   "test": {
     "executable": "pwsh",
@@ -32,10 +31,11 @@
       "-NoProfile",
       "-NonInteractive",
       "-File",
-      "./Chocolatey.ps1",
+      "./MyChocolatey.ps1",
       "Test"
     ],
-    "input": "stdin"
+    "input": "stdin",
+    "return": "state"
   },
   "schema": {
     "embedded": {
@@ -46,7 +46,7 @@
         "name": {
           "type": "string",
           "description": "Resource identifier",
-          "default": "Chocolatey"
+          "default": "MyChocolatey"
         },
         "ensure": {
           "type": "string",
