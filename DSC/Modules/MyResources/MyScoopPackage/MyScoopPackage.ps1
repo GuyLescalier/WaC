@@ -10,6 +10,29 @@ function Assert-ScoopIsInstalled {
     }
 }
 
+function Test-GitInstalled {
+    try {
+        Get-Command git -ErrorAction Stop | Out-Null
+        return $true
+    }
+    catch {
+        return $false
+    }
+}
+
+
+function convert-latestToVersion {
+    param(
+        [Parameter(Mandatory)]
+        [string]$pkgName
+    )
+
+    $manifest = scoop cat $pkgName | ConvertFrom-Json
+    $version = $manifest.version
+
+    return $version    
+}
+
 function Assert-PackageInfoIsValid {
     param (
         [Parameter(Mandatory)]
@@ -19,10 +42,10 @@ function Assert-PackageInfoIsValid {
         [string]$PackageName
     )
     
-    if ($null -eq $pkgInfo.Name) {
-        throw "Could not find manifest for '$pkgName' in local buckets."
+    if ($null -eq $PackageInfo.Name) {
+        throw "Could not find manifest for '$PackageName' in local buckets."
     }
-    
+
 }
 
 function Get-ResourceState {
@@ -38,11 +61,21 @@ function Get-ResourceState {
 
 
     if ($null -ne ($pkgInfo.Installed) ) {
+
+        if ($InputObject.version -eq 'latest') {
+            $version = convert-latestToVersion -pkgName $pkgName
+        }
+        else {
+            $version = $InputObject.version
+        }
+
+        $state = if ($pkgInfo.Installed -eq $version) { 'Present' } else { 'Stale' }
+
         return @{
             packageName      = $pkgName
-            ensure           = 'Present'
+            ensure           = $state
             version          = $InputObject.version
-            installedVersion = $pkgInfo.Version
+            installedVersion = $pkgInfo.Installed
         }
     }
     else {
@@ -59,37 +92,52 @@ function Test-ResourceState {
     Assert-ScoopIsInstalled
 
     $currentState = Get-ResourceState -InputObject $InputObject
-
     $desiredEnsure = $InputObject.ensure
 
-    $inDesired = ($currentState.ensure -eq $desiredEnsure)
+    $inDesired = $false
 
-    # If the package should be present and a specific version is requested,
-    # verify that the installed version matches the expected version.
-
-    if ( ($inDesired) -and ($desiredEnsure -eq 'Present') -and ($InputObject.version -ne 'latest') ) {
-        $inDesired = ($currentState.installedVersion -eq $InputObject.version)
+    if ($desiredEnsure -eq 'Present') {
+        $inDesired = ($currentState.ensure -eq 'Present')
+    }
+    elseif ($desiredEnsure -eq 'Absent') {
+        $inDesired = ($currentState.ensure -eq 'Absent')
     }
 
     $currentState._inDesiredState = $inDesired
     return $currentState
 }
 
+# TODO: Handle version downgrade scenario 
 function Set-ResourceState {
     param($InputObject)
 
     Assert-ScoopIsInstalled
 
     $pkgName = $InputObject.packageName
-    $desiredEnsure = $InputObject.ensure
 
-    if ($desiredEnsure -eq 'Present') {
+    if ($InputObject.ensure -eq 'Present') {
+        
+        $currentState = Get-ResourceState -InputObject $InputObject
 
-        $version = $InputObject.version
+        if ($InputObject.version -eq 'latest') {
+            $version = convert-latestToVersion -pkgName $pkgName
+        }
+        else {
+            $version = $InputObject.version
+        }
 
         $installArg = if ($version -ne 'latest') { "$pkgName@$version" } else { $pkgName }
 
-        scoop "install" $installArg
+        if ($currentState.ensure -eq 'Absent') {
+            scoop "install" $installArg
+        }
+        else {
+            if (-not (Test-GitInstalled)) {
+                scoop install git
+            }
+            scoop "update" $installArg
+        }
+
     }
     else {
         scoop "uninstall" $pkgName
