@@ -17,8 +17,6 @@ function Get-ChocolateyPackageInfo {
         [string]$PackageName
     )
     
-    Assert-ChocolateyIsInstalled
-
     $output = choco list $PackageName --exact --limit-output --no-progress 2>$null
 
     if ($output -match '^(?<name>[^|]+)\|(?<version>[^|]+)$') {
@@ -51,9 +49,10 @@ function Get-LatestVersion {
 
 function Get-ResourceState {
     param($InputObject)
-
+    
     $packageName = $InputObject.packageName
     $desiredVersion = $InputObject.version
+
     $pkgInfo = Get-ChocolateyPackageInfo -PackageName $packageName
 
     if ($null -eq $pkgInfo.installedVersion) {
@@ -65,19 +64,16 @@ function Get-ResourceState {
         }
     }
 
-    $expectedVersion = if ($desiredVersion -eq 'latest') {
-        Get-LatestVersion -PackageName $packageName
+    
+
+    if ($desiredVersion -eq 'latest') {
+        $expectedVersion = Get-LatestVersion -PackageName $packageName
     }
     else {
-        $desiredVersion
+        $expectedVersion = $desiredVersion
     }
 
-    $state = if ($pkgInfo.installedVersion -eq $expectedVersion) {
-        'Present'
-    }
-    else {
-        'Stale'
-    }
+    $state = if ($pkgInfo.installedVersion -eq $expectedVersion) { 'Present' } else { 'Stale' }
 
     return @{
         packageName      = $packageName
@@ -90,46 +86,36 @@ function Get-ResourceState {
 function Test-ResourceState {
     param($InputObject)
 
-    Assert-ScoopIsInstalled
-
     $currentState = Get-ResourceState -InputObject $InputObject
     $desiredEnsure = $InputObject.ensure
 
-    $inDesired = $false
+    $currentState._inDesiredState = ($currentState.ensure -eq $desiredEnsure)
 
-    if ($desiredEnsure -eq 'Present') {
-        $inDesired = ($currentState.ensure -eq 'Present')
-    }
-    elseif ($desiredEnsure -eq 'Absent') {
-        $inDesired = ($currentState.ensure -eq 'Absent')
-    }
-
-    $currentState._inDesiredState = $inDesired
     return $currentState
 }
 
 function Set-ResourceState {
     param($InputObject)
 
-    Assert-ScoopIsInstalled
+    if ($InputObject.ensure -eq 'Absent') {
+
+        & choco uninstall $target -y
+        return
+    }
 
     $target = $InputObject.packageName
 
-    if ($InputObject.ensure -eq 'Present') {
-
-        if ($InputObject.version -ne 'latest') {
-            $target += " --version $($InputObject.Version)"
-        }
-        # If you do not have a package installed, upgrade will install it.
-        & choco upgrade $target -y
+    if ($InputObject.version -ne 'latest') {
+        $target += " --version $($InputObject.Version)"
     }
-    else {
-        & choco uninstall $target -y
-    }
+    # If you do not have a package installed, upgrade will install it.
+    & choco upgrade $target -y
 
 }
 
 try {
+    Assert-ChocolateyIsInstalled
+    
     $inputJson = [Console]::In.ReadToEnd()
     $inputObject = $inputJson | ConvertFrom-Json
 
