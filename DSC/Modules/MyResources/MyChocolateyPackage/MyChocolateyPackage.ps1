@@ -97,18 +97,24 @@ function Test-ResourceState {
 function Set-ResourceState {
     param($InputObject)
 
-    $pkgName = $InputObject.packageName
+    $testResult = Test-ResourceState -InputObject $InputObject
 
-    if ($InputObject.ensure -eq 'Absent') {
+    if ($testResult._inDesiredState) {
+        return
+    }
+
+    $pkgName = $testResult.packageName
+
+    if ($testResult.ensure -eq 'Absent') {
         & choco uninstall $pkgName -y
         return
     }
 
-    if ($InputObject.version -eq 'latest') {
+    if ($testResult.ensure -eq 'latest') {
         & choco upgrade $pkgName -y
     }
     else {
-        & choco upgrade $pkgName "--version=$($InputObject.version)" -y
+        & choco upgrade $pkgName "--version=$($testResult.version)" -y
     }
 }
 
