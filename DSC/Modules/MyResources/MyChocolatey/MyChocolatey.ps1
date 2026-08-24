@@ -1,64 +1,67 @@
-# This resource require administrator privileges.
-
 param(
     [Parameter(Position = 0)]
     [ValidateSet('Get', 'Set', 'Test')]
     [string]$Operation = 'Get'
 )
 
-function Test-ScoopInstalled {
-    return $null -ne (Get-Command scoop -ErrorAction SilentlyContinue)
+
+function Test-ChocolateyInstalled {
+    return $null -ne (Get-Command choco -ErrorAction SilentlyContinue)
 }
 
-function Install-Scoop {
-    # Install Scoop
-    try {
-        $installerPath = Join-Path $env:TEMP "scoop-install-$(New-Guid).ps1"
-
-        Invoke-RestMethod -Uri 'https://get.scoop.sh' -OutFile $installerPath
-
-        & $installerPath
+function Get-ChocolateyInstallPath() {
+    $scopes = @([System.EnvironmentVariableTarget]::Machine, [System.EnvironmentVariableTarget]::User)
+    foreach ($scope in $scopes) {
+        $chocoPath = [System.Environment]::GetEnvironmentVariable('ChocolateyInstall', $scope)
+        if ($chocoPath) {
+            return $chocoPath
+        }
     }
-    finally {
-        if (Test-Path $installerPath) {
-            Remove-Item $installerPath -Force -ErrorAction SilentlyContinue
+    return 'C:\ProgramData\chocolatey'
+}
+
+function Install-Chocolatey {
+    $script = Invoke-RestMethod -Uri 'https://chocolatey.org/install.ps1' -UseBasicParsing
+    Invoke-Expression -Command $script
+}
+
+function Uninstall-Chocolatey {
+    # Uninstall Chocolatey
+    $chocoPath = Get-ChocolateyInstallPath
+    Remove-Item -Path $chocoPath -Recurse -Force -ErrorAction SilentlyContinue
+    
+    # Remove environment variables
+    $envVars = @('ChocolateyInstall', 'ChocolateyToolsLocation', 'ChocolateyLastPathUpdate')
+    $scopes = @([System.EnvironmentVariableTarget]::Machine, [System.EnvironmentVariableTarget]::User)
+    foreach ($envVar in $envVars) {
+        foreach ($scope in $scopes) {
+            if ([System.Environment]::GetEnvironmentVariable($envVar, $scope)) {
+                [System.Environment]::SetEnvironmentVariable($envVar, $null, $scope)
+            }
         }
     }
 }
 
-function Uninstall-Scoop {
-    # Revisit this once one these issues are resolved:
-    # https://github.com/ScoopInstaller/Scoop/issues/5734
-    # https://github.com/ScoopInstaller/Scoop/issues/6447
-        
-    $installedPackages = scoop list 6>$null
-    if ($installedPackages.Count -gt 0) {
-        throw "failed to uninstall scoop, all installed resources via scoop must be removed before uninstalling scoop itself."
-    }
-    echo y | powershell -ExecutionPolicy Bypass -Command "scoop uninstall scoop"
-}
-
 function Get-ResourceState {
     param($InputObject)
-
-    $isInstalled = Test-ScoopInstalled
-
+    
+    $isInstalled = Test-ChocolateyInstalled
     $state = @{
         name   = $InputObject.name
         ensure = if ($isInstalled) { 'Present' } else { 'Absent' }
     }
-    
+
     return $state
 }
 
 function Test-ResourceState {
     param($InputObject)
-
+    
     $currentState = Get-ResourceState -InputObject $InputObject
     $desiredEnsure = $InputObject.ensure
-
+        
     $inDesiredState = ($currentState.ensure -eq $desiredEnsure)
-
+        
     $currentState._inDesiredState = $inDesiredState
     return $currentState
 
@@ -74,12 +77,13 @@ function Set-ResourceState {
     }
 
     if ($testResult.ensure -eq 'Absent') {
-        Install-Scoop
+        Install-Chocolatey
     }
 
     else {
-        Uninstall-Scoop
+        Uninstall-Chocolatey
     }
+
 }
 
 try {

@@ -1,0 +1,61 @@
+{
+  "$schema": "https://raw.githubusercontent.com/PowerShell/DSC/main/schemas/v3/resource/manifest.json",
+  "type": "MyCompany.Installer/MyChocolatey",
+  "version": "1.0.0",
+  "description": "Installs or removes the Chocolatey package manager itself",
+  "get": {
+    "executable": "pwsh",
+    "args": [
+      "-NoProfile",
+      "-NonInteractive",
+      "-File",
+      "./MyChocolatey.ps1",
+      "Get"
+    ],
+    "input": "stdin"
+  },
+  "set": {
+    "executable": "pwsh",
+    "args": [
+      "-NoProfile",
+      "-NonInteractive",
+      "-File",
+      "./MyChocolatey.ps1",
+      "Set"
+    ],
+    "input": "stdin"
+  },
+  "test": {
+    "executable": "pwsh",
+    "args": [
+      "-NoProfile",
+      "-NonInteractive",
+      "-File",
+      "./MyChocolatey.ps1",
+      "Test"
+    ],
+    "input": "stdin",
+    "return": "state"
+  },
+  "schema": {
+    "embedded": {
+      "$schema": "https://json-schema.org/draft/2020-12/schema",
+      "type": "object",
+      "required": [],
+      "properties": {
+        "name": {
+          "type": "string",
+          "description": "Resource identifier",
+          "default": "MyChocolatey",
+          "key": true
+        },
+        "ensure": {
+          "type": "string",
+          "enum": ["Present", "Absent"],
+          "description": "Whether Chocolatey should be installed or removed",
+          "default": "Present"
+        }
+      }
+    }
+  }
+}
