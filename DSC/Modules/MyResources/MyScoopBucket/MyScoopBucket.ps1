@@ -56,6 +56,12 @@ function Test-ResourceState {
 function Set-ResourceState {
     param($InputObject)
 
+    $testResult = Test-ResourceState -InputObject $InputObject
+
+    if ($testResult._inDesiredState) {
+        return
+    }
+
     $ensure = $InputObject.ensure
 
     if ($ensure -eq 'Present') { 
