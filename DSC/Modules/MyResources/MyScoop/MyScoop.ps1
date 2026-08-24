@@ -10,6 +10,33 @@ function Test-ScoopInstalled {
     return $null -ne (Get-Command scoop -ErrorAction SilentlyContinue)
 }
 
+function Install-Scoop {
+    # Install Scoop
+    try {
+        $installerPath = Join-Path $env:TEMP "scoop-install-$(New-Guid).ps1"
+
+        Invoke-RestMethod -Uri 'https://get.scoop.sh' -OutFile $installerPath
+
+        & $installerPath
+    }
+    finally {
+        if (Test-Path $installerPath) {
+            Remove-Item $installerPath -Force -ErrorAction SilentlyContinue
+        }
+    }
+}
+
+function Uninstall-Scoop {
+    # Revisit this once one these issues are resolved:
+    # https://github.com/ScoopInstaller/Scoop/issues/5734
+    # https://github.com/ScoopInstaller/Scoop/issues/6447
+        
+    $installedPackages = scoop list 6>$null
+    if ($installedPackages.Count -gt 0) {
+        throw "failed to uninstall scoop, all installed resources via scoop must be removed before uninstalling scoop itself."
+    }
+    echo y | powershell -ExecutionPolicy Bypass -Command "scoop uninstall scoop"
+}
 
 function Get-ResourceState {
     param($InputObject)
@@ -40,32 +67,18 @@ function Test-ResourceState {
 function Set-ResourceState {
     param($InputObject)
 
-    if (! (Test-ScoopInstalled)) {
-        try {
-            $installerPath = Join-Path $env:TEMP "scoop-install-$(New-Guid).ps1"
+    $testResult = Test-ResourceState -InputObject $InputObject
 
-            Invoke-RestMethod -Uri 'https://get.scoop.sh' -OutFile $installerPath
-
-            & $installerPath
-        }
-        finally {
-            if (Test-Path $installerPath) {
-                Remove-Item $installerPath -Force -ErrorAction SilentlyContinue
-            }
-        }
+    if ($testResult._inDesiredState) {
+        return
     }
-    else {
-        
-        # Revisit this once one these issues are resolved:
-        # https://github.com/ScoopInstaller/Scoop/issues/5734
-        # https://github.com/ScoopInstaller/Scoop/issues/6447
-        
-        $installedPackages = scoop list 6>$null
-        if ($installedPackages.Count -gt 0) {
-            throw "failed to uninstall scoop, all installed resources via scoop must be removed before uninstalling scoop itself."
-        }
-        echo y | powershell -ExecutionPolicy Bypass -Command "scoop uninstall scoop"
 
+    if (! (Test-ScoopInstalled)) {
+        Install-Scoop
+    }
+
+    else {
+        Uninstall-Scoop
     }
 }
 
