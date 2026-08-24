@@ -73,7 +73,7 @@ function Set-ResourceState {
         return
     }
 
-    if (! (Test-ScoopInstalled)) {
+    if ($testResult.ensure -eq 'Absent') {
         Install-Scoop
     }
 

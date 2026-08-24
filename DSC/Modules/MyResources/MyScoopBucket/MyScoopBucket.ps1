@@ -62,17 +62,15 @@ function Set-ResourceState {
         return
     }
 
-    $ensure = $InputObject.ensure
-
-    if ($ensure -eq 'Present') { 
+    if ($testResult.ensure -eq 'Absent') { 
 
         if (-not (Test-GitInstalled)) {
             scoop install git
         }
 
         scoop bucket add $InputObject.name
+    }
     
-    } 
     else {
         scoop bucket rm $InputObject.name 
     }
