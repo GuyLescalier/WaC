@@ -76,7 +76,7 @@ function Set-ResourceState {
         return
     }
 
-    if ($InputObject.ensure -eq 'Present') {
+    if (! (Test-ChocolateyInstalled)) {
         Install-Chocolatey
     }
 
