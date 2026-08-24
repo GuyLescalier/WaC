@@ -9,6 +9,39 @@ function Test-ChocolateyInstalled {
     return $null -ne (Get-Command choco -ErrorAction SilentlyContinue)
 }
 
+function Get-ChocolateyInstallPath() {
+    $scopes = @([System.EnvironmentVariableTarget]::Machine, [System.EnvironmentVariableTarget]::User)
+    foreach ($scope in $scopes) {
+        $chocoPath = [System.Environment]::GetEnvironmentVariable('ChocolateyInstall', $scope)
+        if ($chocoPath) {
+            return $chocoPath
+        }
+    }
+    return 'C:\ProgramData\chocolatey'
+}
+
+function Install-Chocolatey {
+    $script = Invoke-RestMethod -Uri 'https://chocolatey.org/install.ps1' -UseBasicParsing
+    Invoke-Expression -Command $script
+}
+
+function Uninstall-Chocolatey {
+    # Uninstall Chocolatey
+    $chocoPath = Get-ChocolateyInstallPath
+    Remove-Item -Path $chocoPath -Recurse -Force -ErrorAction SilentlyContinue
+    
+    # Remove environment variables
+    $envVars = @('ChocolateyInstall', 'ChocolateyToolsLocation', 'ChocolateyLastPathUpdate')
+    $scopes = @([System.EnvironmentVariableTarget]::Machine, [System.EnvironmentVariableTarget]::User)
+    foreach ($envVar in $envVars) {
+        foreach ($scope in $scopes) {
+            if ([System.Environment]::GetEnvironmentVariable($envVar, $scope)) {
+                [System.Environment]::SetEnvironmentVariable($envVar, $null, $scope)
+            }
+        }
+    }
+}
+
 function Get-ResourceState {
     param($InputObject)
     
@@ -37,27 +70,20 @@ function Test-ResourceState {
 function Set-ResourceState {
     param($InputObject)
 
-    if (! (Test-ChocolateyInstalled)) {
-        # Install Chocolatey
-        $script = Invoke-RestMethod -Uri 'https://chocolatey.org/install.ps1' -UseBasicParsing
-        Invoke-Expression -Command $script
+    $testResult = Test-ResourceState -InputObject $InputObject
+
+    if ($testResult._inDesiredState) {
+        return
     }
+
+    if ($InputObject.ensure -eq 'Present') {
+        Install-Chocolatey
+    }
+
     else {
-        # Uninstall Chocolatey
-        $chocoPath = $this.GetChocolateyInstallPath()
-        Remove-Item -Path $chocoPath -Recurse -Force -ErrorAction SilentlyContinue
-    
-        # Remove environment variables
-        $envVars = @('ChocolateyInstall', 'ChocolateyToolsLocation', 'ChocolateyLastPathUpdate')
-        $scopes = @([System.EnvironmentVariableTarget]::Machine, [System.EnvironmentVariableTarget]::User)
-        foreach ($envVar in $envVars) {
-            foreach ($scope in $scopes) {
-                if ([System.Environment]::GetEnvironmentVariable($envVar, $scope)) {
-                    [System.Environment]::SetEnvironmentVariable($envVar, $null, $scope)
-                }
-            }
-        }
+        Uninstall-Chocolatey
     }
+
 }
 
 try {
