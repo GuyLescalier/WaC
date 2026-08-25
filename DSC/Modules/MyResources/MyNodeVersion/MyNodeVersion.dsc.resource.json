@@ -1,0 +1,62 @@
+{
+  "$schema": "https://raw.githubusercontent.com/PowerShell/DSC/main/schemas/v3/resource/manifest.json",
+  "type": "MyCompany.Packages/MyNodeVersion",
+  "version": "1.0.0",
+  "description": "Manages individual Node.js versions installation",
+  "get": {
+    "executable": "pwsh",
+    "args": [
+      "-NoProfile",
+      "-NonInteractive",
+      "-File",
+      "./MyNodeVersion.ps1",
+      "Get"
+    ],
+    "input": "stdin"
+  },
+  "set": {
+    "executable": "pwsh",
+    "args": [
+      "-NoProfile",
+      "-NonInteractive",
+      "-File",
+      "./MyNodeVersion.ps1",
+      "Set"
+    ],
+    "input": "stdin",
+    "implementsPretest": false
+  },
+  "test": {
+    "executable": "pwsh",
+    "args": [
+      "-NoProfile",
+      "-NonInteractive",
+      "-File",
+      "./MyNodeVersion.ps1",
+      "Test"
+    ],
+    "input": "stdin",
+    "return": "state"
+  },
+  "schema": {
+    "embedded": {
+      "$schema": "https://json-schema.org/draft/2020-12/schema",
+      "type": "object",
+      "properties": {
+        "version": {
+          "type": "string",
+          "description": "Version of the Node.js version to install",
+          "default": "latest",
+          "key": true
+        },
+        "ensure": {
+          "type": "string",
+          "enum": ["Present", "Absent", "Used"],
+          "description": "Whether the Node.js version should be installed or removed",
+          "default": "Present"
+        }
+      },
+      "required": ["version"]
+    }
+  }
+}
