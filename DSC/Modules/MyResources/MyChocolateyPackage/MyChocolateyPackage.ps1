@@ -99,6 +99,12 @@ function Set-ResourceState {
 
     $pkgName = $InputObject.packageName
 
+    $testResult = Test-ResourceState -InputObject $InputObject
+
+    if ($testResult._inDesiredState) {
+        return
+    }
+
     if ($InputObject.ensure -eq 'Absent') {
         & choco uninstall $pkgName -y
         return
