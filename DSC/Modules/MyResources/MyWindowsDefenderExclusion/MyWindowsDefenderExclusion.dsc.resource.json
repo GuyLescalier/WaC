@@ -43,11 +43,6 @@
       "type": "object",
       "required": [],
       "properties": {
-        "name": {
-          "type": "string",
-          "description": "Exclusion name",
-          "key": true
-        },
         "type": {
           "type": "string",
           "enum": ["Path", "Extension", "Process", "IpAddress"],

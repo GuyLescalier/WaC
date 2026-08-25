@@ -51,9 +51,9 @@ function Set-ResourceState {
         return
     }
 
-    $parameterName = "Exclusion$($this.Type)"
+    $parameterName = "Exclusion$($testResult.type)"
     $parameters = @{
-        $parameterName = $this.Value
+        $parameterName = $testResult.value
     }
 
     if ($testResult.ensure -eq 'Absent') { 
