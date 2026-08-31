@@ -19,16 +19,16 @@ function Get-ChocolateyPackageInfo {
     
     $output = choco list $PackageName --exact --limit-output --no-progress 2>$null
 
-    if ($output -match '^(?<name>[^|]+)\|(?<version>[^|]+)$') {
+    if ($output -notmatch '^(?<name>[^|]+)\|(?<version>[^|]+)$') {
         return @{
             packageName      = $PackageName
-            installedVersion = $matches.version
+            installedVersion = $null
         }
     }
 
     return @{
         packageName      = $PackageName
-        installedVersion = $null
+        installedVersion = $matches.version
     }
 }
 
@@ -40,11 +40,10 @@ function Get-LatestVersion {
 
     $output = choco search $PackageName --exact --limit-output --no-progress 2>$null
 
-    if ($output -match '^[^|]+\|(?<version>[^|]+)$') {
-        return $matches.version
+    if ($output -notmatch '^[^|]+\|(?<version>[^|]+)$') {
+        throw "Could not find package '$PackageName' in Chocolatey sources."
     }
-
-    throw "Could not find package '$PackageName' in Chocolatey sources."
+    return $matches.version
 }
 
 function Get-ResourceState {
@@ -61,25 +60,22 @@ function Get-ResourceState {
             ensure           = 'Absent'
             version          = $desiredVersion
             installedVersion = $null
+            latestVersion    = $null
+            state            = 'Unknown'
         }
     }
 
-    
+    $latestVersion = Get-LatestVersion -PackageName $packageName
 
-    if ($desiredVersion -eq 'latest') {
-        $expectedVersion = Get-LatestVersion -PackageName $packageName
-    }
-    else {
-        $expectedVersion = $desiredVersion
-    }
-
-    $state = if ($pkgInfo.installedVersion -eq $expectedVersion) { 'Present' } else { 'Stale' }
+    $state = if ($pkgInfo.installedVersion -eq $latestVersion) { 'Current' } else { 'Stale' }
 
     return @{
         packageName      = $packageName
-        ensure           = $state
+        ensure           = 'Present'
         version          = $desiredVersion
         installedVersion = $pkgInfo.installedVersion
+        latestVersion    = $latestVersion
+        state            = $state
     }
 }
 
@@ -87,9 +83,26 @@ function Test-ResourceState {
     param($InputObject)
 
     $currentState = Get-ResourceState -InputObject $InputObject
-    $desiredEnsure = $InputObject.ensure
 
-    $currentState._inDesiredState = ($currentState.ensure -eq $desiredEnsure)
+    if ($InputObject.ensure -eq 'Absent') {
+        $currentState._inDesiredState = ($currentState.ensure -eq 'Absent')
+        return $currentState
+    }
+
+    if ($currentState.ensure -eq 'Absent') {
+        $currentState._inDesiredState = $false
+        return $currentState
+    }
+
+    if ($InputObject.version -eq 'latest') {
+        $currentState._inDesiredState =
+        ($currentState.installedVersion -eq $currentState.latestVersion)
+
+        return $currentState
+    }
+
+    $currentState._inDesiredState =
+    ($currentState.installedVersion -eq $InputObject.version)
 
     return $currentState
 }
@@ -103,18 +116,22 @@ function Set-ResourceState {
         return
     }
 
-    $pkgName = $testResult.packageName
+    $pkgName = $InputObject.packageName
+    $desiredEnsure = $InputObject.ensure
+    $desiredVersion = $InputObject.version
 
-    if ($testResult.ensure -eq 'Absent') {
-        & choco uninstall $pkgName -y
+    if ($desiredEnsure -eq 'Present') {
+        if ($desiredVersion -ne 'latest') {
+            & choco upgrade $pkgName "--version=$desiredVersion" -y
+        }
+        else {
+            & choco upgrade $pkgName -y
+        }
         return
     }
 
-    if ($testResult.ensure -eq 'latest') {
-        & choco upgrade $pkgName -y
-    }
-    else {
-        & choco upgrade $pkgName "--version=$($testResult.version)" -y
+    if ($testResult.ensure -eq 'Present') {
+        & choco uninstall $pkgName -y
     }
 }
 
