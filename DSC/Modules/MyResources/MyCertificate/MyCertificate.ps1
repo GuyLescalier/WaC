@@ -1,3 +1,5 @@
+using namespace System.Security.Cryptography.X509Certificates
+
 param(
     [Parameter(Position = 0)]
     [ValidateSet('Get', 'Set', 'Test')]
@@ -17,7 +19,7 @@ function RemoveCertificate {
     param($InputObject)
 
     Write-Verbose "Removing certificate with thumbprint $($InputObject.Thumbprint) from $($InputObject.StoreName) store in $($InputObject.Location) location."
-    $cert = GetCertificate -Thumbprint $InputObject.Thumbprint
+    $cert = GetCertificate -InputObject $InputObject -Thumbprint $InputObject.Thumbprint
     if ($null -ne $cert) {
         Remove-Item $cert.PSPath
     }
@@ -25,7 +27,7 @@ function RemoveCertificate {
 }
 
 function GetCertificate {
-    param($Thumbprint)
+    param($InputObject , $Thumbprint)
 
     try {
         return Get-ChildItem -Path "Cert:\$($InputObject.Location)\$($InputObject.StoreName)\$($Thumbprint)" -ErrorAction Stop
@@ -39,18 +41,19 @@ function GetCertificate {
 function Get-ResourceState {
     param($InputObject)
 
-    $path = $InputObject.Path
+    $Path = $InputObject.Path
 
-    $fileCert = [X509Certificate2]::new($path)
+    $fileCert = [X509Certificate2]::new($Path)
     $Thumbprint = $fileCert.Thumbprint
 
-    $storeCert = GetCertificate -Thumbprint $Thumbprint
+    $storeCert = GetCertificate -InputObject $InputObject -Thumbprint $Thumbprint
 
     return @{
-        path       = $path
-        thumbprint = $Thumbprint
-        ensure     = if ($null -ne $storeCert) { 'Present' } else { 'Absent' }
-
+        Path       = $Path
+        Thumbprint = $Thumbprint
+        Ensure     = if ($null -ne $storeCert) { 'Present' } else { 'Absent' }
+        Location   = $InputObject.Location
+        StoreName  = $InputObject.StoreName
     }
 
 }
@@ -59,9 +62,9 @@ function Test-ResourceState {
     param($InputObject)
 
     $currentState = Get-ResourceState -InputObject $InputObject
-    $desiredEnsure = $InputObject.ensure
+    $desiredEnsure = $InputObject.Ensure
         
-    $inDesiredState = ($currentState.ensure -eq $desiredEnsure)
+    $inDesiredState = ($currentState.Ensure -eq $desiredEnsure)
         
     $currentState._inDesiredState = $inDesiredState
     return $currentState
@@ -76,11 +79,11 @@ function Set-ResourceState {
         return
     }
 
-    if ($testResult.ensure -eq 'Present') {
+    if ( !($testResult.Ensure -eq 'Present') ) {
         InstallCertificate -InputObject $InputObject
     }
     else {
-        RemoveCertificate -InputObject $InputObject
+        RemoveCertificate -InputObject $testResult
     }
 
 }

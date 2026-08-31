@@ -41,7 +41,7 @@
     "embedded": {
       "$schema": "https://json-schema.org/draft/2020-12/schema",
       "type": "object",
-      "required": [],
+      "required": ["Path", "StoreName", "Location"],
       "properties": {
         "name": {
           "type": "string",
@@ -49,21 +49,25 @@
           "default": "MyCertificate",
           "key": true
         },
-        "ensure": {
+        "Ensure": {
           "type": "string",
           "enum": ["Present", "Absent"],
           "description": "Whether the Certificate should be installed or removed",
           "default": "Present"
         },
-        "storeName": {
+        "StoreName": {
           "type": "string",
           "default": "Root",
           "description": "Certificate store name."
         },
-        "location": {
+        "Location": {
           "type": "string",
           "default": "LocalMachine",
           "description": "Certificate store location."
+        },
+        "Path": {
+          "type": "string",
+          "description": "Path to the certificate file."
         }
       }
     }
