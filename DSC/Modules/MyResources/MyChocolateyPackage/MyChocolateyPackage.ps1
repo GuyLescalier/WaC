@@ -53,6 +53,8 @@ function Get-ResourceState {
     $desiredVersion = $InputObject.version
 
     $pkgInfo = Get-ChocolateyPackageInfo -PackageName $packageName
+    $latestVersion = Get-LatestVersion -PackageName $packageName
+
 
     if ($null -eq $pkgInfo.installedVersion) {
         return @{
@@ -60,12 +62,10 @@ function Get-ResourceState {
             ensure           = 'Absent'
             version          = $desiredVersion
             installedVersion = $null
-            latestVersion    = $null
+            latestVersion    = $latestVersion
             state            = 'Unknown'
         }
     }
-
-    $latestVersion = Get-LatestVersion -PackageName $packageName
 
     $state = if ($pkgInfo.installedVersion -eq $latestVersion) { 'Current' } else { 'Stale' }
 
