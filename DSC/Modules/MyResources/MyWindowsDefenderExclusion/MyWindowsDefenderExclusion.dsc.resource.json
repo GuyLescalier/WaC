@@ -1,0 +1,65 @@
+{
+  "$schema": "https://raw.githubusercontent.com/PowerShell/DSC/main/schemas/v3/resource/manifest.json",
+  "type": "MyCompany.Installer/MyWindowsDefenderExclusion",
+  "version": "0.0.1",
+  "description": "Installs or removes the Scoop Bucket",
+  "get": {
+    "executable": "pwsh",
+    "args": [
+      "-NoProfile",
+      "-NonInteractive",
+      "-File",
+      "./MyWindowsDefenderExclusion.ps1",
+      "Get"
+    ],
+    "input": "stdin"
+  },
+  "set": {
+    "executable": "pwsh",
+    "args": [
+      "-NoProfile",
+      "-NonInteractive",
+      "-File",
+      "./MyWindowsDefenderExclusion.ps1",
+      "Set"
+    ],
+    "input": "stdin"
+  },
+  "test": {
+    "executable": "pwsh",
+    "args": [
+      "-NoProfile",
+      "-NonInteractive",
+      "-File",
+      "./MyWindowsDefenderExclusion.ps1",
+      "Test"
+    ],
+    "input": "stdin",
+    "return": "state"
+  },
+  "schema": {
+    "embedded": {
+      "$schema": "https://json-schema.org/draft/2020-12/schema",
+      "type": "object",
+      "required": [],
+      "properties": {
+        "type": {
+          "type": "string",
+          "enum": ["Path", "Extension", "Process", "IpAddress"],
+          "description": "Type of exclusion",
+          "default": "Path"
+        },
+        "value": {
+          "type": "string",
+          "description": "Value of the exclusion"
+        },
+        "ensure": {
+          "type": "string",
+          "enum": ["Present", "Absent"],
+          "description": "Whether the exclusion should be present or absent",
+          "default": "Present"
+        }
+      }
+    }
+  }
+}
