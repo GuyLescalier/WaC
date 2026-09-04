@@ -66,26 +66,24 @@ function Test-ResourceState {
     $desiredEnsure = $InputObject.ensure
 
     if ($desiredEnsure -eq 'Absent') {
-        $currentState._inDesiredState = $currentState.ensure -eq $desiredEnsure
-
+        $currentState._inDesiredState = $currentState.ensure -eq 'Absent'
         return $currentState
     }
 
-    if ($currentState.ensure -eq 'Absent') {
+    if ($currentState.state -ne 'Current') {
         $currentState._inDesiredState = $false
-
         return $currentState
     }
 
-    if ($desiredEnsure -eq 'Used' -and $currentState.ensure -ne $desiredEnsure) {
-        $currentState._inDesiredState = $false
-
+    if ($desiredEnsure -eq 'Present') {
+        $currentState._inDesiredState = $true
         return $currentState
     }
 
-    $currentState._inDesiredState = $currentState.latestVersion -eq $currentState.currentVersion
-
-    return $currentState
+    if ($desiredEnsure -eq 'Used') {
+        $currentState._inDesiredState = $currentState.ensure -eq 'Used'
+        return $currentState
+    }
 }
 
 
@@ -114,9 +112,7 @@ function Set-ResourceState {
     }
 
     # Cleanup old unused versions
-    $nvmStaleVersions = Get-NvmStaleVersions
-    $nvmCurrentVersion = Get-NvmCurrentVersion
-    $versionsToRemove = $nvmStaleVersions | Where-Object { $_ -ne $nvmCurrentVersion }
+    $versionsToRemove = Get-NvmStaleVersions
 
     $versionsToRemove | ForEach-Object {
         & nvm uninstall $_
