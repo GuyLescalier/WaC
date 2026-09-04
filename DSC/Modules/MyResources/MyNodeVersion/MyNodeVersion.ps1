@@ -84,6 +84,9 @@ function Test-ResourceState {
         $currentState._inDesiredState = $currentState.ensure -eq 'Used'
         return $currentState
     }
+
+    $currentState._inDesiredState = $false
+    return $currentState
 }
 
 
