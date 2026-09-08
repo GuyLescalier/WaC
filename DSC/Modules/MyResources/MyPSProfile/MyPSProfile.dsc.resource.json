@@ -1,0 +1,76 @@
+{
+  "$schema": "https://raw.githubusercontent.com/PowerShell/DSC/main/schemas/v3/resource/manifest.json",
+  "type": "MyCompany.Installer/MyPSProfile",
+  "version": "1.0.0",
+  "description": "Installs or removes the PowerShell profile",
+  "get": {
+    "executable": "pwsh",
+    "args": [
+      "-NoProfile",
+      "-NonInteractive",
+      "-File",
+      "./MyPSProfile.ps1",
+      "Get"
+    ],
+    "input": "stdin"
+  },
+  "set": {
+    "executable": "pwsh",
+    "args": [
+      "-NoProfile",
+      "-NonInteractive",
+      "-File",
+      "./MyPSProfile.ps1",
+      "Set"
+    ],
+    "input": "stdin"
+  },
+  "test": {
+    "executable": "pwsh",
+    "args": [
+      "-NoProfile",
+      "-NonInteractive",
+      "-File",
+      "./MyPSProfile.ps1",
+      "Test"
+    ],
+    "input": "stdin",
+    "return": "state"
+  },
+  "schema": {
+    "embedded": {
+      "$schema": "https://json-schema.org/draft/2020-12/schema",
+      "type": "object",
+      "required": [],
+      "properties": {
+        "name": {
+          "type": "string",
+          "description": "Resource identifier",
+          "default": "MyPSProfile",
+          "key": true
+        },
+        "ensure": {
+          "type": "string",
+          "enum": ["Present", "Absent"],
+          "description": "Whether the PowerShell profile should be installed or removed",
+          "default": "Present"
+        },
+        "PowerShellVersion": {
+          "type": "string",
+          "enum": ["v5", "v7"],
+          "description": "Version of the PowerShell profile to install",
+          "default": "v7"
+        },
+        "host": {
+          "type": "string",
+          "description": "The PowerShell host for which the profile should be installed",
+          "default": "AllHosts"
+        },
+        "profileFilePath": {
+          "type": "string",
+          "description": "Path to the PowerShell profile file"
+        }
+      }
+    }
+  }
+}
