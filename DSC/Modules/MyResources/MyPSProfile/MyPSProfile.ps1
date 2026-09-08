@@ -26,25 +26,21 @@ function Get-ProfileBasePath {
 
 function Get-ProfileFileName {
     param(
-        [Parameter(Mandatory)]
+        [AllowNull()]
         [string]$MyHost
     )
+
+    if ($null -eq $MyHost) {
+        return 'profile.ps1'
+    }
 
     switch ($MyHost) {
         'AllHosts' {
             return 'profile.ps1'
         }
 
-        'ConsoleHost' {
-            return 'Microsoft.PowerShell_profile.ps1'
-        }
-
-        'VisualStudioCode' {
-            return 'Microsoft.VSCode_profile.ps1'
-        }
-
         default {
-            return 'profile.ps1'
+            return "$MyHost.ps1"
         }
     }
 }
@@ -56,66 +52,124 @@ function Get-ProfileFilePath {
         $InputObject
     )
 
-    # Explicit path has priority
-    if ($InputObject.profileFilePath) {
-        return $InputObject.profileFilePath
-    }
+    $basePath = Get-ProfileBasePath -PowerShellVersion $InputObject.PowerShellVersion
 
-    $basePath = Get-ProfileBasePath `
-        -PowerShellVersion $InputObject.PowerShellVersion
-
-    $fileName = Get-ProfileFileName `
-        -MyHost $InputObject.host
+    $fileName = Get-ProfileFileName -MyHost $InputObject.host
 
     return Join-Path $basePath $fileName
 }
 
 
-function Test-ProfileExists {
+function IsScriptInProfile {
     param(
         [Parameter(Mandatory)]
-        [string]$ProfileFilePath
+        [string]$ProfileFilePath,
+
+        [Parameter(Mandatory)]
+        [string]$ExpectedScriptHeader,
+
+        [Parameter(Mandatory)]
+        [string]$ExpectedScriptCall
     )
 
-    return Test-Path -Path $ProfileFilePath -PathType Leaf
+    if (-not (Test-Path -Path $ProfileFilePath -PathType Leaf)) {
+        return $false
+    }
+
+    $found = $false
+    $scriptCall = $null
+
+    Get-Content -Path $ProfileFilePath | ForEach-Object {
+        if ($found) {
+            $scriptCall = $_
+            break
+        }
+
+        if ($_ -eq $ExpectedScriptHeader) {
+            $found = $true
+        }
+    }
+
+    if (-not $scriptCall) {
+        return $false
+    }
+
+    return $scriptCall -eq $ExpectedScriptCall
 }
 
 
 function Install-PSProfile {
     param(
         [Parameter(Mandatory)]
-        [string]$ProfileFilePath
+        [string]$ProfileFilePath,
+
+        [Parameter(Mandatory)]
+        [string]$Name,
+
+        [Parameter(Mandatory)]
+        [string]$SourceFilePath
     )
+
+    if (-not (Test-Path -Path $SourceFilePath -PathType Leaf)) {
+        throw "Source profile script '$SourceFilePath' does not exist."
+    }
 
     $profileDirectory = Split-Path -Path $ProfileFilePath -Parent
 
-    if (-not (Test-Path -Path $profileDirectory)) {
-        New-Item `
-            -Path $profileDirectory `
-            -ItemType Directory `
-            -Force | Out-Null
+    if (-not (Test-Path -Path $ProfileFilePath -PathType Leaf)) {
+        New-Item -Path $ProfileFilePath -ItemType File -Force | Out-Null
     }
 
-    if (-not (Test-Path -Path $ProfileFilePath)) {
-        New-Item `
-            -Path $ProfileFilePath `
-            -ItemType File `
-            -Force | Out-Null
-    }
+    $scriptHeader = "# WAC - $Name"
+    $scriptCall = ". '$SourceFilePath'"
+
+    Add-Content-Path $ProfileFilePath -Value @($scriptHeader, $scriptCall)
 }
 
 
 function Uninstall-PSProfile {
     param(
         [Parameter(Mandatory)]
-        [string]$ProfileFilePath
+        [string]$ProfileFilePath,
+
+        [Parameter(Mandatory)]
+        [string]$Name,
+
+        [Parameter(Mandatory)]
+        [string]$SourceFilePath
     )
 
-    if (Test-Path -Path $ProfileFilePath -PathType Leaf) {
-        Remove-Item `
-            -Path $ProfileFilePath `
-            -Force
+    if (-not (Test-Path -Path $ProfileFilePath -PathType Leaf)) {
+        return
     }
+
+    $scriptHeader = "# WAC - $Name"
+    $scriptCall = ". '$SourceFilePath'"
+
+    $content = Get-Content -Path $ProfileFilePath
+    $newContent = @()
+
+    $skipNextLine = $false
+
+    foreach ($line in $content) {
+        if ($skipNextLine) {
+            if ($line -eq $scriptCall) {
+                $skipNextLine = $false
+                continue
+            }
+
+            $skipNextLine = $false
+        }
+
+        if ($line -eq $scriptHeader) {
+            $skipNextLine = $true
+            continue
+        }
+
+        $newContent += $line
+    }
+
+    Set-Content -Path $ProfileFilePath -Value $newContent
 }
 
 
@@ -125,14 +179,23 @@ function Get-ResourceState {
         $InputObject
     )
 
-    $profileFilePath = Get-ProfileFilePath -InputObject $InputObject
-    $profileExists = Test-ProfileExists -ProfileFilePath $profileFilePath
+    $profileFilePath = Get-ProfileFilePath `
+        -InputObject $InputObject
+
+    $scriptHeader = "# WAC - $($InputObject.name)"
+    $scriptCall = ". '$($InputObject.sourceFilePath)'"
+
+    $scriptInProfile = IsScriptInProfile `
+        -ProfileFilePath $profileFilePath `
+        -ExpectedScriptHeader $scriptHeader `
+        -ExpectedScriptCall $scriptCall
 
     $state = @{
         name              = $InputObject.name
-        ensure            = if ($profileExists) { 'Present' } else { 'Absent' }
+        ensure            = if ($scriptInProfile) { 'Present' } else { 'Absent' }
         PowerShellVersion = $InputObject.PowerShellVersion
         host              = $InputObject.host
+        sourceFilePath    = $InputObject.sourceFilePath
         profileFilePath   = $profileFilePath
     }
 
@@ -141,12 +204,11 @@ function Get-ResourceState {
 
 
 function Test-ResourceState {
-    param(
-        [Parameter(Mandatory)]
-        $InputObject
-    )
+    param($InputObject)
 
-    $currentState = Get-ResourceState -InputObject $InputObject
+    $currentState = Get-ResourceState `
+        -InputObject $InputObject
+
     $desiredEnsure = $InputObject.ensure
 
     $currentState._inDesiredState = (
@@ -158,10 +220,7 @@ function Test-ResourceState {
 
 
 function Set-ResourceState {
-    param(
-        [Parameter(Mandatory)]
-        $InputObject
-    )
+    param($InputObject)
 
     $testResult = Test-ResourceState -InputObject $InputObject
 
@@ -170,46 +229,34 @@ function Set-ResourceState {
     }
 
     if ($InputObject.ensure -eq 'Present') {
-        Install-PSProfile `
-            -ProfileFilePath $testResult.profileFilePath
+        Install-PSProfile -ProfileFilePath $testResult.profileFilePath -Name $InputObject.name -SourceFilePath $InputObject.sourceFilePath
     }
     else {
-        Uninstall-PSProfile `
-            -ProfileFilePath $testResult.profileFilePath
+        Uninstall-PSProfile -ProfileFilePath $testResult.profileFilePath -Name $InputObject.name -SourceFilePath $InputObject.sourceFilePath
     }
 }
-
 
 try {
     $inputJson = [Console]::In.ReadToEnd()
     $inputObject = $inputJson | ConvertFrom-Json
 
     $result = switch ($Operation) {
-        'Get' {
-            Get-ResourceState -InputObject $inputObject
-        }
-
-        'Test' {
-            Test-ResourceState -InputObject $inputObject
-        }
-
-        'Set' {
-            Set-ResourceState -InputObject $inputObject
-        }
+        'Get' { Get-ResourceState -InputObject $inputObject }
+        'Test' { Test-ResourceState -InputObject $inputObject }
+        'Set' { Set-ResourceState -InputObject $inputObject }
     }
 
-    if ($null -ne $result) {
-        $jsonOutput = $result | ConvertTo-Json -Compress -Depth 10
-        Write-Output $jsonOutput
-    }
+    $jsonOutput = $result | ConvertTo-Json -Compress -Depth 10
+    Write-Output $jsonOutput
 
     exit 0
+
 }
 catch {
     $errorJson = @{
         message   = $_.Exception.Message
         operation = $Operation
-        level     = 'error'
+        level     = "error"
     } | ConvertTo-Json -Compress
 
     Write-Error $errorJson

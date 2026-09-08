@@ -41,7 +41,7 @@
     "embedded": {
       "$schema": "https://json-schema.org/draft/2020-12/schema",
       "type": "object",
-      "required": [],
+      "required": ["sourceFilePath"],
       "properties": {
         "name": {
           "type": "string",
@@ -66,7 +66,7 @@
           "description": "The PowerShell host for which the profile should be installed",
           "default": "AllHosts"
         },
-        "profileFilePath": {
+        "sourceFilePath": {
           "type": "string",
           "description": "Path to the PowerShell profile file"
         }
