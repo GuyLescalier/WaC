@@ -20,6 +20,25 @@ function Get-ProfileBasePath {
 }
 
 
+function Get-TargetPowerShellVersions {
+    param(
+        [AllowNull()]
+        [string]$PowerShellVersion
+    )
+
+    if ([string]::IsNullOrWhiteSpace($PowerShellVersion)) {
+        return @('v7')
+    }
+
+    switch ($PowerShellVersion) {
+        'v5' { return @('v5') }
+        'v7' { return @('v7') }
+        'both' { return @('v5', 'v7') }
+        default { throw "Unsupported PowerShell version '$PowerShellVersion'." }
+    }
+}
+
+
 function Get-ProfileFileName {
     param(
         [AllowNull()]
@@ -45,10 +64,17 @@ function Get-ProfileFileName {
 function Get-ProfileFilePath {
     param(
         [Parameter(Mandatory)]
-        $InputObject
+        $InputObject,
+
+        [AllowNull()]
+        [string]$PowerShellVersion
     )
 
-    $basePath = Get-ProfileBasePath -PowerShellVersion $InputObject.PowerShellVersion
+    if ([string]::IsNullOrWhiteSpace($PowerShellVersion)) {
+        $PowerShellVersion = 'v7'
+    }
+
+    $basePath = Get-ProfileBasePath -PowerShellVersion $PowerShellVersion
 
     $fileName = Get-ProfileFileName -MyHost $InputObject.MyHost
 
@@ -173,24 +199,57 @@ function Get-ResourceState {
         $InputObject
     )
 
-    $profileFilePath = Get-ProfileFilePath `
-        -InputObject $InputObject
-
     $scriptHeader = "# WAC - $($InputObject.name)"
     $scriptCall = ". '$($InputObject.sourceFilePath)'"
 
-    $scriptInProfile = IsScriptInProfile `
-        -ProfileFilePath $profileFilePath `
-        -ExpectedScriptHeader $scriptHeader `
-        -ExpectedScriptCall $scriptCall
+    $powerShellVersion = if (
+        [string]::IsNullOrWhiteSpace($InputObject.PowerShellVersion)
+    ) {
+        'v7'
+    }
+    else {
+        $InputObject.PowerShellVersion
+    }
+
+    $targetVersions = Get-TargetPowerShellVersions `
+        -PowerShellVersion $powerShellVersion
+
+    $profiles = @(
+        foreach ($version in $targetVersions) {
+            $profileFilePath = Get-ProfileFilePath `
+                -InputObject $InputObject `
+                -PowerShellVersion $version
+
+            $scriptInProfile = IsScriptInProfile `
+                -ProfileFilePath $profileFilePath `
+                -ExpectedScriptHeader $scriptHeader `
+                -ExpectedScriptCall $scriptCall
+
+            @{
+                PowerShellVersion = $version
+                profileFilePath   = $profileFilePath
+                ensure            = if ($scriptInProfile) { 'Present' } else { 'Absent' }
+            }
+        }
+    )
+
+    $allProfilesPresent = @(
+        $profiles | Where-Object { $_.ensure -eq 'Present' }
+    ).Count -eq $profiles.Count
 
     $state = @{
         name              = $InputObject.name
-        ensure            = if ($scriptInProfile) { 'Present' } else { 'Absent' }
-        PowerShellVersion = $InputObject.PowerShellVersion
+        ensure            = if ($allProfilesPresent) { 'Present' } else { 'Absent' }
+        PowerShellVersion = $powerShellVersion
         MyHost            = $InputObject.MyHost
         sourceFilePath    = $InputObject.sourceFilePath
-        profileFilePath   = $profileFilePath
+        profileFilePath   = if ($profiles.Count -eq 1) {
+            $profiles[0].profileFilePath
+        }
+        else {
+            @($profiles.profileFilePath)
+        }
+        profiles          = $profiles
     }
 
     return $state
@@ -205,8 +264,13 @@ function Test-ResourceState {
 
     $desiredEnsure = $InputObject.ensure
 
+    $profilesInDesiredState = @(
+        $currentState.profiles |
+        Where-Object { $_.ensure -eq $desiredEnsure }
+    ).Count
+
     $currentState._inDesiredState = (
-        $currentState.ensure -eq $desiredEnsure
+        $profilesInDesiredState -eq @($currentState.profiles).Count
     )
 
     return $currentState
@@ -222,11 +286,19 @@ function Set-ResourceState {
         return
     }
 
-    if ($InputObject.ensure -eq 'Present') {
-        Install-PSProfile -ProfileFilePath $testResult.profileFilePath -Name $InputObject.name -SourceFilePath $InputObject.sourceFilePath
-    }
-    else {
-        Uninstall-PSProfile -ProfileFilePath $testResult.profileFilePath -Name $InputObject.name -SourceFilePath $InputObject.sourceFilePath
+    $desiredEnsure = $InputObject.ensure
+
+    foreach ($profile in @($testResult.profiles)) {
+        if ($profile.ensure -eq $desiredEnsure) {
+            continue
+        }
+
+        if ($desiredEnsure -eq 'Present') {
+            Install-PSProfile -ProfileFilePath $profile.profileFilePath -Name $InputObject.name -SourceFilePath $InputObject.sourceFilePath
+        }
+        else {
+            Uninstall-PSProfile -ProfileFilePath $profile.profileFilePath -Name $InputObject.name -SourceFilePath $InputObject.sourceFilePath
+        }
     }
 }
 

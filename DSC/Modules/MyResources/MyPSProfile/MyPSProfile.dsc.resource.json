@@ -57,8 +57,8 @@
         },
         "PowerShellVersion": {
           "type": "string",
-          "enum": ["v5", "v7"],
-          "description": "Version of the PowerShell profile to install",
+          "enum": ["v5", "v7", "both"],
+          "description": "PowerShell profile version to configure; use both to configure v5 and v7",
           "default": "v7"
         },
         "MyHost": {
