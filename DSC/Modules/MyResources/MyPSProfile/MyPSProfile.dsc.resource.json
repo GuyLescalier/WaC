@@ -61,7 +61,7 @@
           "description": "Version of the PowerShell profile to install",
           "default": "v7"
         },
-        "host": {
+        "MyHost": {
           "type": "string",
           "description": "The PowerShell host for which the profile should be installed",
           "default": "AllHosts"

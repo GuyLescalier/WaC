@@ -7,19 +7,15 @@ param(
 
 function Get-ProfileBasePath {
     param(
-        [Parameter(Mandatory)]
         [ValidateSet('v5', 'v7')]
         [string]$PowerShellVersion
     )
 
-    switch ($PowerShellVersion) {
-        'v5' {
-            return Join-Path $HOME 'Documents\WindowsPowerShell'
-        }
+    $documentsPath = [Environment]::GetFolderPath('MyDocuments')
 
-        'v7' {
-            return Join-Path $HOME 'Documents\PowerShell'
-        }
+    switch ($PowerShellVersion) {
+        'v5' { Join-Path $documentsPath 'WindowsPowerShell' }
+        'v7' { Join-Path $documentsPath 'PowerShell' }
     }
 }
 
@@ -54,7 +50,7 @@ function Get-ProfileFilePath {
 
     $basePath = Get-ProfileBasePath -PowerShellVersion $InputObject.PowerShellVersion
 
-    $fileName = Get-ProfileFileName -MyHost $InputObject.host
+    $fileName = Get-ProfileFileName -MyHost $InputObject.MyHost
 
     return Join-Path $basePath $fileName
 }
@@ -79,13 +75,13 @@ function IsScriptInProfile {
     $found = $false
     $scriptCall = $null
 
-    Get-Content -Path $ProfileFilePath | ForEach-Object {
+    foreach ($line in Get-Content -LiteralPath $ProfileFilePath) {
         if ($found) {
-            $scriptCall = $_
+            $scriptCall = $line
             break
         }
 
-        if ($_ -eq $ExpectedScriptHeader) {
+        if ($line -eq $ExpectedScriptHeader) {
             $found = $true
         }
     }
@@ -114,8 +110,6 @@ function Install-PSProfile {
         throw "Source profile script '$SourceFilePath' does not exist."
     }
 
-    $profileDirectory = Split-Path -Path $ProfileFilePath -Parent
-
     if (-not (Test-Path -Path $ProfileFilePath -PathType Leaf)) {
         New-Item -Path $ProfileFilePath -ItemType File -Force | Out-Null
     }
@@ -123,7 +117,7 @@ function Install-PSProfile {
     $scriptHeader = "# WAC - $Name"
     $scriptCall = ". '$SourceFilePath'"
 
-    Add-Content-Path $ProfileFilePath -Value @($scriptHeader, $scriptCall)
+    Add-Content -Path $ProfileFilePath -Value @($scriptHeader, $scriptCall)
 }
 
 
@@ -194,7 +188,7 @@ function Get-ResourceState {
         name              = $InputObject.name
         ensure            = if ($scriptInProfile) { 'Present' } else { 'Absent' }
         PowerShellVersion = $InputObject.PowerShellVersion
-        host              = $InputObject.host
+        MyHost            = $InputObject.MyHost
         sourceFilePath    = $InputObject.sourceFilePath
         profileFilePath   = $profileFilePath
     }
