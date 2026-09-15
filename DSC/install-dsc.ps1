@@ -103,14 +103,6 @@ function InstallationPowerShell7 {
     }
 }
 
-function PréRequis {
-
-    Test-PowerShellVersion
-
-    Set-ExecutionPolicy -Scope CurrentUser -ExecutionPolicy Bypass
-    Set-PSResourceRepository -Name "PSGallery" -Trusted
-}
-
 function InstallationDesModules {
 
     Test-PowerShellVersion
