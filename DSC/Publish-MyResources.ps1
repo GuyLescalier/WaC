@@ -5,31 +5,25 @@ param()
 # PUBLICATION DU MODULE
 # ====================================
 function Publish-MyResourcesModule {
+    $modulePath = Join-Path $PSScriptRoot "Modules\MyResources"
 
-    # force English output to avoid parsing issues during Publish-Module
-    # related to : https://github.com/PowerShell/PowerShellGetv2/issues/606
-    
-    $originalNuGetLang = $env:NUGET_CLI_LANGUAGE
+    if (-not (Test-Path -LiteralPath $modulePath -PathType Container)) {
+        throw "Module introuvable : $modulePath"
+    }
 
-    $ModulePath = (Join-Path $PSScriptRoot "Modules\MyResources")
+    if (-not (Get-PSResourceRepository -Name WaCLocalRepo -ErrorAction SilentlyContinue)) {
+        throw "Le repository PSResourceGet 'WaCLocalRepo' n'est pas enregistré."
+    }
 
     try {
-        $env:NUGET_CLI_LANGUAGE = "en-US"
-    
-        Write-Host "  Culture forcée en anglais" -ForegroundColor Gray    
-    
-        Set-Location $ModulePath
+        Publish-PSResource -Path $modulePath -Repository WaCLocalRepo -ErrorAction Stop
 
-        Publish-Module -Path . -Repository WaCLocalRepo -Force
-    
-        Write-Host "✓ Module publié avec succès via Publish-Module" -ForegroundColor Green
-
-        Set-Location $PSScriptRoot
+        Write-Host "✓ Module publié avec succès" -ForegroundColor Green
     }
-    finally {
-        $env:NUGET_CLI_LANGUAGE = $originalNuGetLang
+    catch {
+        Write-Host "Échec de la publication : $($_.Exception.Message)" -ForegroundColor Red
+        throw
     }
-
 }
 
 # ====================================
@@ -38,7 +32,7 @@ function Publish-MyResourcesModule {
 
 function Test-Publication {
     Write-Host "`nVérification du module dans le repository..." -ForegroundColor Cyan
-    $module = Find-Module -Repository WaCLocalRepo -Name MyResources -ErrorAction SilentlyContinue
+    $module = Find-PSResource -Repository WaCLocalRepo -Name MyResources -ErrorAction SilentlyContinue
 
     if ($module) {
         Write-Host "✓ Module trouvé dans le repository" -ForegroundColor Green
