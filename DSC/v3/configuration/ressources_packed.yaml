@@ -10,80 +10,135 @@
       valueData:
         DWord: 1
 
-- name: MyScoop
-  type: MyResources/MyScoop
+- name: Install Scoop
+  type: MyCompany.Installer/MyScoop
   properties:
-      
-- name: Scoop Package - [PackageName]
-  type: MyResources/MyScoopPackage
+    - name: Scoop
+      ensure: Present
+
+- name: MyScoopBucket - [BucketName]
+  type: MyResources/MyScoopBucket
   properties:
-    - PackageName: dotnet-sdk
-    - PackageName: dotnet3-sdk
-    - PackageName: dotnet5-sdk
-    - PackageName: dotnet6-sdk
-    - PackageName: dotnet8-sdk
-    - PackageName: temurin-lts-jdk
-    - PackageName: gh
-    - PackageName: git
-    - PackageName: nuget
-    - PackageName: nvm
-    - PackageName: oh-my-posh
-    - PackageName: terraform
-    - PackageName: CascadiaCode-NF-Mono
-    - PackageName: FiraCode-NF
-    - PackageName: baretail
-    - PackageName: mockoon
-    - PackageName: nuget-package-explorer
-    - PackageName: paint.net
-    - PackageName: postman
-    - PackageName: vlc
-    - PackageName: wiztree
+    - BucketName: versions
+      ensure: Present
+    - BucketName: extras
+      ensure: Present
+    - BucketName: java
+      ensure: Present
+    - BucketName: nerd-fonts
+      ensure: Present
+
+- name: Scoop Package - [packageName]
+  type: MyCompany.Packages/MyScoopPackage
+  properties:
+    - packageName: dotnet-sdk
+      ensure: Present
+    - packageName: dotnet3-sdk
+      ensure: Present
+    - packageName: dotnet5-sdk
+      ensure: Present
+    - packageName: dotnet6-sdk
+      ensure: Present
+    - packageName: dotnet8-sdk
+      ensure: Present
+    - packageName: temurin-lts-jdk
+      ensure: Present
+    - packageName: gh
+      ensure: Present
+    - packageName: git
+      ensure: Present
+    - packageName: nuget
+      ensure: Present
+    - packageName: nvm
+      ensure: Present
+    - packageName: oh-my-posh
+      ensure: Present
+    - packageName: terraform
+      ensure: Present
+    - packageName: CascadiaCode-NF-Mono
+      ensure: Present
+    - packageName: FiraCode-NF
+      ensure: Present
+    - packageName: baretail
+      ensure: Present
+    - packageName: mockoon
+      ensure: Present
+    - packageName: nuget-package-explorer
+      ensure: Present
+    - packageName: paint.net
+      ensure: Present
+    - packageName: postman
+      ensure: Present
+    - packageName: vlc
+      ensure: Present
+    - packageName: wiztree
+      ensure: Present
 
 - name: MyChocolatey
-  type: MyResources/MyChocolatey
+  type: MyCompany.Installer/MyChocolatey
   properties:
 
 - name: MyChocolateyPackage - [PackageName]
-  type: MyResources/MyChocolateyPackage
+  type: MyCompany.Packages/ChocolateyPackage
   properties:
     - PackageName: 7zip
+      ensure: Present
+      version: latest
     - PackageName: adobereader
+      ensure: Present
+      version: latest
     - PackageName: bulkrenameutility
+      ensure: Present
+      version: latest
     - PackageName: notepadplusplus
+      ensure: Present
+      version: latest
     - PackageName: urlrewrite
+      ensure: Present
+      version: latest
     - PackageName: webdeploy
+      ensure: Present
+      version: latest
     - PackageName: winmerge
+      ensure: Present
+      version: latest
 
-- name: WinGetPackage - [Id]
-  type: Microsoft.WinGet.DSC
+- name: WinGetPackage - [id]
+  type: Microsoft.WinGet/Package
   properties:
-    - Id: Fork.Fork
-    - Id: Microsoft.PowerShell
-    - Id: Microsoft.PowerToys
-    - Id: Microsoft.PowerAutomateDesktop
-    - Id: Microsoft.PowerBI
-    - Id: Microsoft.VisualStudioCode
-    - Id: Google.Chrome
-    - Id: HP.ImageAssistant
+    - id: Fork.Fork
+    - id: Microsoft.PowerShell
+    - id: Microsoft.PowerToys
+    - id: Microsoft.PowerAutomateDesktop
+    - id: Microsoft.PowerBI
+    - id: Microsoft.VisualStudioCode
+    - id: Google.Chrome
+    - id: HP.ImageAssistant
 
 - name: VSComponents
   type: Microsoft.VisualStudio.DSC
   properties:
-      productId: Microsoft.VisualStudio.Product.Enterprise
-      channelId: VisualStudio.17.Release
-      vsConfigFile: C:\WaC\resources\visual-studio\enterprise.vsconfig
-      includeRecommended: true
+    productId: Microsoft.VisualStudio.Product.Enterprise
+    channelId: VisualStudio.17.Release
+    vsConfigFile: C:\WaC\resources\visual-studio\enterprise.vsconfig
+    includeRecommended: true
 
 - name: MyCertificate - [resourceName]
-  type: MyResources/MyCertificate
+  type: MyCompany.Installer/MyCertificate
   properties:
-    - Path: C:\WaC\resources\certificates\_.cr-paca.fr.crt
-      resourceName: CR-PACA
-    - Path: C:\WaC\resources\certificates\Autorite de Certification Region SUD Provence-Alpes-Cote d'Azur.crt
-      resourceName: AC-PACA
+    - resourceName: CR-PACA
+      Path: C:\WaC\resources\certificates\_.cr-paca.fr.crt
+      StoreName: Root
+      Location: LocalMachine
+      Ensure: Present
+    - resourceName: AC-PACA
+      Path: C:\WaC\resources\certificates\Autorite de Certification Region SUD Provence-Alpes-Cote d'Azur.crt
+      StoreName: Root
+      Location: LocalMachine
+      Ensure: Present
 
 - name: MyWindowsDefenderExclusion - [Value]
-  type: MyResources/MyWindowsDefenderExclusion
+  type: MyCompany.Installer/MyWindowsDefenderExclusion
   properties:
     - Type: Path
       Value: C:\Projets
@@ -93,14 +148,23 @@
       Value: C:\Users\%user%\scoop
 
 - name: MyNodeVersion - [Version]
-  type: MyResources/MyNodeVersion
+  type: MyCompany.Packages/MyNodeVersion
   properties:
-    - Version: lts
-      Ensure: Used
-    - Version: 18
+    - version: lts
+      ensure: Used
+    - version: "18"
 
 - name: MyHosts - [Name]
-  type: MyResources/MyHosts
+  type: MyCompany.Installer/MyHosts
   properties:
-      Path: C:\WaC\resources\hosts
-      Name: PACA
+    path: C:\WaC\resources\hosts
+    name: PACA
+
+- name: My PowerShell - [Name]
+  type: MyCompany.Installer/MyPSProfile
+  properties:
+    name: MyPSProfile
+    ensure: Present
+    PowerShellVersion: v7
+    MyHost: AllHosts
+    sourceFilePath: C:\Project\WaC\DSC\MyProfile.ps1
