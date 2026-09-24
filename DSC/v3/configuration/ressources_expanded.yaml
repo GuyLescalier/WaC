@@ -198,13 +198,13 @@ resources:
     type: Microsoft.WinGet/Package
     properties:
       id: HP.ImageAssistant
-  - name: VSComponents
-    type: Microsoft.VisualStudio.DSC/VSComponents
-    properties:
-      includeRecommended: true
-      productId: Microsoft.VisualStudio.Product.Enterprise
-      vsConfigFile: C:\WaC\resources\visual-studio\enterprise.vsconfig
-      channelId: VisualStudio.17.Release
+  # - name: VSComponents
+  #   type: Microsoft.VisualStudio.DSC/VSComponents
+  #   properties:
+  #     includeRecommended: true
+  #     productId: Microsoft.VisualStudio.Product.Enterprise
+  #     vsConfigFile: C:\WaC\resources\visual-studio\enterprise.vsconfig
+  #     channelId: VisualStudio.17.Release
   - name: MyCertificate - CR-PACA
     type: MyCompany.Installer/MyCertificate
     properties:
@@ -248,11 +248,3 @@ resources:
     properties:
       name: PACA
       path: C:\WaC\resources\hosts
-  - name: My PowerShell Profile
-    type: MyCompany.Installer/MyPSProfile
-    properties:
-      name: MyPSProfile
-      ensure: Present
-      PowerShellVersion: v7
-      MyHost: AllHosts
-      sourceFilePath: C:\Project\WaC\DSC\MyProfile.ps1

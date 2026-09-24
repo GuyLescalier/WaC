@@ -115,13 +115,13 @@
     - id: Google.Chrome
     - id: HP.ImageAssistant
 
-- name: VSComponents
-  type: Microsoft.VisualStudio.DSC
-  properties:
-    productId: Microsoft.VisualStudio.Product.Enterprise
-    channelId: VisualStudio.17.Release
-    vsConfigFile: C:\WaC\resources\visual-studio\enterprise.vsconfig
-    includeRecommended: true
+# - name: VSComponents
+#   type: Microsoft.VisualStudio.DSC
+#   properties:
+#     productId: Microsoft.VisualStudio.Product.Enterprise
+#     channelId: VisualStudio.17.Release
+#     vsConfigFile: C:\WaC\resources\visual-studio\enterprise.vsconfig
+#     includeRecommended: true
 
 - name: MyCertificate - [resourceName]
   type: MyCompany.Installer/MyCertificate
@@ -159,12 +159,3 @@
   properties:
     path: C:\WaC\resources\hosts
     name: PACA
-
-- name: My PowerShell - [Name]
-  type: MyCompany.Installer/MyPSProfile
-  properties:
-    name: MyPSProfile
-    ensure: Present
-    PowerShellVersion: v7
-    MyHost: AllHosts
-    sourceFilePath: C:\Project\WaC\DSC\MyProfile.ps1
