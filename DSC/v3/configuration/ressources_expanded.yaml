@@ -1,211 +1,250 @@
 $schema: https://raw.githubusercontent.com/PowerShell/DSC/main/schemas/v3/bundled/config/document.json
 resources:
-- name: Registry - HideFileExt
-  type: Microsoft.Windows/Registry
-  properties:
-    keyPath: HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced
-    valueName: HideFileExt
-    valueData:
-      DWord: 0
-- name: Registry - DisableLoopbackCheck
-  type: Microsoft.Windows/Registry
-  properties:
-    keyPath: HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Lsa
-    valueName: DisableLoopbackCheck
-    valueData:
-      DWord: 1
-- name: MyScoop
-  type: MyResources/MyScoop
-  properties: {}
-- name: Scoop Package - dotnet-sdk
-  type: MyResources/MyScoopPackage
-  properties:
-    PackageName: dotnet-sdk
-- name: Scoop Package - dotnet3-sdk
-  type: MyResources/MyScoopPackage
-  properties:
-    PackageName: dotnet3-sdk
-- name: Scoop Package - dotnet5-sdk
-  type: MyResources/MyScoopPackage
-  properties:
-    PackageName: dotnet5-sdk
-- name: Scoop Package - dotnet6-sdk
-  type: MyResources/MyScoopPackage
-  properties:
-    PackageName: dotnet6-sdk
-- name: Scoop Package - dotnet8-sdk
-  type: MyResources/MyScoopPackage
-  properties:
-    PackageName: dotnet8-sdk
-- name: Scoop Package - temurin-lts-jdk
-  type: MyResources/MyScoopPackage
-  properties:
-    PackageName: temurin-lts-jdk
-- name: Scoop Package - gh
-  type: MyResources/MyScoopPackage
-  properties:
-    PackageName: gh
-- name: Scoop Package - git
-  type: MyResources/MyScoopPackage
-  properties:
-    PackageName: git
-- name: Scoop Package - nuget
-  type: MyResources/MyScoopPackage
-  properties:
-    PackageName: nuget
-- name: Scoop Package - nvm
-  type: MyResources/MyScoopPackage
-  properties:
-    PackageName: nvm
-- name: Scoop Package - oh-my-posh
-  type: MyResources/MyScoopPackage
-  properties:
-    PackageName: oh-my-posh
-- name: Scoop Package - terraform
-  type: MyResources/MyScoopPackage
-  properties:
-    PackageName: terraform
-- name: Scoop Package - CascadiaCode-NF-Mono
-  type: MyResources/MyScoopPackage
-  properties:
-    PackageName: CascadiaCode-NF-Mono
-- name: Scoop Package - FiraCode-NF
-  type: MyResources/MyScoopPackage
-  properties:
-    PackageName: FiraCode-NF
-- name: Scoop Package - baretail
-  type: MyResources/MyScoopPackage
-  properties:
-    PackageName: baretail
-- name: Scoop Package - mockoon
-  type: MyResources/MyScoopPackage
-  properties:
-    PackageName: mockoon
-- name: Scoop Package - nuget-package-explorer
-  type: MyResources/MyScoopPackage
-  properties:
-    PackageName: nuget-package-explorer
-- name: Scoop Package - paint.net
-  type: MyResources/MyScoopPackage
-  properties:
-    PackageName: paint.net
-- name: Scoop Package - postman
-  type: MyResources/MyScoopPackage
-  properties:
-    PackageName: postman
-- name: Scoop Package - vlc
-  type: MyResources/MyScoopPackage
-  properties:
-    PackageName: vlc
-- name: Scoop Package - wiztree
-  type: MyResources/MyScoopPackage
-  properties:
-    PackageName: wiztree
-- name: MyChocolatey
-  type: MyResources/MyChocolatey
-  properties: {}
-- name: MyChocolateyPackage - 7zip
-  type: MyResources/MyChocolateyPackage
-  properties:
-    PackageName: 7zip
-- name: MyChocolateyPackage - adobereader
-  type: MyResources/MyChocolateyPackage
-  properties:
-    PackageName: adobereader
-- name: MyChocolateyPackage - bulkrenameutility
-  type: MyResources/MyChocolateyPackage
-  properties:
-    PackageName: bulkrenameutility
-- name: MyChocolateyPackage - notepadplusplus
-  type: MyResources/MyChocolateyPackage
-  properties:
-    PackageName: notepadplusplus
-- name: MyChocolateyPackage - urlrewrite
-  type: MyResources/MyChocolateyPackage
-  properties:
-    PackageName: urlrewrite
-- name: MyChocolateyPackage - webdeploy
-  type: MyResources/MyChocolateyPackage
-  properties:
-    PackageName: webdeploy
-- name: MyChocolateyPackage - winmerge
-  type: MyResources/MyChocolateyPackage
-  properties:
-    PackageName: winmerge
-- name: WinGetPackage - Fork.Fork
-  type: Microsoft.WinGet.DSC
-  properties:
-    Id: Fork.Fork
-- name: WinGetPackage - Microsoft.PowerShell
-  type: Microsoft.WinGet.DSC
-  properties:
-    Id: Microsoft.PowerShell
-- name: WinGetPackage - Microsoft.PowerToys
-  type: Microsoft.WinGet.DSC
-  properties:
-    Id: Microsoft.PowerToys
-- name: WinGetPackage - Microsoft.PowerAutomateDesktop
-  type: Microsoft.WinGet.DSC
-  properties:
-    Id: Microsoft.PowerAutomateDesktop
-- name: WinGetPackage - Microsoft.PowerBI
-  type: Microsoft.WinGet.DSC
-  properties:
-    Id: Microsoft.PowerBI
-- name: WinGetPackage - Microsoft.VisualStudioCode
-  type: Microsoft.WinGet.DSC
-  properties:
-    Id: Microsoft.VisualStudioCode
-- name: WinGetPackage - Google.Chrome
-  type: Microsoft.WinGet.DSC
-  properties:
-    Id: Google.Chrome
-- name: WinGetPackage - HP.ImageAssistant
-  type: Microsoft.WinGet.DSC
-  properties:
-    Id: HP.ImageAssistant
-- name: VSComponents
-  type: Microsoft.VisualStudio.DSC
-  properties:
-    includeRecommended: true
-    productId: Microsoft.VisualStudio.Product.Enterprise
-    vsConfigFile: C:\WaC\resources\visual-studio\enterprise.vsconfig
-    channelId: VisualStudio.17.Release
-- name: MyCertificate - CR-PACA
-  type: MyResources/MyCertificate
-  properties:
-    Path: C:\WaC\resources\certificates\_.cr-paca.fr.crt
-- name: MyCertificate - AC-PACA
-  type: MyResources/MyCertificate
-  properties:
-    Path: C:\WaC\resources\certificates\Autorite de Certification Region SUD Provence-Alpes-Cote d'Azur.crt
-- name: MyWindowsDefenderExclusion - C:\Projets
-  type: MyResources/MyWindowsDefenderExclusion
-  properties:
-    Value: C:\Projets
-    Type: Path
-- name: MyWindowsDefenderExclusion - C:\Users\%user%\.dotnet\tools
-  type: MyResources/MyWindowsDefenderExclusion
-  properties:
-    Value: C:\Users\%user%\.dotnet\tools
-    Type: Path
-- name: MyWindowsDefenderExclusion - C:\Users\%user%\scoop
-  type: MyResources/MyWindowsDefenderExclusion
-  properties:
-    Value: C:\Users\%user%\scoop
-    Type: Path
-- name: MyNodeVersion - lts
-  type: MyResources/MyNodeVersion
-  properties:
-    Ensure: Used
-    Version: lts
-- name: MyNodeVersion - 18
-  type: MyResources/MyNodeVersion
-  properties:
-    Version: 18
-- name: MyHosts - PACA
-  type: MyResources/MyHosts
-  properties:
-    Name: PACA
-    Path: C:\WaC\resources\hosts
-
+  - name: Registry - HideFileExt
+    type: Microsoft.Windows/Registry
+    properties:
+      keyPath: HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced
+      valueName: HideFileExt
+      valueData:
+        DWord: 0
+  - name: Registry - DisableLoopbackCheck
+    type: Microsoft.Windows/Registry
+    properties:
+      keyPath: HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Lsa
+      valueName: DisableLoopbackCheck
+      valueData:
+        DWord: 1
+  - name: Install Scoop
+    type: MyCompany.Installer/MyScoop
+    properties:
+      name: Scoop
+      ensure: Present
+  - name: Install Scoop Bucket - versions
+    type: MyCompany.Installer/MyScoopBucket
+    properties:
+      name: versions
+  - name: Install Scoop Bucket - extras
+    type: MyCompany.Installer/MyScoopBucket
+    properties:
+      name: extras
+  - name: Install Scoop Bucket - java
+    type: MyCompany.Installer/MyScoopBucket
+    properties:
+      name: java
+  - name: Install Scoop Bucket - nerd-fonts
+    type: MyCompany.Installer/MyScoopBucket
+    properties:
+      name: nerd-fonts
+  - name: Scoop Package - dotnet-sdk
+    type: MyCompany.Packages/MyScoopPackage
+    properties:
+      packageName: dotnet-sdk
+  - name: Scoop Package - dotnet3-sdk
+    type: MyCompany.Packages/MyScoopPackage
+    properties:
+      packageName: dotnet3-sdk
+  - name: Scoop Package - dotnet5-sdk
+    type: MyCompany.Packages/MyScoopPackage
+    properties:
+      packageName: dotnet5-sdk
+  - name: Scoop Package - dotnet6-sdk
+    type: MyCompany.Packages/MyScoopPackage
+    properties:
+      packageName: dotnet6-sdk
+  - name: Scoop Package - dotnet8-sdk
+    type: MyCompany.Packages/MyScoopPackage
+    properties:
+      packageName: dotnet8-sdk
+  - name: Scoop Package - temurin-lts-jdk
+    type: MyCompany.Packages/MyScoopPackage
+    properties:
+      packageName: temurin-lts-jdk
+  - name: Scoop Package - gh
+    type: MyCompany.Packages/MyScoopPackage
+    properties:
+      packageName: gh
+  - name: Scoop Package - git
+    type: MyCompany.Packages/MyScoopPackage
+    properties:
+      packageName: git
+  - name: Scoop Package - nuget
+    type: MyCompany.Packages/MyScoopPackage
+    properties:
+      packageName: nuget
+  - name: Scoop Package - nvm
+    type: MyCompany.Packages/MyScoopPackage
+    properties:
+      packageName: nvm
+  - name: Scoop Package - oh-my-posh
+    type: MyCompany.Packages/MyScoopPackage
+    properties:
+      packageName: oh-my-posh
+  - name: Scoop Package - terraform
+    type: MyCompany.Packages/MyScoopPackage
+    properties:
+      packageName: terraform
+  - name: Scoop Package - CascadiaCode-NF-Mono
+    type: MyCompany.Packages/MyScoopPackage
+    properties:
+      packageName: CascadiaCode-NF-Mono
+  - name: Scoop Package - FiraCode-NF
+    type: MyCompany.Packages/MyScoopPackage
+    properties:
+      packageName: FiraCode-NF
+  - name: Scoop Package - baretail
+    type: MyCompany.Packages/MyScoopPackage
+    properties:
+      packageName: baretail
+  - name: Scoop Package - mockoon
+    type: MyCompany.Packages/MyScoopPackage
+    properties:
+      packageName: mockoon
+  - name: Scoop Package - nuget-package-explorer
+    type: MyCompany.Packages/MyScoopPackage
+    properties:
+      packageName: nuget-package-explorer
+  - name: Scoop Package - paint.net
+    type: MyCompany.Packages/MyScoopPackage
+    properties:
+      packageName: paint.net
+  - name: Scoop Package - postman
+    type: MyCompany.Packages/MyScoopPackage
+    properties:
+      packageName: postman
+  - name: Scoop Package - vlc
+    type: MyCompany.Packages/MyScoopPackage
+    properties:
+      packageName: vlc
+  - name: Scoop Package - wiztree
+    type: MyCompany.Packages/MyScoopPackage
+    properties:
+      packageName: wiztree
+  - name: MyChocolatey
+    type: MyCompany.Installer/MyChocolatey
+    properties:
+      name: choco
+      ensure: Present
+  - name: MyChocolateyPackage - 7zip
+    type: MyCompany.Packages/ChocolateyPackage
+    properties:
+      packageName: 7zip
+      version: latest
+      ensure: Present
+  - name: MyChocolateyPackage - adobereader
+    type: MyCompany.Packages/ChocolateyPackage
+    properties:
+      packageName: adobereader
+      version: latest
+      ensure: Present
+  - name: MyChocolateyPackage - bulkrenameutility
+    type: MyCompany.Packages/ChocolateyPackage
+    properties:
+      packageName: bulkrenameutility
+      version: latest
+      ensure: Present
+  - name: MyChocolateyPackage - notepadplusplus
+    type: MyCompany.Packages/ChocolateyPackage
+    properties:
+      packageName: notepadplusplus
+      version: latest
+      ensure: Present
+  - name: MyChocolateyPackage - urlrewrite
+    type: MyCompany.Packages/ChocolateyPackage
+    properties:
+      packageName: urlrewrite
+      version: latest
+      ensure: Present
+  - name: MyChocolateyPackage - webdeploy
+    type: MyCompany.Packages/ChocolateyPackage
+    properties:
+      packageName: webdeploy
+      version: latest
+      ensure: Present
+  - name: MyChocolateyPackage - winmerge
+    type: MyCompany.Packages/ChocolateyPackage
+    properties:
+      packageName: winmerge
+      version: latest
+      ensure: Present
+  - name: WinGetPackage - Fork.Fork
+    type: Microsoft.WinGet/Package
+    properties:
+      id: Fork.Fork
+  - name: WinGetPackage - Microsoft.PowerShell
+    type: Microsoft.WinGet/Package
+    properties:
+      id: Microsoft.PowerShell
+  - name: WinGetPackage - Microsoft.PowerToys
+    type: Microsoft.WinGet/Package
+    properties:
+      id: Microsoft.PowerToys
+  - name: WinGetPackage - Microsoft.PowerAutomateDesktop
+    type: Microsoft.WinGet/Package
+    properties:
+      id: Microsoft.PowerAutomateDesktop
+  - name: WinGetPackage - Microsoft.PowerBI
+    type: Microsoft.WinGet/Package
+    properties:
+      id: Microsoft.PowerBI
+  - name: WinGetPackage - Microsoft.VisualStudioCode
+    type: Microsoft.WinGet/Package
+    properties:
+      id: Microsoft.VisualStudioCode
+  - name: WinGetPackage - Google.Chrome
+    type: Microsoft.WinGet/Package
+    properties:
+      id: Google.Chrome
+  - name: WinGetPackage - HP.ImageAssistant
+    type: Microsoft.WinGet/Package
+    properties:
+      id: HP.ImageAssistant
+  # - name: VSComponents
+  #   type: Microsoft.VisualStudio.DSC/VSComponents
+  #   properties:
+  #     includeRecommended: true
+  #     productId: Microsoft.VisualStudio.Product.Enterprise
+  #     vsConfigFile: C:\WaC\resources\visual-studio\enterprise.vsconfig
+  #     channelId: VisualStudio.17.Release
+  - name: MyCertificate - CR-PACA
+    type: MyCompany.Installer/MyCertificate
+    properties:
+      Path: C:\WaC\resources\certificates\_.cr-paca.fr.crt
+      StoreName: Root
+      Location: LocalMachine
+      Ensure: Present
+  - name: MyCertificate - AC-PACA
+    type: MyCompany.Installer/MyCertificate
+    properties:
+      Path: C:\WaC\resources\certificates\Autorite de Certification Region SUD Provence-Alpes-Cote d'Azur.crt
+      StoreName: Root
+      Location: LocalMachine
+      Ensure: Present
+  - name: MyWindowsDefenderExclusion - C:\Projets
+    type: MyCompany.Installer/MyWindowsDefenderExclusion
+    properties:
+      Value: C:\Projets
+      Type: Path
+  - name: MyWindowsDefenderExclusion - C:\Users\%user%\.dotnet\tools
+    type: MyCompany.Installer/MyWindowsDefenderExclusion
+    properties:
+      Value: C:\Users\%user%\.dotnet\tools
+      Type: Path
+  - name: MyWindowsDefenderExclusion - C:\Users\%user%\scoop
+    type: MyCompany.Installer/MyWindowsDefenderExclusion
+    properties:
+      Value: C:\Users\%user%\scoop
+      Type: Path
+  - name: MyNodeVersion - lts
+    type: MyCompany.Packages/MyNodeVersion
+    properties:
+      ensure: Used
+      version: lts
+  - name: MyNodeVersion - 18
+    type: MyCompany.Packages/MyNodeVersion
+    properties:
+      version: "18"
+  - name: MyHosts - PACA
+    type: MyCompany.Installer/MyHosts
+    properties:
+      name: PACA
+      path: C:\WaC\resources\hosts
